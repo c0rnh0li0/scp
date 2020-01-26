@@ -14,18 +14,19 @@ class CreateLocationsTable extends Migration
     public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->bigIncrements('id');
             $table->string('longitude');
             $table->string('latitude');
             $table->string('address');
             $table->string('number')->nullable();
-            $table->string('city_id');
+
+            $table->bigInteger('city_id')->nullable()->unsigned();
+            $table->bigInteger('modified_by')->nullable()->unsigned();
+            $table->bigInteger('deleted_by')->nullable()->unsigned();
 
             $table->timestamps();
-            $table->integer('modified_by')->nullable()->unsigned()->index();
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('deleted_by')->nullable()->unsigned()->index();
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
         });
     }

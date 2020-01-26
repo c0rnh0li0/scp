@@ -14,13 +14,15 @@ class CreateGendersTable extends Migration
     public function up()
     {
         Schema::create('genders', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->bigIncrements('id');
             $table->string('name');
 
             $table->timestamps();
-            $table->integer('modified_by')->nullable()->unsigned()->index();
+            $table->bigInteger('modified_by')->nullable()->unsigned()->index();
             $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('deleted_by')->nullable()->unsigned()->index();
+            $table->bigInteger('deleted_by')->nullable()->unsigned()->index();
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
         });

@@ -19,23 +19,14 @@ class CreateUserDetailsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('picture')->nullable();
 
-            $table->integer('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            $table->integer('user_type_id')->unsigned()->index();
-            $table->foreign('user_type_id')->references('id')->on('user_types')->onDelete('cascade');
-
-            $table->integer('gender_id')->unsigned()->index();
-            $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade');
-
-            $table->integer('location_id')->nullable()->unsigned()->index();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+            $table->bigInteger('user_id')->nullable()->unsigned();
+            $table->bigInteger('user_type_id')->nullable()->unsigned();
+            $table->bigInteger('gender_id')->nullable()->unsigned();
+            $table->bigInteger('location_id')->nullable()->unsigned();
+            $table->bigInteger('modified_by')->nullable()->unsigned();
+            $table->bigInteger('deleted_by')->nullable()->unsigned();
 
             $table->timestamps();
-            $table->integer('modified_by')->nullable()->unsigned()->index();
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('deleted_by')->nullable()->unsigned()->index();
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserTypesTable extends Migration
+class AddForeignKeysToLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,10 @@ class CreateUserTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-
-            $table->timestamps();
-
-            $table->bigInteger('modified_by')->nullable()->unsigned()->index();
+        Schema::table('locations', function (Blueprint $table) {
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
-            $table->bigInteger('deleted_by')->nullable()->unsigned()->index();
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
-
-            $table->softDeletes();
         });
     }
 
@@ -35,6 +27,14 @@ class CreateUserTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_types');
+        Schema::table('locations', function (Blueprint $table) {
+            $columns = [
+                'city_id',
+                'modified_by',
+                'deleted_by'
+            ];
+
+            $table->dropColumn($columns);
+        });
     }
 }

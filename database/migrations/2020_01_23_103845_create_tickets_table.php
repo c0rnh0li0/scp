@@ -14,20 +14,22 @@ class CreateTicketsTable extends Migration
     public function up()
     {
         Schema::create('tickets', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->bigIncrements('id');
 
-            $table->integer('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            $table->integer('place_id')->unsigned()->index();
-            $table->foreign('place_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->bigInteger('place_id')->unsigned()->index();
+            $table->bigInteger('modified_by')->nullable()->unsigned();
+            $table->bigInteger('deleted_by')->nullable()->unsigned();
 
             $table->timestamps();
-            $table->integer('modified_by')->nullable()->unsigned()->index();
-            $table->foreign('modified_by')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('deleted_by')->nullable()->unsigned()->index();
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
+        });
+
+        Schema::table('tickets', function (Blueprint $table) {
+
+
         });
     }
 
