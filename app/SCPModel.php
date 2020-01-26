@@ -13,4 +13,12 @@ class SCPModel extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
     ];
+
+    public function modifiedBy() {
+        return $this->hasOne('App\User', 'modified_by');
+    }
+
+    public function deletedBy() {
+        return $this->hasOne('App\User', 'deleted_by');
+    }
 }

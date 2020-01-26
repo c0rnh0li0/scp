@@ -1,0 +1,9 @@
+require('./jquery.1.8.3.min');
+require('./bootstrap');
+require('./jquery-scrolltofixed');
+require('./jquery.easing.1.3');
+require('./jquery.isotope');
+require('./wow');
+require('./classie');
+require('./featherlight.min');
+require('./contactform');

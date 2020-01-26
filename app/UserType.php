@@ -2,9 +2,16 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\SCPModel;
 
-class UserType extends Model
+class UserType extends SCPModel
 {
-    //
+    protected $fillable = [
+        'name',
+        'created_at',
+        'updated_at',
+        'modified_by',
+        'deleted_by',
+        'deleted_at'
+    ];
 }
