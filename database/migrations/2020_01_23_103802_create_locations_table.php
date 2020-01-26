@@ -27,6 +27,8 @@ class CreateLocationsTable extends Migration
             $table->bigInteger('deleted_by')->nullable()->unsigned();
 
             $table->timestamps();
+
+
             $table->softDeletes();
         });
     }
