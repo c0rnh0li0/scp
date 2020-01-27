@@ -6,6 +6,8 @@ use App\SCPModel;
 
 class UserType extends SCPModel
 {
+    //const DEFAULT_USER_TYPE = 2;
+
     protected $fillable = [
         'name',
         'created_at',

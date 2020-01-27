@@ -46,14 +46,20 @@
                     <li class="small-logo"><a href="#header"><img width="60" height="60" src="img/skopje-logo-b.png" alt=""></a></li>
 
                     <li><a href="#contact">Contact</a></li>
-                    <li><a class="popup-link" data-featherlight-ajax="{{ route('login') }}" href="#login">Sign in</a></li>
+                    <li><a class="popup-link" href="{{ route('login') }}">Sign in</a></li>
 
                     @if (Route::has('register'))
-                        <li><a data-lightbox="register" class="popup-link" href="{{ route('register') }}">Sign up</a></li>
+                        <li><a class="popup-link" href="{{ route('register') }}">Sign up</a></li>
                     @endif
+                    {{-- @auth
+                        <li><a href="{{ route('logout') }}">Logout</a></li>
+                    @else
+                        <li><a class="popup-link" href="{{ route('login') }}">Sign in</a></li>
 
-
-
+                        @if (Route::has('register'))
+                            <li><a class="popup-link" href="{{ route('register') }}">Sign up</a></li>
+                        @endif
+                    @endauth--}}
                 </ul>
                 <a class="res-nav_click" href="#"><i class="fa fa-bars"></i></a>
             </div>
@@ -381,6 +387,6 @@
             </div>
         </footer>
 
-        <script type="text/javascript" src="{{ asset('js/home/bottom.js') }}"></script>
+        {{--<script type="text/javascript" src="{{ asset('js/home/bottom.js') }}"></script> --}}
     </body>
 </html>

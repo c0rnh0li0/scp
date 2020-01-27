@@ -18,7 +18,8 @@ class UserDetail extends Model
         'updated_at',
         'modified_by',
         'deleted_by',
-        'deleted_at'
+        'deleted_at',
+        'is_company'
     ];
 
     public function user() {
