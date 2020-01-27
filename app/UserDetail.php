@@ -26,15 +26,15 @@ class UserDetail extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function userType() {
-        return $this->hasOne('App\UserType', 'user_type_id');
+    public function type() {
+        return $this->belongsTo('App\UserType', 'user_type_id');
     }
 
     public function gender() {
-        return $this->hasOne('App\Gender', 'gender_id');
+        return $this->belongsTo('App\Gender', 'gender_id');
     }
 
     public function location() {
-        return $this->hasOne('App\Location', 'gender_id');
+        return $this->belongsTo('App\Location', 'gender_id');
     }
 }
