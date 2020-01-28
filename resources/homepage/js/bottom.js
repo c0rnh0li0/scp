@@ -6,12 +6,6 @@ $(function () {
 
     });
 
-    /*wow = new WOW({
-        animateClass: 'animated',
-        offset: 100
-    });
-    wow.init();*/
-
     $('.main-nav li a, .servicelink').not('.popup-link').bind('click', function(event) {
         var $anchor = $(this);
 
@@ -28,6 +22,18 @@ $(function () {
             $('.main-nav').hide();
         }
         event.preventDefault();
+    });
+
+    $('.popup-link').bind('click', function(e) {
+        e.preventDefault();
+
+        $.get($(this).attr('href'), function (response) {
+            $.featherlight(response, {
+                variant: null,
+            });
+        });
+
+        return false;
     });
 
     var $container = $('.portfolioContainer'),

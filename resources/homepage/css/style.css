@@ -861,3 +861,15 @@ border: 2px solid #fff;
 	animation-delay: 1.2s; 
 	-webkit-animation-delay: 1.2s; 
 }
+.form.login-form, .form.register-form {
+	margin: 0;
+	width: 25rem;
+}
+.featherlight-content {
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+.featherlight .featherlight-inner {
+	margin-top: 1rem;
+}

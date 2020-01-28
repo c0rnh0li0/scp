@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\UserType;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -26,8 +28,20 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    //protected $redirectTo = RouteServiceProvider::HOME;
+    protected function redirectTo()
+    {
+        $authed = User::find(auth()->user()->id);
 
+        if ($authed->details->type->id == UserType::ADMIN_USER_TYPE) {
+            return RouteServiceProvider::ADMIN;
+        }
+        else if ($authed->details->type->id == UserType::COMPANY_USER_TYPE) {
+            return RouteServiceProvider::COMPANY;
+        }
+
+        return '/home';
+    }
     /**
      * Create a new controller instance.
      *
