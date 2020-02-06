@@ -1,48 +1,44 @@
 <template>
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer" app>
-            <v-list dense>
+            <v-list>
+                <v-list-item>
+                    <v-list-item-avatar>
+                        <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                        <v-list-item-title class="title">John Leider</v-list-item-title>
+                        <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <template v-for="(item, i) in items">
-
-                    <v-list-item v-if="item.text" :key="i" align="center">
-                        <router-link :to="item.route">
-                            <v-list-item-action>
-                                <v-icon>{{ item.icon }}</v-icon>
-                            </v-list-item-action>
-                            <v-list-item-content>
-                                <v-list-item-title class="grey--text">
-                                    {{ item.text }}
-                                </v-list-item-title>
-                            </v-list-item-content>
-                        </router-link>
-                    </v-list-item>
+                    <v-row v-if="item.heading" :key="i" align="center">
+                        <v-col cols="6">
+                            <v-subheader v-if="item.heading">
+                                {{ item.heading }}
+                            </v-subheader>
+                        </v-col>
+                        <v-col cols="6" class="text-right">
+                            <v-btn small text>edit</v-btn>
+                        </v-col>
+                    </v-row>
                     <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
+                    <v-list-item v-else :key="i" :to="item.route" >
+                        <v-list-item-action>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title class="blue-grey--text darken-4">
+                                {{ item.text }}
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                 </template>
-
-                <!-- <router-link to="/admin" link>
-                    <v-list-item>
-                        <v-list-item-action>
-                            <v-icon>mdi-home</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-title>Home</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </router-link>
-                <router-link to="/about" link>
-                    <v-list-item>
-                        <v-list-item-action>
-                            <v-icon>mdi-contact-mail</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-title>Skopje City Pass</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </router-link> -->
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="indigo" dark>
+        <v-app-bar app color="blue-grey darken-4" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <v-toolbar-title>Skopje City Pass</v-toolbar-title>
         </v-app-bar>
@@ -54,7 +50,7 @@
                 </transition>
             </v-container>
         </v-content>
-        <v-footer color="indigo" app>
+        <v-footer color="blue-grey darken-4" app>
             <span class="white--text">&copy; 2020</span>
         </v-footer>
     </v-app>
@@ -67,9 +63,15 @@
         },
         data: () => ({
             drawer: null,
+            item: 0,
             items: [
                 { icon: 'mdi-home-modern', text: 'Home', route: '/admin' },
-                { icon: 'mdi-account', text: 'About', route: '/about' },
+                { icon: 'mdi-file-document-edit', text: 'Contracts', route: '/admin/contracts' },
+                { icon: 'mdi-bank', text: 'Places', route: '/admin/places' },
+                { icon: 'mdi-account', text: 'People', route: '/admin/people' },
+                { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/admin/tickets' },
+                { divider: true },
+                { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
             ],
         }),
     }
