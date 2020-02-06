@@ -1,31 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from '../components/Index.vue'
+import AdminRoutes from './admin';
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'index',
-    component: Index
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../components/Example.vue')
-    }
-  }
+    {
+        path: '/admin',
+        component: require('../components/admin/Index').default,
+        children: AdminRoutes
+    },
+    {
+        path: '/about',
+        name: 'about',
+        component: require('../components/Example' +
+            '').default
+    },
+    { path: '/404', name: '404', component: require('../components/404').default, },
+    { path: '*', redirect: '/404' },
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 })
 
 export default router
