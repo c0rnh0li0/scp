@@ -17,6 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// auth
+Route::get('session', 'Auth\LoginController@auth'); //->middleware('auth:api');
+
 // users
 Route::get('users', 'UserController@index');
 Route::get('user/{id}', 'UserController@show');
@@ -25,11 +28,11 @@ Route::put('users', 'UserController@store');
 Route::delete('users/{id}', 'UserController@destroy');
 
 // user details
-Route::get('people', 'PeopleController@index');
-Route::get('people/{id}', 'PeopleController@show');
-Route::post('people', 'PeopleController@store');
-Route::put('people', 'PeopleController@store');
-Route::delete('people/{id}', 'PeopleController@destroy');
+Route::get('people', 'PeopleController@index')->middleware('auth:api');
+Route::get('people/{id}', 'PeopleController@show')->middleware('auth:api');
+Route::post('people', 'PeopleController@store')->middleware('auth:api');
+Route::put('people', 'PeopleController@store')->middleware('auth:api');
+Route::delete('people/{id}', 'PeopleController@destroy')->middleware('auth:api');
 
 Route::get('place', 'PlaceController@index');
 Route::get('place/{id}', 'PlaceController@show');

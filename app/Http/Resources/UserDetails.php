@@ -21,7 +21,7 @@ class UserDetails extends JsonResource
             'description' => $this->description,
             'picture' => $this->picture,
             'user' => $this->user,
-            'user_type' => $this->user_type,
+            'type' => $this->type,
             'gender' => $this->gender,
             'location' => $this->location,
             'modified_by' => $this->modified_by,

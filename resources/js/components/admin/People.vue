@@ -85,31 +85,24 @@
                 loading: true,
                 options: {},
                 headers: [
-                    {
-                        text: 'Name',
-                        align: 'left',
-                        sortable: true,
-                        value: 'user.name',
-                    },
+                    {text: 'Name', align: 'left', sortable: true, value: 'user.name',},
                     {text: 'Email', value: 'user.email', sortable: true,},
-                    {text: 'Gender', value: 'gender.name', sortable: true,},
+                    {text: 'Type', value: 'type.name', sortable: true,},
                     {text: 'Since', value: 'created_at', sortable: true,},
                     {text: 'Actions', value: 'action', sortable: false},
                 ],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    calories: 0,
-                    fat: 0,
-                    carbs: 0,
-                    protein: 0,
+                    email: '',
+                    type: 0,
+                    gender: 0
                 },
                 defaultItem: {
                     name: '',
-                    calories: 0,
-                    fat: 0,
-                    carbs: 0,
-                    protein: 0,
+                    email: '',
+                    type: 0,
+                    gender: 0
                 },
             }
         },

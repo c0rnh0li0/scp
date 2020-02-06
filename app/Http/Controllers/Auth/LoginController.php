@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserDetails;
 use App\Providers\RouteServiceProvider;
+use App\UserDetail;
 use App\UserType;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
@@ -50,5 +52,16 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Gets currently logged in user data
+     *
+     * @return $user
+     */
+    public function auth() {
+        $authed = UserDetail::where('user_id', auth()->user()->id)->get(1);
+        dd($authed);
+        return $authed;
     }
 }

@@ -35,6 +35,20 @@
                         </v-list-item-content>
                     </v-list-item>
                 </template>
+
+                <v-list-item :key="999" @click.stop="logout" >
+                    <v-list-item-action>
+                        <v-icon>mdi-logout</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title class="blue-grey--text darken-4">
+                            Logout
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <form id="logout-form" method="POST" style="display: none;">
+                    <input type="hidden" id="_token" name="_token" value="yM9fsLlf971YvlouAXsK8AJMymhTQ3h7QwNHaxw8" />
+                </form>
             </v-list>
         </v-navigation-drawer>
 
@@ -61,6 +75,10 @@
         props: {
             source: String,
         },
+        mounted() {
+            document.getElementById('logout-form').action = window.Laravel.logoutUrl
+            document.getElementById('_token').value = window.Laravel.csrf
+        },
         data: () => ({
             drawer: null,
             item: 0,
@@ -72,7 +90,13 @@
                 { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/admin/tickets' },
                 { divider: true },
                 { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
+                { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
             ],
         }),
+        methods: {
+            logout () {
+                document.getElementById('logout-form').submit()
+            }
+        }
     }
 </script>

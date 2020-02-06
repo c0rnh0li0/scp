@@ -23,6 +23,10 @@ const adminroutes = [
         path: 'lookups',
         component: require('./../components/admin/Lookups').default
     },
+    {
+        path: 'tokens',
+        component: require('./../components/admin/Tokens').default
+    },
 ];
 
 export default adminroutes;

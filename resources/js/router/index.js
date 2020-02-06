@@ -17,7 +17,7 @@ const routes = [
             '').default
     },
     { path: '/404', name: '404', component: require('../components/404').default, },
-    { path: '*', redirect: '/404' },
+    /*{ path: '*', redirect: '/404' },*/
 ]
 
 const router = new VueRouter({
