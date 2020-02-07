@@ -9,6 +9,7 @@ require('./featherlight.min');
 require('./contactform');
 require('./bottom');
 
+
 window.wow = new WOW.WOW({
     animateClass: 'animated',
     offset: 100,

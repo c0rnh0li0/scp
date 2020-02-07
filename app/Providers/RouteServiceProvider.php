@@ -21,6 +21,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+    public const INDEX = '/';
     public const HOME = '/home';
     public const ADMIN = '/admin';
     public const COMPANY = '/place';
@@ -45,10 +46,7 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
-
-        //
     }
 
     /**

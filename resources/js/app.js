@@ -12,6 +12,10 @@ import Vuetify from 'vuetify';
 import router from './router/index';
 import store from './store/index';
 
+axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrf;
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem('token');
 
 Vue.component('index', require('./components/Index.vue').default);
 

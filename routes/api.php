@@ -13,13 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('login', 'Api\AuthController@login')->name('api_login');
+Route::post('register', 'Api\AuthController@register')->name('api_register');;
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::middleware('auth:api')->group(function () {
     // auth
-    Route::get('session', 'Auth\LoginController@auth')->middleware('auth:api');
+    //Route::get('session', 'Auth\LoginController@auth')->middleware('auth:api');
+    Route::post('logout','Api\AuthController@logout');
 
     // users
     Route::get('users', 'UserController@index');
@@ -41,5 +45,4 @@ Route::middleware('auth:api')->group(function () {
     Route::post('place', 'PlaceController@store');
     Route::put('place', 'PlaceController@store');
     Route::delete('place/{id}', 'PlaceController@destroy');
-
 });

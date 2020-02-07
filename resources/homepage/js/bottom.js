@@ -2,11 +2,10 @@ $(function () {
     $('#test').scrollToFixed();
     $('.res-nav_click').click(function() {
         $('.main-nav').slideToggle();
-        return false
-
+        return false;
     });
 
-    $('.main-nav li a, .servicelink').not('.popup-link').bind('click', function(event) {
+    $('.main-nav li a, .servicelink').not('.popup-link').bind('click', function(e) {
         var $anchor = $(this);
 
         $('html, body').stop().animate({
@@ -21,8 +20,53 @@ $(function () {
         if ($(window).width() < 768) {
             $('.main-nav').hide();
         }
-        event.preventDefault();
+        e.preventDefault();
     });
+
+    function toJSONString( form ) {
+        var obj = {};
+        var elements = form.querySelectorAll( "input, select, textarea" );
+        for( var i = 0; i < elements.length; ++i ) {
+            var element = elements[i];
+            var name = element.name;
+            var value = element.value;
+
+            if( name ) {
+                obj[ name ] = value;
+            }
+        }
+
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    function initializeForms() {
+        $('.scp-form').off('submit').on('submit', function (e) {
+            e.preventDefault();
+
+            var frmData = toJSONString(this);
+
+            $.post(this.action, frmData )
+                .done(function(response, msg, jqx) {
+                    if (response.success) {
+                        window.localStorage.setItem('token', response.success.token);
+                        window.location.href = response.success.goto;
+                    }
+                    else {
+
+                    }
+                })
+                .fail(function(jqx, error, msg) {
+                    console.log('login fail', arguments);
+                    //
+                })
+                .always(function() {
+                    console.log('login always', arguments);
+                    //
+                });
+
+            return false;
+        });
+    }
 
     $('.popup-link').bind('click', function(e) {
         e.preventDefault();
@@ -30,6 +74,9 @@ $(function () {
         $.get($(this).attr('href'), function (response) {
             $.featherlight(response, {
                 variant: null,
+                afterContent: function () {
+                    initializeForms();
+                }
             });
         });
 

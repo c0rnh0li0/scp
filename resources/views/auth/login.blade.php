@@ -3,7 +3,8 @@
 @section('content')
 <div class="col-12">
     <div class="form login-form">
-        <form action="{{ route('login') }}" method="post" role="form" class="contactForm">
+        {{-- <form action="{{ route('login') }}" method="post" role="form" class="contactForm"> --}}
+        <form action="{{ route('api_login') }}" method="post" role="form" class="scp-form contactForm">
             @csrf
 
             <div class="form-group">
