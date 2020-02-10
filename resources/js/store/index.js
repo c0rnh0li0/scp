@@ -4,23 +4,26 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-      sessionEndpoint: '/api/auth',
-      session: {}
-  },
-  mutations: {
-      setSession (state, sessionData) {
-          state.session = sessionData
-      }
-  },
-  actions: {
-      async getSessionData ({ commit }) {
-          commit('setSession', await getServerSession())
-      },
-      async getServerSession() {
-
-      }
-  },
-  modules: {
-  }
+    state: {
+        sessionEndpoint: '/api/auth',
+        session: {}
+    },
+    mutations: {
+          setSession (state, payload) {
+              state.session = payload
+          }
+    },
+    actions: {
+          getSession({commit}) {
+              return axios.post(this.state.sessionEndpoint).then((response) => {
+                  commit('setSession', response.data.data);
+              });
+          }
+    },
+    modules: {},
+    getters: {
+        session: (state) => {
+            return state.session
+        }
+    }
 })

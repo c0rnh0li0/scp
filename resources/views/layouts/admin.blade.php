@@ -20,7 +20,7 @@
                 'siteName' => config('app.name'),
                 'siteUrl' => config('app.url'),
                 'apiUrl' => config('app.url') . '/api',
-                'logoutUrl' => route('logout'),
+                'logoutUrl' => route('api_logout'),
                 'csrf' => csrf_token()
             ]) !!};
     </script>

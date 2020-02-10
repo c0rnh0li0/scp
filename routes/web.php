@@ -13,10 +13,10 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('index');
 
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+//Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 
 Route::get('/admin', 'HomeController@admin')->name('admin');

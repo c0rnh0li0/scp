@@ -73,15 +73,16 @@ class AuthController extends Controller
             });
         }
 
-        $success['success'] = true;
-        $success['goto'] = route(RouteServiceProvider::INDEX);
-        return response()->json(['success' => $success], $this->successStatus);
+        return response()->json(['response' => [
+            'success' => true,
+            'goto' => route('index')
+        ]], $this->successStatus);
     }
 
     public function user() {
         $user = Auth::user();
-        $details = UserDetail::find($user->id);
-        return UserDetailResource::collection($details);
+        $details = UserDetail::findOrFail($user->id);
+        return new UserDetailResource($details);
         //return response()->json(['success' => $user], $this->successStatus);
     }
 }

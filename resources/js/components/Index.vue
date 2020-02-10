@@ -7,8 +7,8 @@
                         <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title class="title">John Leider</v-list-item-title>
-                        <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle>
+                        <v-list-item-title class="title">{{ session.user.name }}</v-list-item-title>
+                        <v-list-item-subtitle>{{ session.user.email }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
 
@@ -47,7 +47,7 @@
                     </v-list-item-content>
                 </v-list-item>
                 <form id="logout-form" method="POST" style="display: none;">
-                    <input type="hidden" id="_token" name="_token" value="yM9fsLlf971YvlouAXsK8AJMymhTQ3h7QwNHaxw8" />
+                    <input type="hidden" id="_token" name="_token" value="" />
                 </form>
             </v-list>
         </v-navigation-drawer>
@@ -71,13 +71,16 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         props: {
             source: String,
         },
-        mounted() {
-            document.getElementById('logout-form').action = window.Laravel.logoutUrl
-            document.getElementById('_token').value = window.Laravel.csrf
+        computed: {
+            session() {
+                return this.$store.state.session
+            }
         },
         data: () => ({
             drawer: null,
@@ -91,11 +94,24 @@
                 { divider: true },
                 { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
                 { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
+                { icon: 'mdi-information-outline', text: 'About', route: '/about' },
             ],
         }),
         methods: {
             logout () {
-                document.getElementById('logout-form').submit()
+                axios.post(window.Laravel.logoutUrl, {})
+                    .then((response) => {
+                        if (response.data.response.success) {
+                            window.localStorage.removeItem('token')
+                            window.location.href = response.data.response.goto
+                        }
+                    })
+                    .catch((err) => {
+                        console.log('logout', err);
+                    });
+                /*document.getElementById('logout-form').action = window.Laravel.logoutUrl
+                document.getElementById('_token').value = window.Laravel.csrf
+                document.getElementById('logout-form').submit()*/
             }
         }
     }
