@@ -35,4 +35,9 @@ class HomeController extends Controller
     {
         return view('place');
     }
+
+    public function error()
+    {
+        return view('place');
+    }
 }

@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AdminRoutes from './admin';
+import store from '../store/index';
+import AdminRoutes from './admin'
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/admin',
+        name: 'admin',
         component: require('../components/admin/Index').default,
         children: AdminRoutes,
         meta: { requiresAuth: true, type: 'admin' }
@@ -17,8 +19,8 @@ const routes = [
         component: require('../components/Example').default,
         meta: { requiresAuth: false }
     },
-    { path: '/404', name: '404', component: require('../components/errors/404').default, },
-    { path: '/401', name: '401', component: require('../components/errors/401').default, },
+    { path: '/404', name: '404', component: require('../components/errors/Error404').default, },
+    { path: '/401', name: '401', component: require('../components/errors/Error401').default, },
 ]
 
 const router = new VueRouter({
@@ -30,20 +32,15 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth == false)) {
         console.log('router no auth', to);
-        /*if (Vue.auth.isAuthenticated()) {
-            next({
-                name: 'Home'
-            })
-        } else*/ next()
+        next()
     }
     else if (to.matched.some(record => record.meta.requiresAuth)) {
         console.log('router yes auth', to);
-        /*if (!Vue.auth.isAuthenticated()) {
+        if (!store.state.session) {
             next({
-                path: '/'
+                path: '/401'
             })
-        } else next()*/
-        next()
+        } else next()
     }
     else  {
         console.log('router just next');

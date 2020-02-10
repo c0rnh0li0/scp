@@ -23,6 +23,7 @@ Route::get('/admin', 'HomeController@admin')->name('admin');
 Route::get('/place', 'HomeController@place')->name('place');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('*', 'HomeController@error')->name('error');
 /*
 | POST     | password/confirm                        |                                   | App\Http\Controllers\Auth\ConfirmPasswordController@confirm               | web,auth           |
 |        | GET|HEAD | password/confirm                        | password.confirm                  | App\Http\Controllers\Auth\ConfirmPasswordController@showConfirmForm       | web,auth           |

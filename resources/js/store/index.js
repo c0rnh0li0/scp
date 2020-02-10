@@ -15,9 +15,13 @@ export default new Vuex.Store({
     },
     actions: {
           getSession({commit}) {
-              return axios.post(this.state.sessionEndpoint).then((response) => {
-                  commit('setSession', response.data.data);
-              });
+              return axios.post(this.state.sessionEndpoint)
+                  .then((response) => {
+                      commit('setSession', response.data.data)
+                  })
+                  .catch((error) => {
+                      console.log(error)
+                  });
           }
     },
     modules: {},

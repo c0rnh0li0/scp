@@ -7,10 +7,6 @@
 
 <script>
     export default {
-        name: "401"
+        name: "Error401"
     }
 </script>
-
-<style scoped>
-
-</style>
