@@ -38,6 +38,6 @@ class HomeController extends Controller
 
     public function error()
     {
-        return view('place');
+        return view('error');
     }
 }

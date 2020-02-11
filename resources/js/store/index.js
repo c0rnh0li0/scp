@@ -21,6 +21,7 @@ export default new Vuex.Store({
                   })
                   .catch((error) => {
                       console.log(error)
+                      window.location.href = ''
                   });
           }
     },
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     getters: {
         session: (state) => {
             return state.session
+        },
+        isAuthed: (state) => {
+            return state.session.user && window.localStorage.getItem('user_data') && window.localStorage.getItem('token')
         }
     }
 })

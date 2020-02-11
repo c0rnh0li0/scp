@@ -384,7 +384,5 @@
                 </div> -->
             </div>
         </footer>
-
-        {{--<script type="text/javascript" src="{{ asset('js/home/bottom.js') }}"></script> --}}
     </body>
 </html>

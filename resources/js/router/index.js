@@ -19,8 +19,7 @@ const routes = [
         component: require('../components/Example').default,
         meta: { requiresAuth: false }
     },
-    { path: '/404', name: '404', component: require('../components/errors/Error404').default, },
-    { path: '/401', name: '401', component: require('../components/errors/Error401').default, },
+    { path: '/error', name: 'error', component: require('../components/Error').default, meta: { requiresAuth: false } },
 ]
 
 const router = new VueRouter({
@@ -36,9 +35,9 @@ router.beforeEach((to, from, next) => {
     }
     else if (to.matched.some(record => record.meta.requiresAuth)) {
         console.log('router yes auth', to);
-        if (!store.state.session) {
+        if (!store.getters.isAuthed) {
             next({
-                path: '/401'
+                path: '/error'
             })
         } else next()
     }

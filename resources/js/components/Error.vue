@@ -1,12 +1,15 @@
 <template>
     <div>
-        <h1>Unauthorized</h1>
-        <p>Global unauthorized</p>
+        <h1>Error</h1>
     </div>
 </template>
 
 <script>
     export default {
-        name: "Error401"
+        name: "Error"
     }
 </script>
+
+<style scoped>
+
+</style>
