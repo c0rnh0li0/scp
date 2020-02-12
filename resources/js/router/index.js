@@ -19,7 +19,8 @@ const routes = [
         component: require('../components/Example').default,
         meta: { requiresAuth: false }
     },
-    { path: '/error', name: 'error', component: require('../components/Error').default, meta: { requiresAuth: false } },
+    //{ path: '/error', name: 'error', component: require('../components/Error').default, meta: { requiresAuth: false } },
+    { path: '*', component: require('../components/Error').default, meta: { requiresAuth: false } },
 ]
 
 const router = new VueRouter({
@@ -29,6 +30,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    console.log('router paths', from, to);
+
     if (to.matched.some(record => record.meta.requiresAuth == false)) {
         console.log('router no auth', to);
         next()

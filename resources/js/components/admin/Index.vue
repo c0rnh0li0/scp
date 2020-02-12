@@ -8,6 +8,8 @@
     export default {
         mounted() {
             console.log('Admin Component mounted.')
+        },
+        created() {
         }
     }
 </script>

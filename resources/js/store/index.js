@@ -6,7 +6,27 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         sessionEndpoint: '/api/auth',
-        session: {}
+        session: {},
+        menus: {
+            admin: [
+                { icon: 'mdi-home-modern', text: 'Home', route: '/admin/dashboard' },
+                { icon: 'mdi-file-document-edit', text: 'Contracts', route: '/admin/contracts' },
+                { icon: 'mdi-bank', text: 'Places', route: '/admin/places' },
+                { icon: 'mdi-account', text: 'People', route: '/admin/people' },
+                { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/admin/tickets' },
+                { divider: true },
+                { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
+                { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
+                { icon: 'mdi-information-outline', text: 'About', route: '/about' },
+            ],
+            tourist: [],
+            place: []
+        },
+        userTypes: {
+            'Administrator': 'admin',
+            'Tourist': 'tourist',
+            'Place': 'place'
+        }
     },
     mutations: {
           setSession (state, payload) {
@@ -18,10 +38,11 @@ export default new Vuex.Store({
               return axios.post(this.state.sessionEndpoint)
                   .then((response) => {
                       commit('setSession', response.data.data)
+                      return response.data.data
                   })
                   .catch((error) => {
                       console.log(error)
-                      window.location.href = ''
+                      window.location.href = '/error'
                   });
           }
     },

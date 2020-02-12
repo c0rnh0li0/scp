@@ -71,7 +71,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import router from "../router";
 
     export default {
         props: {
@@ -80,22 +80,25 @@
         computed: {
             session() {
                 return this.$store.state.session
+
+                /*return this.$store.dispatch("getSession").then(userData => {
+
+
+                });*/
+
+
+            },
+            items() {
+                //return this.$store.state.menus[this.session.user.type]
+                return this.$store.state.menus.admin
             }
+        },
+        mounted() {
+            router.push(this.items[0].route)
         },
         data: () => ({
             drawer: null,
             item: 0,
-            items: [
-                { icon: 'mdi-home-modern', text: 'Home', route: '/admin' },
-                { icon: 'mdi-file-document-edit', text: 'Contracts', route: '/admin/contracts' },
-                { icon: 'mdi-bank', text: 'Places', route: '/admin/places' },
-                { icon: 'mdi-account', text: 'People', route: '/admin/people' },
-                { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/admin/tickets' },
-                { divider: true },
-                { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
-                { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
-                { icon: 'mdi-information-outline', text: 'About', route: '/about' },
-            ],
         }),
         methods: {
             logout () {
@@ -109,9 +112,6 @@
                     .catch((err) => {
                         console.log('logout', err);
                     });
-                /*document.getElementById('logout-form').action = window.Laravel.logoutUrl
-                document.getElementById('_token').value = window.Laravel.csrf
-                document.getElementById('logout-form').submit()*/
             }
         }
     }
