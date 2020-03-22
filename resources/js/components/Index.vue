@@ -7,8 +7,8 @@
                         <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title class="title">{{ session.user.name }}</v-list-item-title>
-                        <v-list-item-subtitle>{{ session.user.email }}</v-list-item-subtitle>
+                        <v-list-item-title class="title">{{ username }}</v-list-item-title>
+                        <v-list-item-subtitle>{{ email }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
 
@@ -55,6 +55,12 @@
         <v-app-bar app color="blue-grey darken-4" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <v-toolbar-title>Skopje City Pass</v-toolbar-title>
+            <v-spacer />
+            <div v-for="(qitem, j) in quick_items" :key="j">
+                <v-btn icon :to="qitem.route">
+                    <v-icon>{{ qitem.icon }}</v-icon>
+                </v-btn>
+            </div>
         </v-app-bar>
 
         <v-content>
@@ -64,15 +70,13 @@
                 </transition>
             </v-container>
         </v-content>
-        <v-footer color="blue-grey darken-4" app>
+        <!-- <v-footer color="blue-grey darken-4" app>
             <span class="white--text">&copy; 2020</span>
-        </v-footer>
+        </v-footer> -->
     </v-app>
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-
     export default {
         props: {
             source: String,
@@ -80,22 +84,23 @@
         computed: {
             session() {
                 return this.$store.state.session
+            },
+            items() {
+                return this.$store.state.menu
+            },
+            quick_items() {
+                return this.$store.state.quick
+            },
+            username() {
+                return this.$store.state.username
+            },
+            email() {
+                return this.$store.state.email
             }
         },
         data: () => ({
             drawer: null,
-            item: 0,
-            items: [
-                { icon: 'mdi-home-modern', text: 'Home', route: '/admin' },
-                { icon: 'mdi-file-document-edit', text: 'Contracts', route: '/admin/contracts' },
-                { icon: 'mdi-bank', text: 'Places', route: '/admin/places' },
-                { icon: 'mdi-account', text: 'People', route: '/admin/people' },
-                { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/admin/tickets' },
-                { divider: true },
-                { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
-                { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
-                { icon: 'mdi-information-outline', text: 'About', route: '/about' },
-            ],
+            item: 0
         }),
         methods: {
             logout () {
@@ -109,9 +114,6 @@
                     .catch((err) => {
                         console.log('logout', err);
                     });
-                /*document.getElementById('logout-form').action = window.Laravel.logoutUrl
-                document.getElementById('_token').value = window.Laravel.csrf
-                document.getElementById('logout-form').submit()*/
             }
         }
     }

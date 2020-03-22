@@ -19,8 +19,8 @@ Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 //Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 
-Route::get('/admin', 'HomeController@admin')->name('admin');
-Route::get('/place', 'HomeController@place')->name('place');
+Route::get('/admin/{slug?}', 'HomeController@admin')->name('admin');
+Route::get('/place/{slug?}', 'HomeController@place')->name('place');
 Route::get('/home', 'HomeController@index')->name('home');
 
 /*

@@ -25,6 +25,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('auth', 'Api\AuthController@user');
     Route::post('logout','Api\AuthController@logout')->name('api_logout');
 
+    // lookup data
+    Route::post('lookups', 'HomeController@lookups');
+
     // users
     Route::get('users', 'UserController@index');
     Route::get('user/{id}', 'UserController@show');

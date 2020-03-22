@@ -8,9 +8,12 @@ Vue.component('passport-clients', require('./components/passport/Clients.vue').d
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
 
-import Vuetify from 'vuetify';
+import vuetify from './plugins/vuetify';
 import router from './router/index';
 import store from './store/index';
+import './plugins/google-maps'
+import './plugins/tiptap-vuetify'
+
 
 axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrf;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
@@ -19,14 +22,10 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage
 axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    console.log('global axios error', arguments)
-    router.push({ path: '/' + response[0].response.status })
-    //return Promise.reject(error);
+    router.push({ path: '/' + error.response.status })
 });
 
 Vue.component('index', require('./components/Index.vue').default);
-
-Vue.use(Vuetify);
 
 import './../sass/main.scss'
 
@@ -34,10 +33,11 @@ const app = new Vue({
     el: '#app',
     store,
     router,
-    vuetify: new Vuetify(),
+    vuetify: vuetify,
     render: h => h('index'),
-    created() {
-        this.$store.dispatch('getSession');
+    async created() {
+        await this.$store.dispatch('getSession');
+        this.$store.dispatch('getLookupData');
     },
     mounted() {
 

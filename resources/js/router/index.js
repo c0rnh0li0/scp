@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AdminRoutes from './admin';
+import PlaceRoutes from './place';
 
 Vue.use(VueRouter)
 
@@ -12,13 +13,19 @@ const routes = [
         meta: { requiresAuth: true, type: 'admin' }
     },
     {
+        path: '/place',
+        component: require('../components/place/Index').default,
+        children: PlaceRoutes,
+        meta: { requiresAuth: true, type: 'place' }
+    },
+    {
         path: '/about',
         name: 'about',
         component: require('../components/Example').default,
         meta: { requiresAuth: false }
     },
-    { path: '/404', name: '404', component: require('../components/errors/404').default, },
-    { path: '/401', name: '401', component: require('../components/errors/401').default, },
+    { path: '/404', name: '404', component: require('../components/errors/404').default, meta: { requiresAuth: false } },
+    { path: '/401', name: '401', component: require('../components/errors/401').default, meta: { requiresAuth: false } },
 ]
 
 const router = new VueRouter({
@@ -40,7 +47,7 @@ router.beforeEach((to, from, next) => {
         console.log('router yes auth', to);
         /*if (!Vue.auth.isAuthenticated()) {
             next({
-                path: '/'
+                path: '/401'
             })
         } else next()*/
         next()

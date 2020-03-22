@@ -1,0 +1,13 @@
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+
+Vue.use(Vuetify)
+
+export default new Vuetify({
+    iconfont: "mdi",
+    lang: {
+        // If you change the language here, then it changes in the editor itself
+        current: 'en' // en | es | fr | pl | ru
+    }
+})
