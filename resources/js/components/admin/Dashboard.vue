@@ -16,6 +16,7 @@
 
 <script>
     export default {
+        name: 'Dashboard',
         mounted() {
             console.log('Admin Dashboard Component mounted.')
         }

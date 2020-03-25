@@ -26,13 +26,7 @@
     </script>
 </head>
 <body>
-    <div id="app">
-        <v-app>
-            <v-content>
-                <v-container></v-container>
-            </v-content>
-        </v-app>
-    </div>
+    <div id="app"></div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 </body>

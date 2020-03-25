@@ -1,30 +1,30 @@
 const adminroutes = [
     {
-        path: '',
+        path: '/admin/dashboard',
         component: require('./../components/admin/Dashboard').default
     },
     {
-        path: 'contracts',
+        path: '/admin/contracts',
         component: require('./../components/admin/Contracts').default
     },
     {
-        path: 'places',
+        path: '/admin/places',
         component: require('./../components/admin/Places').default
     },
     {
-        path: 'people',
+        path: '/admin/people',
         component: require('./../components/admin/People').default
     },
     {
-        path: 'tickets',
+        path: '/admin/tickets',
         component: require('./../components/admin/Tickets').default
     },
     {
-        path: 'lookups',
+        path: '/admin/lookups',
         component: require('./../components/admin/Lookups').default
     },
     {
-        path: 'tokens',
+        path: '/admin/tokens',
         component: require('./../components/admin/Tokens').default
     },
 ];
