@@ -8,7 +8,7 @@
             </v-container>
         </v-content>
         <v-btn bottom
-               color="pink"
+               color="success"
                dark
                fab
                fixed

@@ -10,7 +10,6 @@
         "watch-poll": "npm run watch -- --watch-poll"
     },
     "dependencies": {
-        "@nagoos/vue-image-picker": "^1.0.4",
         "@vue/cli-service": "^4.2.3",
         "bootstrap-vue": "^2.7.0",
         "register-service-worker": "^1.7.1",

@@ -48,4 +48,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('place', 'PlaceController@store');
     Route::put('place', 'PlaceController@store');
     Route::delete('place/{id}', 'PlaceController@destroy');
+
+    // user details
+    Route::post('userdetails/save/{id}', 'UserDetailController@save');
 });

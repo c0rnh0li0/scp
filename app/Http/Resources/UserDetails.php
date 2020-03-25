@@ -20,6 +20,7 @@ class UserDetails extends JsonResource
             'phone' => $this->phone,
             'description' => $this->description,
             'picture' => $this->picture,
+            'website' => $this->website,
             'user' => new UserResource($this->user),
             'type' => $this->type,
             'gender' => $this->gender,

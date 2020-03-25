@@ -10,6 +10,7 @@ class UserDetail extends Model
         'phone',
         'description',
         'picture',
+        'website',
         'user_id',
         'user_type_id',
         'gender_id',
@@ -35,6 +36,6 @@ class UserDetail extends Model
     }
 
     public function location() {
-        return $this->belongsTo('App\Location', 'gender_id');
+        return $this->belongsTo('App\Location', 'location_id');
     }
 }

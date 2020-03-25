@@ -1,18 +1,17 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">QR code scanner</div>
-
-                    <div class="card-body">
-                        <p class="error">{{ error }}</p>
+    <v-container fluid>
+        <v-row class="mx-2">
+            <v-col cols="12" id="scanner-container">
+                <v-card class="mx-auto" max-width="500" elevation="10" :loading="loading">
+                    <v-card-title>QR Code Scanner</v-card-title>
+                    <v-card-subtitle v-if="error" class="red--text font-weight-bolder">{{ error }}</v-card-subtitle>
+                    <v-card-text>
                         <qrcode-stream @decode="onDecode" @init="onInit" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -28,7 +27,8 @@
         data () {
             return {
                 result: '',
-                error: ''
+                error: '',
+                loading: false
             }
         },
         methods: {
@@ -37,8 +37,12 @@
             },
 
             async onInit (promise) {
+                console.log('loading qr code scanner')
+                this.loading = true
+
                 try {
                     await promise
+                    this.loading = false
                 } catch (error) {
                     /*if (error.name === 'NotAllowedError') {
                         this.error = "ERROR: you need to grant camera access permisson"
@@ -54,6 +58,7 @@
                         this.error = "ERROR: Stream API is not supported in this browser"
                     }*/
                     this.error = error.name + ': ' + error.message
+                    this.loading = false
                 }
             }
         }

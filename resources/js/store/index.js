@@ -25,6 +25,7 @@ export default new Vuex.Store({
                 { divider: true },
                 { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
                 { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
+                { divider: true },
                 { icon: 'mdi-information-outline', text: 'About', route: '/about' },
             ],
             place: [
@@ -32,13 +33,13 @@ export default new Vuex.Store({
                 { icon: 'mdi-home-modern', text: 'Home', route: '/place/statistics' },
                 { icon: 'mdi-account', text: 'Profile', route: '/place/profile' },
                 { icon: 'mdi-book-plus', text: 'Offers', route: '/place/offers' },
+                { divider: true },
             ],
         },
         menu: [],
         quicks: {
             admin: [],
             place: [
-                { icon: 'mdi-account', text: 'Profile', route: '/place/profile' },
                 { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place' },
             ],
         },
@@ -48,7 +49,8 @@ export default new Vuex.Store({
             cities: [],
             gengers: []
         },
-        google_api_key: 'AIzaSyDrKxNprd3CrfaSzH_u__tPzpUNd-aRpmU'
+        google_api_key: 'AIzaSyDrKxNprd3CrfaSzH_u__tPzpUNd-aRpmU',
+        avatars_path: '/storage/avatars/'
     },
     mutations: {
           setSession (state, payload) {
@@ -71,7 +73,7 @@ export default new Vuex.Store({
                   commit('setSession', response.data.data)
               });
           },
-          async getLookupData({commit}) {
+          async getLookups({commit}) {
               return await axios.post('/api/lookups').then((response) => {
                   commit('setLookups', response.data)
               });
@@ -99,6 +101,12 @@ export default new Vuex.Store({
         },
         google: (state) => {
             return state.google_api_key
+        },
+        lookups: (state) => {
+            return state.lookups
+        },
+        avatars_path: (state) => {
+            return state.avatars_path
         }
     }
 })

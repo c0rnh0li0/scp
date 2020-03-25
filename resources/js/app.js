@@ -22,7 +22,9 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage
 axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    router.push({ path: '/' + error.response.status })
+    if (error.response.status == 404 || error.response.status == 401)
+        router.push({ path: '/' + error.response.status })
+    return Promise.reject(error.response);
 });
 
 Vue.component('index', require('./components/Index.vue').default);
@@ -37,7 +39,7 @@ const app = new Vue({
     render: h => h('index'),
     async created() {
         await this.$store.dispatch('getSession');
-        this.$store.dispatch('getLookupData');
+        await this.$store.dispatch('getLookups');
     },
     mounted() {
 
