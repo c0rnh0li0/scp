@@ -35,6 +35,17 @@
         methods: {
             onDecode (result) {
                 this.result = result
+                console.log('scan result', this.result)
+                let chunks = this.result.split('_')
+
+                //$user, $offer, $amount
+                let str = 'user: ' + chunks[0] + '\n'
+                    + 'offer: ' + chunks[1] + '\n'
+                    + 'amount: ' + chunks[2] + '\n'
+                    + 'bought: ' + chunks[3] + '\n'
+
+                alert(str)
+                //1_4_2_2020-03-30 11:41:41
             },
 
             async onInit (promise) {
