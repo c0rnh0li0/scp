@@ -62,5 +62,7 @@ Route::middleware('auth:api')->group(function () {
     // tickets
     Route::get('tickets', 'TicketController@index');
     Route::post('tickets/buy', 'TicketController@buy');
+    Route::post('tickets/check', 'TicketController@check');
+    Route::post('tickets/use', 'TicketController@use');
     Route::get('tickets/qr/{user}/{offer}/{ticket}/{amount}', 'TicketController@qr');
 });

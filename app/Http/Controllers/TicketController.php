@@ -48,7 +48,9 @@ class TicketController extends Controller
         $ticket->offer_id = $offer->id;
         $ticket->used = false;
         $ticket->amount = $amount;
-        $ticket->qr_code = $this->qr($user->id, $offer->id, $amount);
+        $ticket->save();
+
+        $ticket->qr_code = $this->qr($user->id, $ticket->id, $amount);
 
         if ($ticket->save()) {
             return response()->json([
@@ -71,11 +73,11 @@ class TicketController extends Controller
      * @param $amount
      * @return image
      */
-    public function qr($user, $offer, $amount) {
+    public function qr($user, $ticket, $amount) {
         $qr_data = [
-            $amount,
+            $ticket,
             $user,
-            $offer,
+            $amount,
             now(),
         ];
 
@@ -95,6 +97,71 @@ class TicketController extends Controller
         return $qrcode_name . '.png';
     }
 
+    /**
+     * get ticket information.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function check(Request $request) {
+        $rules = [
+            'ticket_id' => 'required|numeric',
+            'user_id' => 'required|numeric',
+            'amount' => 'required|numeric'
+        ];
+
+        $this->validate($request, $rules);
+
+        $ticket = Ticket::findOrFail($request->input('ticket_id'));
+
+        if ($ticket->used == 0) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ticket is valid!',
+                'ticket' => new TicketResource($ticket)
+            ], 200);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ticket is not valid!',
+                'ticket' => new TicketResource($ticket)
+            ], 200);
+        }
+
+    }
+
+    /**
+     * use ticket
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function use(Request $request) {
+        $rules = [
+            'ticket_id' => 'required|numeric',
+        ];
+
+        $this->validate($request, $rules);
+
+        $ticket = Ticket::findOrFail($request->input('ticket_id'));
+        $ticket->used = 1;
+
+        if ($ticket->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ticket is used!',
+                'ticket' => new TicketResource($ticket)
+            ], 200);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ticket is not used!'
+            ], 200);
+        }
+
+    }
     /**
      * Remove the specified resource from storage.
      *

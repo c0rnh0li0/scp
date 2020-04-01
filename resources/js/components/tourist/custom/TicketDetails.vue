@@ -3,7 +3,7 @@
         <v-card-title>
             <div class="font-weight-bold">{{ ticket.offer.title }}</div>
             <v-spacer></v-spacer>
-            <v-btn icon dark @click="$emit('closeTicket', offer)">
+            <v-btn icon dark @click="$emit('closeTicket', ticket)">
                 <v-icon color="black">mdi-close</v-icon>
             </v-btn>
         </v-card-title>

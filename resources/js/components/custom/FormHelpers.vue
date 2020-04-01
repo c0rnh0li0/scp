@@ -3,7 +3,6 @@
         <v-snackbar v-model="snackbar" :timeout="snack_timeout" :color="snack_color" top>
             <v-icon v-if="snack_color == 'success'" color="white">mdi-check</v-icon>
             <v-icon v-if="snack_color == 'error'" color="white">mdi-close-octagon</v-icon>
-            <
             {{ snack_message }}
         </v-snackbar>
         <v-dialog v-model="saving" hide-overlay persistent width="300">

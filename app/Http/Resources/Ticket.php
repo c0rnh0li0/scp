@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\UserDetail;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User as UserResource;
-use App\Http\Resources\UserDetails as PlaceDetailResource;
+use App\Http\Resources\UserDetails as UserDetailResource;
 use App\Http\Resources\Offer as OfferDetailResource;
 
 class Ticket extends JsonResource
@@ -17,9 +18,12 @@ class Ticket extends JsonResource
      */
     public function toArray($request)
     {
+        $userDetails = UserDetail::where('user_id', $this->user->id)->get();
+
         return [
             'id' => $this->id,
             'user' => new UserResource($this->user),
+            'user_details' => new UserDetailResource($userDetails[0]),
             'offer' => new OfferDetailResource($this->offer),
             'used' => $this->used,
             'amount' => $this->amount,

@@ -80,6 +80,14 @@
                             disabled
                             v-model="email"
                     />
+                    <v-text-field
+                            type="password"
+                            prepend-icon="mdi-lock-question"
+                            label="Password"
+                            v-model="password"
+                            readonly
+                            @click="openPasswordModal"
+                    />
                 </v-col>
             </v-flex>
 
@@ -283,7 +291,9 @@
                 </v-card>
             </v-sheet>
         </v-bottom-sheet>
-
+        <v-dialog v-model="password_dialog" persistent max-width="400">
+            <password-form @closePasswordDialog="closePasswordDialog" />
+        </v-dialog>
         <v-btn bottom
                color="success"
                ref="saveBtn"
@@ -327,12 +337,14 @@
 
     import FormHelpers from '../custom/FormHelpers'
     import placeholderImage from "./assets/placeholder-img.jpg";
+    import PasswordForm from './custom/PasswordForm'
     import { mapState } from 'vuex'
 
     export default {
         components: {
             TiptapVuetify,
-            FormHelpers
+            FormHelpers,
+            PasswordForm
         },
         watch: {
             sessionData(newVal, oldVal) {
@@ -383,6 +395,9 @@
             subcategories: [],
             valutes: [],
             profileData: {},
+
+            password_dialog: false,
+            password: '*****************',
 
             suggested_place: null,
             suggestion_address: '',
@@ -631,7 +646,13 @@
                         that.saving = that.btn_save_disabled = false
                         that.snackbar = true
                     })
-            }
+            },
+            openPasswordModal() {
+                this.password_dialog = true
+            },
+            closePasswordDialog() {
+                this.password_dialog = false
+            },
         },
         mounted() {
             console.log('Profile Component mounted, lookups.', this.$store.state.lookups)
