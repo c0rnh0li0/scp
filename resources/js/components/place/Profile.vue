@@ -622,6 +622,8 @@
                 formData.append('category_id', this.profileData.location.category_id)
                 /********************************************/
 
+                formData.append('is_company', 1)
+
                 let requestOptions = {
                     headers: {
                         'content-type': 'multipart/form-data'

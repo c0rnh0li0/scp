@@ -234,7 +234,6 @@
                         that.saving = false
                         that.snackbar = true
                         that.confirm_button_disabled = false
-                        //that.snackbar = true
                     })
             }
         }
