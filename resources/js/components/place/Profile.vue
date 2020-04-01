@@ -1,27 +1,28 @@
 <template>
-    <v-container fluid>
-        <v-row class="mx-2">
-            <v-col cols="12" id="map-container">
-                <div id="autocomplete-container">
-                    <v-row class="mx-2">
-                        <v-col class="align-center justify-space-between" cols="12">
-                            <gmap-autocomplete
-                                    class="introInput"
-                                    placeholder="Search..."
-                                    @place_changed="setPlace">
-                            </gmap-autocomplete>
-                        </v-col>
-                    </v-row>
-                </div>
+    <v-container grid-list-xl fluid fill-height>
+        <v-layout row wrap>
+            <!-- google maps autocomplete -->
+            <v-flex xs12 sm12 md12 lg12 xl12>
+                <v-col class="align-center justify-space-between" cols="12">
+                    <gmap-autocomplete
+                            class="introInput"
+                            placeholder="Search..."
+                            @place_changed="setPlace">
+                    </gmap-autocomplete>
+                    <v-divider></v-divider>
+                </v-col>
+            </v-flex>
 
-                <v-divider></v-divider>
-                <gmap-map
-                        ref="mapRef"
-                        :center="defaultCenter"
-                        :zoom="17"
-                        map-type-id="satellite"
-                        style="width: 100%; height: 500px;"
-                        :options="{
+            <!-- google map component -->
+            <v-flex xs12 sm12 md12 lg12 xl12>
+                <v-col cols="12" id="map-container">
+                    <gmap-map
+                            ref="mapRef"
+                            :center="defaultCenter"
+                            :zoom="17"
+                            map-type-id="satellite"
+                            style="width: 100%; height: 500px;"
+                            :options="{
                            zoomControl: true,
                            mapTypeControl: false,
                            scaleControl: false,
@@ -31,132 +32,198 @@
                            disableDefaultUi: true,
                            gestureHandling: 'auto'
                          }">
-                    <gmap-marker
-                            :key="index"
-                            v-for="(m, index) in markers"
-                            :position="m.position"
-                            :clickable="true"
-                            :draggable="true"
-                            @click="center=m.position"
-                            @mouseup="markerMoved"
+                        <gmap-marker
+                                :key="index"
+                                v-for="(m, index) in markers"
+                                :position="m.position"
+                                :clickable="true"
+                                :draggable="true"
+                                @click="center=m.position"
+                                @mouseup="markerMoved"
+                        />
+                    </gmap-map>
+                </v-col>
+            </v-flex>
+
+            <!-- avatar -->
+            <v-flex xs12 sm12 md2 lg2 xl2>
+                <v-col class="text-center justify-space-between" cols="12">
+                    <v-label @click.stop="pickFile">Avatar</v-label>
+
+                    <input type="file"
+                           style="display: none;"
+                           name="avatar"
+                           ref="image"
+                           accept="image/*"
+                           @change="onFilePicked">
+
+                    <v-spacer></v-spacer>
+                    <v-avatar size="100">
+                        <v-img :src="placeholderImage" width="100" height="100" v-if="placeholderImage" class="avatar-img" @click.stop="pickFile" aspect-ratio="1"></v-img>
+                    </v-avatar>
+                </v-col>
+            </v-flex>
+
+            <!-- profile name -->
+            <v-flex xs12 sm12 md5 lg5 xl5 class="justify-center d-flex align-center">
+                <v-col cols="12">
+                    <v-text-field v-model="name" label="Name" :error-messages="errors.name" />
+                </v-col>
+            </v-flex>
+
+            <!-- email: readonly/disabled (used for login, unique) -->
+            <v-flex xs12 sm12 md5 lg5 xl5 class="justify-center d-flex align-center">
+                <v-col cols="12">
+                    <v-text-field
+                            prepend-icon="mdi-mail"
+                            label="Email"
+                            disabled
+                            v-model="email"
                     />
-                </gmap-map>
-            </v-col>
+                </v-col>
+            </v-flex>
 
-            <v-col class="text-center justify-space-between" cols="2">
-                <v-label @click.stop="pickFile">Avatar</v-label>
+            <!-- telephone -->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-text-field
+                            type="tel"
+                            prepend-icon="mdi-phone"
+                            label="Telephone"
+                            v-model="phone"
+                    />
+                </v-col>
+            </v-flex>
 
-                <input type="file"
-                       style="display: none;"
-                       name="avatar"
-                       ref="image"
-                       accept="image/*"
-                       @change="onFilePicked">
+            <!-- website -->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-text-field
+                            prepend-icon="mdi-earth"
+                            label="Website"
+                            v-model="website"
+                    />
+                </v-col>
+            </v-flex>
 
-                <v-spacer></v-spacer>
-                <v-avatar size="100">
-                    <v-img :src="placeholderImage" width="100" height="100" v-if="placeholderImage" class="avatar-img" @click.stop="pickFile" aspect-ratio="1"></v-img>
-                </v-avatar>
-            </v-col>
-            <v-col class="justify-center d-flex align-center" cols="10">
-                <v-text-field v-model="name" label="Name" :error-messages="errors.name" />
-            </v-col>
-            <v-col cols="6">
-                <v-text-field
-                        prepend-icon="mdi-mail"
-                        label="Email"
-                        disabled
-                        v-model="email"
-                />
-            </v-col>
-            <v-col cols="6">
-                <v-text-field
-                        type="tel"
-                        prepend-icon="mdi-phone"
-                        label="Telephone"
-                        v-model="phone"
-                />
-            </v-col>
-            <v-col cols="6">
-                <v-text-field
-                        prepend-icon="mdi-earth"
-                        label="Website"
-                        v-model="website"
-                />
-            </v-col>
-            <v-col cols="6">
-                <v-select
-                        prepend-icon="mdi-earth"
-                        v-model="city"
-                        value="city"
-                        :items="cities"
-                        item-text="name"
-                        item-value="id"
-                        label="City"
-                        :error-messages="errors.city_id"
-                ></v-select>
-            </v-col>
-            <v-col cols="6">
-                <v-select
-                        prepend-icon="mdi-format-list-bulleted-square"
-                        v-model="category"
-                        ref="category"
-                        value="category"
-                        :items="categories"
-                        item-text="name"
-                        item-value="id"
-                        label="Category"
-                        @change="categoryChanged"
-                        :error-messages="errors.category_id"
-                ></v-select>
-            </v-col>
-            <v-col cols="6">
-                <v-select
-                        prepend-icon="mdi-format-list-checkbox"
-                        v-model="subcategory"
-                        ref="subcategory"
-                        :items="subcategories"
-                        value="subcategory"
-                        item-text="name"
-                        item-value="id"
-                        label="Subcategory"
-                ></v-select>
-            </v-col>
+            <!-- Valute -->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-select
+                            prepend-icon="mdi-currency-eur"
+                            v-model="valute"
+                            value="valute"
+                            :items="valutes"
+                            item-value="id"
+                            label="Currency"
+                            :error-messages="errors.valute_id"
+                    >
+                        <template v-slot:item='{item}'> <div v-html='item.name'/> </template>
+                        <template v-slot:selection='{item}'> <div v-html='item.name'/> </template>
+                    </v-select>
+                </v-col>
+            </v-flex>
 
-            <v-col cols="12">
-                <tiptap-vuetify
-                        v-model="description"
-                        :extensions="extensions"
-                        placeholder="Describe your place here…"
-                />
-            </v-col>
+            <!-- city -->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-select
+                            prepend-icon="mdi-earth"
+                            v-model="city"
+                            value="city"
+                            :items="cities"
+                            item-text="name"
+                            item-value="id"
+                            label="City"
+                            :error-messages="errors.city_id"
+                    ></v-select>
+                </v-col>
+            </v-flex>
 
-            <v-col cols="12">
-                <v-text-field
-                        prepend-icon="mdi-city"
-                        label="Address"
-                        v-model="address"
-                        :error-messages="errors.address"
-                />
-            </v-col>
+            <!-- category -->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-select
+                            prepend-icon="mdi-format-list-bulleted-square"
+                            v-model="category"
+                            ref="category"
+                            value="category"
+                            :items="categories"
+                            item-text="name"
+                            item-value="id"
+                            label="Category"
+                            @change="categoryChanged"
+                            :error-messages="errors.category_id"
+                    ></v-select>
+                </v-col>
+            </v-flex>
 
-            <v-col cols="6">
-                <v-text-field
-                        prepend-icon="mdi-longitude"
-                        label="Longitude"
-                        v-model="longitude"
-                        :error-messages="errors.longitude"
-                />
-            </v-col>
-            <v-col cols="6">
-                <v-text-field
-                        prepend-icon="mdi-latitude"
-                        label="Latitude"
-                        v-model="latitude"
-                        :error-messages="errors.latitude"
-                />
-            </v-col>
-        </v-row>
+            <!-- subcategory -->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-select
+                            prepend-icon="mdi-format-list-checkbox"
+                            v-model="subcategory"
+                            ref="subcategory"
+                            :items="subcategories"
+                            value="subcategory"
+                            item-text="name"
+                            item-value="id"
+                            label="Subcategory"
+                    ></v-select>
+                </v-col>
+            </v-flex>
+
+            <!-- description -->
+            <v-flex xs12 sm12 md12 lg12 xl12>
+                <v-label>Description</v-label>
+                <v-col cols="12">
+                    <tiptap-vuetify
+                            v-model="description"
+                            :extensions="extensions"
+                            placeholder="Describe your place here…"
+                    />
+                </v-col>
+            </v-flex>
+
+
+            <!-- address -->
+            <v-flex xs12 sm12 md12 lg12 xl12>
+                <v-col cols="12">
+                    <v-text-field
+                            prepend-icon="mdi-city"
+                            label="Address"
+                            v-model="address"
+                            :error-messages="errors.address"
+                    />
+                </v-col>
+            </v-flex>
+
+            <!-- longitude-->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-text-field
+                            prepend-icon="mdi-longitude"
+                            label="Longitude"
+                            v-model="longitude"
+                            :error-messages="errors.longitude"
+                    />
+                </v-col>
+            </v-flex>
+
+            <!-- latitude-->
+            <v-flex xs12 sm12 md6 lg6 xl6>
+                <v-col cols="12">
+                    <v-text-field
+                            prepend-icon="mdi-latitude"
+                            label="Latitude"
+                            v-model="latitude"
+                            :error-messages="errors.latitude"
+                    />
+                </v-col>
+            </v-flex>
+        </v-layout>
+
         <v-bottom-sheet v-model="bottomSheet">
             <v-sheet height="auto">
                 <v-card class="mx-auto"
@@ -284,16 +351,16 @@
         ,
         data: () => ({
             bottomSheet: false,
-            saving: false,
             btn_save_disabled: false,
             loading: false,
 
             errors: [],
 
+            // form helpers stuff
+            saving: false,
             snackbar: false,
             snack_message: '',
             snack_color: '',
-            snack_timeout: 2000,
 
             progress: false,
 
@@ -305,6 +372,7 @@
             email: '',
             phone: '',
             website: '',
+            valute: '',
             description: '',
             picture: '',
             category: -1,
@@ -313,6 +381,7 @@
             cities: [],
             categories: [],
             subcategories: [],
+            valutes: [],
             profileData: {},
 
             suggested_place: null,
@@ -454,6 +523,7 @@
             setLookupData(data) {
                 this.categories = data.categories
                 this.cities = data.cities
+                this.valutes = data.valutes
 
                 let parent_category = this.categories.find(cat => cat.id == this.category)
                 if (parent_category) {
@@ -468,6 +538,7 @@
                 this.email = data.user.email
                 this.phone = data.phone
                 this.description = data.description
+                this.valute = data.valute ? data.valute.id : null
                 this.picture = data.picture ? this.$store.state.avatars_path + data.picture : this.placeholderImage
                 this.placeholderImage = data.picture ? this.$store.state.avatars_path + data.picture : this.placeholderImage
 
@@ -504,6 +575,7 @@
                 this.profileData.description = this.description
                 this.profileData.picture = this.images.length ? this.images[0] : null
                 this.profileData.website = this.website
+                this.profileData.valute = this.valute
 
                 if (!this.profileData.location)
                     this.profileData.location = {}
@@ -531,6 +603,7 @@
                 formData.append('latitude', this.profileData.location.latitude)
                 formData.append('address', this.profileData.location.address)
                 formData.append('city_id', this.profileData.location.city_id)
+                formData.append('valute_id', this.profileData.valute)
                 formData.append('category_id', this.profileData.location.category_id)
                 /********************************************/
 
@@ -547,6 +620,7 @@
                     .then(response => {
                         that.snack_message = response.data.message
                         that.snack_color = response.data.success ? 'success' : 'error'
+                        this.$store.dispatch('getSession')
                     })
                     .catch(error => {
                         that.errors = error.data.errors

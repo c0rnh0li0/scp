@@ -56,11 +56,12 @@ $(function () {
                     }
                 })
                 .fail(function(jqx, error, msg) {
+                    $('.error-container').show();
+
                     console.log('login fail', arguments);
-                    //
                 })
                 .always(function() {
-                    console.log('login always', arguments);
+                    // console.log('login always', arguments);
                     //
                 });
 

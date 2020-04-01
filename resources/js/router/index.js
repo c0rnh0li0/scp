@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AdminRoutes from './admin';
 import PlaceRoutes from './place';
+import TouristRoutes from './tourist';
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,12 @@ const routes = [
         component: require('../components/place/Index').default,
         children: PlaceRoutes,
         meta: { requiresAuth: true, type: 'place' }
+    },
+    {
+        path: '/home',
+        component: require('../components/tourist/Index').default,
+        children: TouristRoutes,
+        meta: { requiresAuth: true, type: 'tourist' }
     },
     {
         path: '/about',

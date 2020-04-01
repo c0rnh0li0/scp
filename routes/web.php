@@ -21,7 +21,7 @@ Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('r
 
 Route::get('/admin/{slug?}', 'HomeController@admin')->name('admin');
 Route::get('/place/{slug?}', 'HomeController@place')->name('place');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/{slug?}', 'HomeController@home')->name('home');
 
 Route::get('/error', 'HomeController@error')->name('error');
 /*

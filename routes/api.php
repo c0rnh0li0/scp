@@ -23,7 +23,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group(function () {
     // auth
     Route::post('auth', 'Api\AuthController@user');
-    Route::post('logout','Api\AuthController@logout')->name('api_logout');
+    Route::post('logout', 'Api\AuthController@logout')->name('api_logout');
+    Route::post('password', 'Api\AuthController@password');
 
     // lookup data
     Route::post('lookups', 'HomeController@lookups');
@@ -51,4 +52,15 @@ Route::middleware('auth:api')->group(function () {
 
     // user details
     Route::post('userdetails/save/{id}', 'UserDetailController@save');
+
+    // offers
+    Route::get('offers', 'OfferController@index');
+    Route::get('offers/get', 'OfferController@get');
+    Route::post('offers/save/{id}', 'OfferController@save');
+    Route::post('offers/delete/{id}', 'OfferController@delete');
+
+    // tickets
+    Route::get('tickets', 'TicketController@index');
+    Route::post('tickets/buy', 'TicketController@buy');
+    Route::get('tickets/qr/{user}/{offer}/{ticket}/{amount}', 'TicketController@qr');
 });

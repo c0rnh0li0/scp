@@ -9,6 +9,9 @@ class Ticket extends SCPModel
     protected $fillable = [
         'user_id',
         'place_id',
+        'used',
+        'amount',
+        'qr_code',
         'created_at',
         'updated_at',
         'modified_by',
@@ -20,7 +23,7 @@ class Ticket extends SCPModel
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function place() {
-        return $this->hasOne('App\User', 'place_id');
+    public function offer() {
+        return $this->belongsTo('App\Offer', 'offer_id');
     }
 }

@@ -24,7 +24,8 @@ class AuthController extends Controller
                 'c_password' => 'required|same:password',
             ]);
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);                        }
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -83,6 +84,41 @@ class AuthController extends Controller
         $user = Auth::user();
         $details = UserDetail::findOrFail($user->id);
         return new UserDetailResource($details);
-        //return response()->json(['success' => $user], $this->successStatus);
+    }
+
+    public function password(Request $request) {
+        if (Auth::check()) {
+            $user = User::findOrFail(auth('api')->user()->id);
+
+            $rules = [
+                'password' => ['required', function($attribute, $value, $fail) use ($user) {
+                    if (!\Hash::check($value, $user->password)) {
+                        return $fail(__('The current password is incorrect.'));
+                    }
+                }],
+                'new_password' => 'required',
+                'confirm_password' => 'required|same:new_password',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 422);
+
+            $input = $request->all();
+            $user->password = bcrypt($input['new_password']);
+
+            if ($user->save()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Password successfully changed!'
+                ], 201);
+            }
+            else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error changing password!'
+                ], 201);
+            }
+        }
     }
 }

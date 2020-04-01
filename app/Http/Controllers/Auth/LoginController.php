@@ -36,14 +36,20 @@ class LoginController extends Controller
     {
         $authed = User::find(Auth::user()->id);
 
-        if ($authed->details->type->id == UserType::ADMIN_USER_TYPE) {
+        if ($authed->details->type->id == UserType::ADMIN_USER_TYPE)
+        {
             return RouteServiceProvider::ADMIN;
         }
-        else if ($authed->details->type->id == UserType::COMPANY_USER_TYPE) {
+        else if ($authed->details->type->id == UserType::COMPANY_USER_TYPE)
+        {
             return RouteServiceProvider::COMPANY;
         }
+        else if ($authed->details->type->id == UserType::COMPANY_USER_TYPE)
+        {
+            return RouteServiceProvider::HOME;
+        }
 
-        return '/home';
+        return RouteServiceProvider::INDEX;
     }
     /**
      * Create a new controller instance.

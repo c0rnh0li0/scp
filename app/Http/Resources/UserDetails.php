@@ -25,6 +25,7 @@ class UserDetails extends JsonResource
             'type' => $this->type,
             'gender' => $this->gender,
             'location' => $this->location,
+            'valute' => $this->valute,
             'modified_by' => $this->modified_by,
             'deleted_by' => $this->deleted_by,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),

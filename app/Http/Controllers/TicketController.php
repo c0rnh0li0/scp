@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Offer;
 use App\Ticket;
+use App\Http\Resources\Ticket as TicketResource;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\BaconQrCodeGenerator as QrCode;
 
 class TicketController extends Controller
 {
@@ -14,17 +17,10 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $user = auth('api')->user();
+        $tickets = Ticket::where('deleted_at', null)->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(30);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return TicketResource::collection($tickets);
     }
 
     /**
@@ -33,43 +29,70 @@ class TicketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function buy(Request $request)
     {
-        //
+        $rules = [
+            'offer_id' => 'required|numeric',
+            'amount' => 'required|numeric',
+        ];
+
+        $this->validate($request, $rules);
+
+        $ticket = new Ticket();
+
+        $amount = $request->input('amount');
+        $user = auth('api')->user();
+        $offer = Offer::findOrFail($request->input('offer_id'));
+
+        $ticket->user_id = $user->id;
+        $ticket->offer_id = $offer->id;
+        $ticket->used = false;
+        $ticket->amount = $amount;
+        $ticket->qr_code = $this->qr($user->id, $offer->id, $amount);
+
+        if ($ticket->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ticket successfully bought!',
+                'ticket' => new TicketResource($ticket)
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error buying ticket!'
+            ], 201);
+        }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
+     * @param $user
+     * @param $offer
+     * @param $amount
+     * @return image
      */
-    public function show(Ticket $ticket)
-    {
-        //
-    }
+    public function qr($user, $offer, $amount) {
+        $qr_data = [
+            $amount,
+            $user,
+            $offer,
+            now(),
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
-    }
+        $qrcode_name_raw = join('_', $qr_data);
+        $qrcode_name = str_replace(' ', '_' , $qrcode_name_raw);
+        $qrcode_name = str_replace(':', '-' , $qrcode_name);
+        $qrcode_path = public_path('storage\tickets\\' . $qrcode_name . '.png');
+        $data = $qrcode_name_raw;
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Ticket $ticket)
-    {
-        //
+        //touch($qrcode_path);
+
+        $qr = new QrCode();
+        $pngImage = $qr->format('png')
+                       ->size(400)
+                       ->errorCorrection('H')
+                       ->generate($data, $qrcode_path);
+        return $qrcode_name . '.png';
     }
 
     /**

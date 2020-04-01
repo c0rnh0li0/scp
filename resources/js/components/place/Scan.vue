@@ -4,6 +4,7 @@
             <v-col cols="12" id="scanner-container">
                 <v-card class="mx-auto" max-width="500" elevation="10" :loading="loading">
                     <v-card-title>QR Code Scanner</v-card-title>
+                    <v-divider></v-divider>
                     <v-card-subtitle v-if="error" class="red--text font-weight-bolder">{{ error }}</v-card-subtitle>
                     <v-card-text>
                         <qrcode-stream @decode="onDecode" @init="onInit" />

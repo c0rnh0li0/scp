@@ -4,7 +4,7 @@
             <v-list>
                 <v-list-item>
                     <v-list-item-avatar>
-                        <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+                        <v-img :src="avatar"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title class="title">{{ username }}</v-list-item-title>
@@ -81,6 +81,12 @@
         props: {
             source: String,
         },
+        watch: {
+            picture(newVal, oldVal) {
+                this.avatar = this.$store.state.avatars_path + newVal
+                return newVal
+            },
+        },
         computed: {
             session() {
                 return this.$store.state.session
@@ -96,11 +102,15 @@
             },
             email() {
                 return this.$store.state.email
-            }
+            },
+            picture() {
+                return this.$store.state.picture
+            },
         },
         data: () => ({
             drawer: null,
-            item: 0
+            item: 0,
+            avatar: ''
         }),
         methods: {
             logout () {
@@ -115,6 +125,9 @@
                         console.log('logout', err);
                     });
             }
+        },
+        mounted() {
+            this.avatar = this.$store.state.avatars_path + this.$store.state.picture
         }
     }
 </script>

@@ -873,3 +873,13 @@ border: 2px solid #fff;
 .featherlight .featherlight-inner {
 	margin-top: 1rem;
 }
+
+.login-failed-alert {
+	background-color: #e51c23 !important;
+	color: #f0f0f0 !important;
+	text-align: center;
+}
+
+.error-container {
+	display: none;
+}

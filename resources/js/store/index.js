@@ -9,6 +9,8 @@ export default new Vuex.Store({
         session: {},
         username: '',
         email: '',
+        picture: 'avatar_default.png',
+        valute: '',
         types: {
             type_1: 'admin',
             type_2: 'tourist',
@@ -17,7 +19,8 @@ export default new Vuex.Store({
         type: null,
         menus: {
             admin: [
-                { icon: 'mdi-home-modern', text: 'Home', route: '/admin' },
+                { divider: true },
+                { icon: 'mdi-home-modern', text: 'Home', route: '/admin/dashboard' },
                 { icon: 'mdi-file-document-edit', text: 'Contracts', route: '/admin/contracts' },
                 { icon: 'mdi-bank', text: 'Places', route: '/admin/places' },
                 { icon: 'mdi-account', text: 'People', route: '/admin/people' },
@@ -29,28 +32,47 @@ export default new Vuex.Store({
                 { icon: 'mdi-information-outline', text: 'About', route: '/about' },
             ],
             place: [
-                { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place' },
-                { icon: 'mdi-home-modern', text: 'Home', route: '/place/statistics' },
+                { divider: true },
+                { icon: 'mdi-home-modern', text: 'Dashboard', route: '/place/statistics' },
+                { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place/scan' },
                 { icon: 'mdi-account', text: 'Profile', route: '/place/profile' },
                 { icon: 'mdi-book-plus', text: 'Offers', route: '/place/offers' },
                 { divider: true },
+                { icon: 'mdi-information-outline', text: 'About', route: '/about' },
+            ],
+            tourist: [
+                { divider: true },
+                { icon: 'mdi-home-modern', text: 'Dashboard', route: '/home/dashboard' },
+                { icon: 'mdi-map-marker', text: 'Map', route: '/home/map' },
+                { icon: 'mdi-book-plus', text: 'Offers', route: '/home/offers' },
+                { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/home/tickets' },
+                { icon: 'mdi-account', text: 'Profile', route: '/home/profile' },
+                { divider: true },
+                { icon: 'mdi-information-outline', text: 'About', route: '/about' },
             ],
         },
         menu: [],
         quicks: {
             admin: [],
             place: [
-                { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place' },
+                { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place/scan' },
             ],
+            tourist: [
+                { icon: 'mdi-map-marker', text: 'Map', route: '/home/map' },
+            ]
         },
         quick: [],
         lookups: {
             categories: [],
             cities: [],
-            gengers: []
+            genders: [],
+            valutes: [],
+            countries: []
         },
         google_api_key: 'AIzaSyDrKxNprd3CrfaSzH_u__tPzpUNd-aRpmU',
-        avatars_path: '/storage/avatars/'
+        avatars_path: '/storage/avatars/',
+        promo_images_path: '/storage/promo_images/',
+        tickets_path: '/storage/tickets/',
     },
     mutations: {
           setSession (state, payload) {
@@ -59,12 +81,16 @@ export default new Vuex.Store({
               state.quick = state.quicks[state.type]
               state.username = payload.user.name
               state.email = payload.user.email
+              state.picture = payload.picture ? payload.picture : state.picture
+              state.valute = payload.valute ? payload.valute.id : ''
               state.session = payload
           },
           setLookups (state, payload) {
               state.lookups.categories = payload.categories
               state.lookups.cities = payload.cities
-              state.lookups.gengers = payload.genders
+              state.lookups.genders = payload.genders
+              state.lookups.valutes = payload.valutes
+              state.lookups.countries = payload.countries
           },
     },
     actions: {
@@ -96,6 +122,12 @@ export default new Vuex.Store({
         email: (state) => {
             return state.email
         },
+        picture: (state) => {
+            return state.picture
+        },
+        valute: (state) => {
+            return state.valute
+        },
         quick: (state) => {
             return state.quick
         },
@@ -107,6 +139,12 @@ export default new Vuex.Store({
         },
         avatars_path: (state) => {
             return state.avatars_path
+        },
+        promo_images_path: (state) => {
+            return state.promo_images_path
+        },
+        tickets_path: (state) => {
+            return state.tickets_path
         }
     }
 })

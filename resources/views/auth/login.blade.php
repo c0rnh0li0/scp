@@ -6,7 +6,14 @@
         {{-- <form action="{{ route('login') }}" method="post" role="form" class="contactForm"> --}}
         <form action="{{ route('api_login') }}" method="post" role="form" class="scp-form contactForm">
             @csrf
-
+            <div class="form-group error-container">
+                <div class="alert alert-danger login-failed-alert" role="alert">
+                    <i class="fa fa-exclamation-triangle float-left mt-1"></i>
+                    <span class="align-center center">
+                        Login failed!
+                    </span>
+                </div>
+            </div>
             <div class="form-group">
                 <input id="email" type="email" placeholder="Your Email" class="form-control input-text @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                 <div class="validation"> @error('email') <strong>{{ $message }}</strong> @enderror </div>

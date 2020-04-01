@@ -17,9 +17,9 @@ class CreateLocationsTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->bigIncrements('id');
-            $table->string('longitude');
-            $table->string('latitude');
-            $table->string('address');
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('address')->nullable();
             $table->string('number')->nullable();
 
             $table->bigInteger('city_id')->nullable()->unsigned();

@@ -3,6 +3,7 @@ require('./bootstrap');
 require('./jquery-scrolltofixed');
 require('./jquery.easing.1.3');
 require('./jquery.isotope');
+require('./bootoast');
 const WOW = require('./wow.min');
 require('./classie');
 require('./featherlight.min');

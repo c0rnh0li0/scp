@@ -1,6 +1,6 @@
 const placeroutes = [
     {
-        path: '',
+        path: 'scan',
         component: require('./../components/place/Scan').default
     },
     {

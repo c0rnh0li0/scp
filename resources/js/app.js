@@ -41,7 +41,7 @@ const app = new Vue({
         await this.$store.dispatch('getSession');
         await this.$store.dispatch('getLookups');
     },
-    mounted() {
+    async mounted() {
 
     }
 });

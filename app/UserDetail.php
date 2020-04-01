@@ -15,6 +15,7 @@ class UserDetail extends Model
         'user_type_id',
         'gender_id',
         'location_id',
+        'valute_id',
         'created_at',
         'updated_at',
         'modified_by',
@@ -37,5 +38,9 @@ class UserDetail extends Model
 
     public function location() {
         return $this->belongsTo('App\Location', 'location_id');
+    }
+
+    public function valute() {
+        return $this->belongsTo('App\Valute', 'valute_id');
     }
 }
