@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User as UserResource;
+use App\Http\Resources\Location as LocationResource;
 
 class UserDetails extends JsonResource
 {
@@ -24,7 +25,7 @@ class UserDetails extends JsonResource
             'user' => new UserResource($this->user),
             'type' => $this->type,
             'gender' => $this->gender,
-            'location' => $this->location,
+            'location' => new LocationResource($this->location),
             'valute' => $this->valute,
             'modified_by' => $this->modified_by,
             'deleted_by' => $this->deleted_by,

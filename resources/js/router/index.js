@@ -17,13 +17,13 @@ const routes = [
         path: '/place',
         component: require('../components/place/Index').default,
         children: PlaceRoutes,
-        meta: { requiresAuth: true, type: 'place' }
+        meta: { requiresAuth: true, type: 'place', transitionName: 'fade' }
     },
     {
         path: '/home',
         component: require('../components/tourist/Index').default,
         children: TouristRoutes,
-        meta: { requiresAuth: true, type: 'tourist' }
+        meta: { requiresAuth: true, type: 'tourist', transitionName: 'fade' }
     },
     {
         path: '/about',

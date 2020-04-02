@@ -19,7 +19,7 @@
             </v-row>
         </v-parallax>
         <v-card-text>
-            <v-container grid-list-xl fluid fill-height>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
                     <v-row class="justify-center text-center">
                         <v-col cols="12" class="text-center">

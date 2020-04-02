@@ -19,7 +19,7 @@
             </v-row>
         </v-parallax>
         <v-card-text>
-            <v-container grid-list-xl fluid fill-height>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
                     <!-- long description -->
                     <v-flex xs12 sm12 md12 lg12 xl12>

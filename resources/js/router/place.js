@@ -15,6 +15,10 @@ const placeroutes = [
         path: 'offers',
         component: require('./../components/place/Offers').default
     },
+    {
+        path: 'business/:id/:scope',
+        component: require('./../components/place/Business').default
+    },
 ];
 
 export default placeroutes;

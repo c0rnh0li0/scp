@@ -1,12 +1,22 @@
 // FILE PATH: /resources/js/service-worker.js
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
-importScripts('https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/6.3.4/firebase-messaging.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+importScripts('https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js');
 
 firebase.initializeApp({
-    'messagingSenderId': '######'
+    apiKey: "AIzaSyDrKxNprd3CrfaSzH_u__tPzpUNd-aRpmU",
+    authDomain: "skopje-city-pass.firebaseapp.com",
+    databaseURL: "https://skopje-city-pass.firebaseio.com",
+    projectId: "skopje-city-pass",
+    storageBucket: "skopje-city-pass.appspot.com",
+    messagingSenderId: "332397838213",
+    appId: "1:332397838213:web:487455021fbd85cee88eec",
+    measurementId: "G-KL1YXRDH6Q"
 });
+
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 const messaging = firebase.messaging();
 
@@ -24,6 +34,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
 });
 
 if (workbox) {
+    console.log(`Yay! Workbox is loaded 🎉`);
     // injected assets by Workbox CLI
     workbox.precaching.precacheAndRoute([]);
 

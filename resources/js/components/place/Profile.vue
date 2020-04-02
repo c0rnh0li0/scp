@@ -1,12 +1,12 @@
 <template>
-    <v-container grid-list-xl fluid fill-height>
-        <v-layout row wrap>
+    <v-container grid-list-xl class="ma-0 pa-0">
+        <v-layout row wrap class="ma-0 pa-0">
             <!-- google maps autocomplete -->
-            <v-flex xs12 sm12 md12 lg12 xl12>
-                <v-col class="align-center justify-space-between" cols="12">
+            <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
+                <v-col class="align-center justify-space-between mb-2" cols="12">
                     <gmap-autocomplete
                             class="introInput"
-                            placeholder="Search..."
+                            placeholder="Search for your location..."
                             @place_changed="setPlace">
                     </gmap-autocomplete>
                     <v-divider></v-divider>
@@ -14,7 +14,7 @@
             </v-flex>
 
             <!-- google map component -->
-            <v-flex xs12 sm12 md12 lg12 xl12>
+            <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
                 <v-col cols="12" id="map-container">
                     <gmap-map
                             ref="mapRef"
@@ -291,7 +291,7 @@
                 </v-card>
             </v-sheet>
         </v-bottom-sheet>
-        <v-dialog v-model="password_dialog" persistent max-width="400">
+        <v-dialog v-model="password_dialog" persistent max-width="400" :fullscreen="$vuetify.breakpoint.mdAndDown">
             <password-form @closePasswordDialog="closePasswordDialog" />
         </v-dialog>
         <v-btn bottom
@@ -336,7 +336,7 @@
     } from 'tiptap-vuetify'
 
     import FormHelpers from '../custom/FormHelpers'
-    import placeholderImage from "./assets/placeholder-img.jpg";
+    import placeholderImage from "./assets/placeholder-img.jpg"
     import PasswordForm from './custom/PasswordForm'
     import { mapState } from 'vuex'
 

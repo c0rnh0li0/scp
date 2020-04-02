@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserDetails as UserDetailResource;
 use App\User;
+use App\UserDetail;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
 
@@ -18,6 +20,17 @@ class UserController extends Controller
         $users = User::paginate(10);
 
         return UserResource::collection($users);
+    }
+
+    /**
+     * get profile for a user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function profile($id) {
+        $details = UserDetail::where('user_id', $id)->get();
+        return new UserDetailResource($details[0]);
     }
 
     /**

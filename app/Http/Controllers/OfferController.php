@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Offer;
 use App\Http\Resources\Offer as OfferResource;
+use App\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OfferController extends Controller
 {
@@ -14,18 +16,44 @@ class OfferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id = null)
     {
-        $offers = Offer::where('deleted_at', null)->orderBy('created_at', 'desc')->paginate(30);
+        $owner_id = $id ? $id : auth('api')->user()->id;
+
+        $offers = Offer::where('deleted_at', null)
+                       ->where('owner_id', $owner_id)
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(30);
 
         return OfferResource::collection($offers);
     }
 
-    public function get()
+    public function get($fromDashboard = false)
     {
-        $offers = Offer::where('deleted_at', null)->where('include_global', 1)->orderBy('created_at', 'desc')->paginate(30);
+        $get = $fromDashboard ? 4 : 30;
 
-        return OfferResource::collection($offers);
+        $featured_offers = Offer::select('offers.*')
+                                ->join('tickets', 'tickets.offer_id', '!=', 'offers.id')
+                                ->where('offers.deleted_at', null)
+                                ->where('offers.include_global', 1)
+                                ->where('offers.featured', 1)
+                                ->orderBy('offers.created_at', 'desc')
+                                ->paginate($get);
+
+        $other_offers = Offer::select('offers.*')
+                               ->join('tickets', 'tickets.offer_id', '!=', 'offers.id')
+                               ->where('offers.deleted_at', null)
+                               ->where('offers.include_global', 1)
+                               ->where('offers.featured', 0)
+                               ->orderBy('offers.created_at', 'desc')
+                               ->paginate($get);
+
+        return response()->json([
+            'offers' => [
+                'featured' => OfferResource::collection($featured_offers),
+                'other' => OfferResource::collection($other_offers)
+            ],
+        ], 201);
     }
 
     /**

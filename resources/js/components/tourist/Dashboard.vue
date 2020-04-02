@@ -1,22 +1,20 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">tourist home</div>
-
-                    <div class="card-body">
-                        I'm an tourist component.
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        <tickets></tickets>
+        <offers :from-dashboard="true"></offers>
     </div>
 </template>
 
 <script>
+    import Tickets from './Tickets'
+    import Offers from './Offers'
+
     export default {
-        mounted() {
+        components: {
+            Tickets,
+            Offers
+        },
+        created() {
             console.log('tourist Dashboard Component mounted.')
         }
     }

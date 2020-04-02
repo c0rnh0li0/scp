@@ -141,7 +141,7 @@
             </v-flex>
         </v-layout>
 
-        <v-dialog v-model="password_dialog" persistent max-width="400">
+        <v-dialog v-model="password_dialog" persistent max-width="400" :fullscreen="$vuetify.breakpoint.mdAndDown">
             <password-form @closePasswordDialog="closePasswordDialog" />
         </v-dialog>
 
@@ -316,10 +316,13 @@
                 this.countries = data.countries
 
                 if (this.country > -1) {
-                    this.cities = this.$store.state.lookups.countries.find(cat => cat.id == this.country).cities
-                    let foundCity = this.cities.find(cit => cit.id == this.city);
-                    if (foundCity)
-                        this.city = foundCity.name
+                    let citiesByCountry = this.$store.state.lookups.countries.find(cat => cat.id == this.country)
+                    if (citiesByCountry) {
+                        this.cities = citiesByCountry.cities
+                        let foundCity = this.cities.find(cit => cit.id == this.city);
+                        if (foundCity)
+                            this.city = foundCity.name
+                    }
                 }
             },
             // TODO: mark city as selected on load, based on country
@@ -334,8 +337,18 @@
                 this.picture = data.picture ? this.$store.state.avatars_path + data.picture : this.placeholderImage
                 this.placeholderImage = data.picture ? this.$store.state.avatars_path + data.picture : this.placeholderImage
 
-                this.city = data.location ? data.location.city_id : ''
                 this.country = data.location ? data.location.country_id : -1
+                if (this.country > -1) {
+                    this.city = data.location.city_id
+
+                    let citiesByCountry = this.$store.state.lookups.countries.find(cat => cat.id == this.country)
+                    if (citiesByCountry) {
+                        this.cities = citiesByCountry.cities
+                        let foundCity = this.cities.find(cit => cit.id == this.city);
+                        if (foundCity)
+                            this.city = foundCity.name
+                    }
+                }
 
                 this.address = data.location ? data.location.address : ''
             },
@@ -428,16 +441,15 @@
                     return city.id
             }
         },
-        async mounted() {
+        async created() {
             console.log('Profile Component mounted, lookups.', this.$store.state.lookups)
             console.log('Profile Component mounted, session.', this.$store.state.session)
 
-            /*if (this.$store.state.session.user)
+            if (this.$store.state.session.user)
                 this.setPageData(this.$store.state.session)
 
-            this.setLookupData(this.$store.state.lookups);*/
+            this.setLookupData(this.$store.state.lookups);
         },
-        created() {}
     }
 </script>
 

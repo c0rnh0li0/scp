@@ -19,6 +19,10 @@ const touristroutes = [
         path: 'profile',
         component: require('./../components/tourist/Profile').default
     },
+    {
+        path: 'business/:id/:scope',
+        component: require('./../components/place/Business').default
+    },
 ];
 
 export default touristroutes;

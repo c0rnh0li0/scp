@@ -19,7 +19,7 @@
             <v-card-title v-html="ticket.offer.short_description" />
         </v-img>
         <v-card-text>
-            <v-container grid-list-xl fluid fill-height>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
                     <!-- long description -->
                     <v-flex xs12 sm12 md12 lg12 xl12>
@@ -51,7 +51,6 @@
         props: ['ticket'],
         watch: {
             ticket(newVal, oldVal) {
-                console.log('preview ticket', newVal)
                 return newVal
             },
         },

@@ -17,8 +17,11 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $user = auth('api')->user();
-        $tickets = Ticket::where('deleted_at', null)->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(30);
+        $tickets = Ticket::where('deleted_at', null)
+                         ->where('used', 0)
+                         ->where('user_id', auth('api')->user()->id)
+                         ->orderBy('created_at', 'desc')
+                         ->paginate(30);
 
         return TicketResource::collection($tickets);
     }

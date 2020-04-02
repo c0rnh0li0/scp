@@ -35,6 +35,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('users', 'UserController@store');
     Route::put('users', 'UserController@store');
     Route::delete('users/{id}', 'UserController@destroy');
+    Route::get('profile/{id}', 'UserController@profile');
 
     // people (tourists)
     Route::get('people', 'PeopleController@index');
@@ -54,8 +55,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('userdetails/save/{id}', 'UserDetailController@save');
 
     // offers
-    Route::get('offers', 'OfferController@index');
-    Route::get('offers/get', 'OfferController@get');
+    Route::get('offers/{id?}', 'OfferController@index');
+    Route::get('offers/get/{fromDashboard?}', 'OfferController@get');
     Route::post('offers/save/{id}', 'OfferController@save');
     Route::post('offers/delete/{id}', 'OfferController@delete');
 

@@ -27,6 +27,8 @@ axios.interceptors.response.use(function (response) {
     return Promise.reject(error.response);
 });
 
+import './registerServiceWorker'
+
 Vue.component('index', require('./components/Index.vue').default);
 
 import './../sass/main.scss'
@@ -37,9 +39,12 @@ const app = new Vue({
     router,
     vuetify: vuetify,
     render: h => h('index'),
-    async created() {
+    async beforeCreate() {
         await this.$store.dispatch('getSession');
         await this.$store.dispatch('getLookups');
+    },
+    async created() {
+
     },
     async mounted() {
 

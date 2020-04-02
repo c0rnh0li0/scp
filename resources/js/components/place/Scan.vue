@@ -13,19 +13,18 @@
                             </div>
 
                             <div v-if="validationFailure" class="validation-failure">
-                                This is NOT valid!
+                                Ticket is NOT valid!
                             </div>
 
                             <div v-if="validationPending" class="validation-pending">
                                 Long validation in progress...
                             </div>
                         </qrcode-stream>
-                        <v-btn @click="onDecode('1_4_1_2020-03-30 11:41:41')">Manual decode</v-btn>
                     </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
-        <v-dialog v-model="ticket_confirm_dialog" persistent max-width="600">
+        <v-dialog v-model="ticket_confirm_dialog" persistent max-width="600" :fullscreen="$vuetify.breakpoint.mdAndDown">
             <ticket-check :ticket="ticket_check"
                           @closeTicketCheck="closeTicketCheck"
                           @confirmTicketCheck="confirmTicketCheck"

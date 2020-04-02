@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer v-model="drawer" app>
+        <v-navigation-drawer v-model="drawer" color="grey lighten-5" light app>
             <v-list>
                 <v-list-item>
                     <v-list-item-avatar>
@@ -29,7 +29,7 @@
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
-                            <v-list-item-title class="blue-grey--text darken-4">
+                            <v-list-item-title>
                                 {{ item.text }}
                             </v-list-item-title>
                         </v-list-item-content>
@@ -41,7 +41,7 @@
                         <v-icon>mdi-logout</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title class="blue-grey--text darken-4">
+                        <v-list-item-title class="red--text darken-4">
                             Logout
                         </v-list-item-title>
                     </v-list-item-content>
@@ -52,7 +52,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="blue-grey darken-4" dark>
+        <v-app-bar app color="light-blue darken-4" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <v-toolbar-title>Skopje City Pass</v-toolbar-title>
             <v-spacer />
@@ -65,9 +65,7 @@
 
         <v-content>
             <v-container fluid>
-                <transition name="fade" mode="out-in">
-                    <router-view></router-view>
-                </transition>
+                <router-view></router-view>
             </v-container>
         </v-content>
         <!-- <v-footer color="blue-grey darken-4" app>
@@ -92,7 +90,13 @@
                 return this.$store.state.session
             },
             items() {
-                return this.$store.state.menu
+                let menu_items = this.$store.state.menu
+
+                // for previewing profile from business scope only
+                if (menu_items.length && this.$store.state.type == this.$store.state.types.type_3)
+                    menu_items.find(m => m.name == 'business_profile').route += this.$store.state.id + '/true'
+
+                return menu_items
             },
             quick_items() {
                 return this.$store.state.quick
@@ -126,7 +130,7 @@
                     });
             }
         },
-        mounted() {
+        created() {
             this.avatar = this.$store.state.avatars_path + this.$store.state.picture
         }
     }

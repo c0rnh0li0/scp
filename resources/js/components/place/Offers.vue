@@ -1,237 +1,190 @@
 <template>
-    <v-container fluid class="fill-height">
-        <v-row class="mx-2">
-            <v-col cols="12" align="center" justify="center" v-if="offers.length == 0">
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-col cols="12" align="center" justify="center" v-if="offers_loaded && offers.length == 0">
                 <v-alert type="info" align="center" justify="center" max-width="400">
-                    You don't have any offers for now
+                    No offers at this time...
                 </v-alert>
             </v-col>
-            <v-col cols="12" align="center" justify="center" v-else>
-                <v-container grid-list-xl fluid fill-height>
-                    <v-layout row wrap>
-                        <v-flex v-for="(offer, i) in offers" :key="offer.id" xs12 sm6 md4 lg3 xl3>
-                            <v-card class="ma-2">
-                                <v-img :src="$store.state.promo_images_path + offer.promo_image"
-                                       class="white--text align-end"
-                                       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                                       height="200px">
-                                    <v-card-title class="font-weight-bold" v-text="offer.title"></v-card-title>
-                                </v-img>
-                                <v-card-subtitle v-html="offer.short_description"></v-card-subtitle>
-                                <v-card-actions>
-                                    <v-row class="text-start">
-                                        <v-col cols="12">
-                                            <div class="d-inline real-price-text grey--text caption">{{ offer.real_price }}</div>
-                                            <div class="d-inline grey--text" v-html="$store.state.session.valute.sign" />
-
-                                            <br />
-
-                                            <div class="d-inline offered-price-text green--text text--darken-4 font-weight-medium title">{{ offer.offered_price }}</div>
-                                            <div class="d-inline font-weight-medium title green--text text--darken-4" v-html="$store.state.session.valute.sign" />
-                                        </v-col>
-                                    </v-row>
-                                    <v-spacer></v-spacer>
-
-                                    <!-- <v-tooltip top>
-                                        <template v-slot:activator="{ on }">
-                                            <span v-on="on">
-                                                <v-btn icon @click="previewOffer(offer)">
-                                                    <v-icon>mdi-eye</v-icon>
-                                                </v-btn>
-                                            </span>
-                                        </template>
-                                        <span>Preview offer</span>
-                                    </v-tooltip> -->
-
-                                    <v-tooltip top>
-                                        <template v-slot:activator="{ on }">
-                                            <span v-on="on">
-                                                <v-btn icon @click="editOffer(offer)">
-                                                    <v-icon>mdi-pencil</v-icon>
-                                                </v-btn>
-                                            </span>
-                                        </template>
-                                        <span>Edit</span>
-                                    </v-tooltip>
-
-                                    <v-tooltip top>
-                                        <template v-slot:activator="{ on }">
-                                            <span v-on="on">
-                                                <v-btn icon @click="askDeleteOffer(offer)">
-                                                    <v-icon>mdi-delete</v-icon>
-                                                </v-btn>
-                                            </span>
-                                        </template>
-                                        <span>Delete</span>
-                                    </v-tooltip>
-                                </v-card-actions>
-                            </v-card>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+            <v-col cols="12" align="center" justify="center" class="ma-0 pa-0" v-else>
+                <v-card flat class="ma-0 pa-0 mb-2">
+                    <v-card-title class="display-1">
+                        Your offers
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container grid-list-xl class="ma-0 pa-0">
+                            <v-layout row wrap class="ma-0 pa-0">
+                                <v-flex v-for="(offer, i) in offers" :key="offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
+                                    <offer-card :offer="offer" @editOffer="editOffer" @askDeleteOffer="askDeleteOffer" />
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+                </v-card>
             </v-col>
-        </v-row>
-        <v-btn bottom
-               color="success"
-               dark
-               fab
-               fixed
-               right
-               @click="showForm">
-            <v-icon>mdi-plus</v-icon>
-        </v-btn>
-        <v-dialog v-model="dialog" scrollable persistent max-width="1000">
-            <v-card>
-                <v-card-title class="font-weight-bold">
-                    {{ dialog_title }}
-                    <v-spacer></v-spacer>
-                    <v-btn icon dark @click="closeForm">
-                        <v-icon color="black">mdi-close</v-icon>
-                    </v-btn>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                    <v-container grid-list-xl fluid fill-height>
-                        <v-layout row wrap>
-                            <!-- offer title -->
-                            <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-input hidden v-model="id" />
-                                <v-text-field
-                                        prepend-icon="mdi-tag"
-                                        label="Offer Title"
-                                        v-model="title"
-                                        :error-messages="errors.title" />
-                            </v-flex>
 
-                            <!-- short description -->
-                            <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-label ref="shortDescriptionLabel">Short Description</v-label>
-                                <tiptap-vuetify
-                                        v-model="short_description"
-                                        :extensions="extensions"
-                                        ref="shortDescription"
-                                        placeholder="Add a short description for your offer…"
-                                />
-                                <errors :message="errors.short_description" />
-                            </v-flex>
+            <v-btn bottom
+                   color="success"
+                   dark
+                   fab
+                   fixed
+                   right
+                   @click="showForm">
+                <v-icon>mdi-plus</v-icon>
+            </v-btn>
+            <v-dialog v-model="dialog" scrollable persistent max-width="1000" :fullscreen="$vuetify.breakpoint.mdAndDown">
+                <v-card>
+                    <v-card-title class="font-weight-bold">
+                        {{ dialog_title }}
+                        <v-spacer></v-spacer>
+                        <v-btn icon dark @click="closeForm">
+                            <v-icon color="black">mdi-close</v-icon>
+                        </v-btn>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-container grid-list-xl fluid fill-height>
+                            <v-layout row wrap>
+                                <!-- offer title -->
+                                <v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-input hidden v-model="id" />
+                                    <v-text-field
+                                            prepend-icon="mdi-tag"
+                                            label="Offer Title"
+                                            v-model="title"
+                                            :error-messages="errors.title" />
+                                </v-flex>
 
-                            <!-- long description -->
-                            <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-label>Long Description</v-label>
-                                <tiptap-vuetify
-                                        v-model="long_description"
-                                        :extensions="extensions"
-                                        placeholder="Add a nice and long description for your offer…"
-                                />
-                            </v-flex>
+                                <!-- short description -->
+                                <v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-label ref="shortDescriptionLabel">Short Description</v-label>
+                                    <tiptap-vuetify
+                                            v-model="short_description"
+                                            :extensions="extensions"
+                                            ref="shortDescription"
+                                            placeholder="Add a short description for your offer…"
+                                    />
+                                    <errors :message="errors.short_description" />
+                                </v-flex>
 
-                            <!-- promo image -->
-                            <v-flex xs12 sm12 md6 lg6 xl6 class="text-center justify-space-between">
-                                <v-label @click.stop="pickFile">Promo image</v-label>
+                                <!-- long description -->
+                                <v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-label>Long Description</v-label>
+                                    <tiptap-vuetify
+                                            v-model="long_description"
+                                            :extensions="extensions"
+                                            placeholder="Add a nice and long description for your offer…"
+                                    />
+                                </v-flex>
 
-                                <input type="file"
-                                       style="display: none;"
-                                       name="promo_image"
-                                       ref="image"
-                                       accept="image/*"
-                                       @change="onFilePicked">
-                                <v-spacer></v-spacer>
-                                <v-img :src="placeholderImage" height="250" v-if="placeholderImage" class="avatar-img" @click.stop="pickFile" aspect-ratio="1"></v-img>
-                            </v-flex>
+                                <!-- promo image -->
+                                <v-flex xs12 sm12 md6 lg6 xl6 class="text-center justify-space-between">
+                                    <v-label @click.stop="pickFile">Promo image</v-label>
 
-                            <!-- pricing and checkboxes -->
-                            <v-flex xs12 sm12 md6 lg6 xl6 class="text-center justify-space-between">
-                                <v-col cols="12" class="justify-space-between">
-                                    <v-row>
-                                        <v-col cols="11">
-                                            <v-text-field
-                                                    prepend-icon="mdi-cash"
-                                                    label="Real Price"
-                                                    v-model="real_price"
-                                                    :error-messages="errors.real_price"
-                                            />
-                                        </v-col>
-                                        <v-col cols="1" class="d-flex align-middle align-center">
-                                            <div v-html='valute' />
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="11">
-                                            <v-text-field
-                                                    prepend-icon="mdi-cash-refund"
-                                                    label="Offered Price"
-                                                    v-model="offered_price"
-                                                    :error-messages="errors.offered_price"
-                                            />
-                                        </v-col>
-                                        <v-col cols="1" class="d-flex align-middle align-center">
-                                            <div v-html='valute' />
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-tooltip top>
-                                            <template v-slot:activator="{ on }">
+                                    <input type="file"
+                                           style="display: none;"
+                                           name="promo_image"
+                                           ref="image"
+                                           accept="image/*"
+                                           @change="onFilePicked">
+                                    <v-spacer></v-spacer>
+                                    <v-img :src="placeholderImage" height="250" v-if="placeholderImage" class="avatar-img" @click.stop="pickFile" aspect-ratio="1"></v-img>
+                                </v-flex>
+
+                                <!-- pricing and checkboxes -->
+                                <v-flex xs12 sm12 md6 lg6 xl6 class="text-center justify-space-between">
+                                    <v-col cols="12" class="justify-space-between">
+                                        <v-row>
+                                            <v-col cols="11">
+                                                <v-text-field
+                                                        prepend-icon="mdi-cash"
+                                                        label="Real Price"
+                                                        v-model="real_price"
+                                                        :error-messages="errors.real_price"
+                                                />
+                                            </v-col>
+                                            <v-col cols="1" class="d-flex align-middle align-center">
+                                                <div v-html='valute' />
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="11">
+                                                <v-text-field
+                                                        prepend-icon="mdi-cash-refund"
+                                                        label="Offered Price"
+                                                        v-model="offered_price"
+                                                        :error-messages="errors.offered_price"
+                                                />
+                                            </v-col>
+                                            <v-col cols="1" class="d-flex align-middle align-center">
+                                                <div v-html='valute' />
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-tooltip top>
+                                                <template v-slot:activator="{ on }">
                                         <span v-on="on">
                                             <v-checkbox v-model="include_global" class="mx-2" label="Include in global offers?"></v-checkbox>
                                         </span>
-                                            </template>
-                                            <span>Can this offer be displayed publicly for tourists and can it be used in the creation of bundles (multiple offers) by our system?</span>
-                                        </v-tooltip>
-                                    </v-row>
-                                    <v-row>
-                                        <v-tooltip top>
-                                            <template v-slot:activator="{ on }">
+                                                </template>
+                                                <span>Can this offer be displayed publicly for tourists and can it be used in the creation of bundles (multiple offers) by our system?</span>
+                                            </v-tooltip>
+                                        </v-row>
+                                        <v-row>
+                                            <v-tooltip top>
+                                                <template v-slot:activator="{ on }">
                                         <span v-on="on">
                                             <v-checkbox v-model="featured" class="mx-2" label="Display as featured offer?"></v-checkbox>
                                         </span>
-                                            </template>
-                                            <span>Can this offer be displayed as a featured offer in the top section publicly and for tourists?</span>
-                                        </v-tooltip>
-                                    </v-row>
-                                </v-col>
-                            </v-flex>
+                                                </template>
+                                                <span>Can this offer be displayed as a featured offer in the top section publicly and for tourists?</span>
+                                            </v-tooltip>
+                                        </v-row>
+                                    </v-col>
+                                </v-flex>
 
-                            <!-- notes -->
-                            <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-label>Notes about this offer</v-label>
-                                <tiptap-vuetify
-                                        v-model="notes"
-                                        :extensions="extensions"
-                                        placeholder="Add few notes about your offer…"
-                                />
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-spacer />
-                    <v-btn text color="error" @click="closeForm" :disabled="btn_save_disabled">Cancel</v-btn>
-                    <v-btn text color="success" @click="saveForm" :disabled="btn_save_disabled">Save</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <v-dialog v-model="preview_offer">
-            <preview-offer :offer="preview_offer" :hide_actions="true" @closeOffer="closeOfferPreview" />
-        </v-dialog>
-        <v-dialog v-model="delete_dialog" persistent max-width="290">
-            <v-card>
-                <v-card-title>Are you sure you want to delete "{{ deleteOffertitle }}"?</v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                    <v-card-subtitle>Your offer will no longer appear in promotions and bundle offers after this action.</v-card-subtitle>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary darken-1" text @click="cancelOfferDelete">No</v-btn>
-                    <v-btn color="error darken-1" @click="deleteOfferConfirmed">Yes</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <form-helpers :snackbar_visible="snackbar"
-                      :snack_color="snack_color"
-                      :snack_message="snack_message"
-                      :saving="saving" />
+                                <!-- notes -->
+                                <v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-label>Notes about this offer</v-label>
+                                    <tiptap-vuetify
+                                            v-model="notes"
+                                            :extensions="extensions"
+                                            placeholder="Add few notes about your offer…"
+                                    />
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-spacer />
+                        <v-btn text color="error" @click="closeForm" :disabled="btn_save_disabled">Cancel</v-btn>
+                        <v-btn text color="success" @click="saveForm" :disabled="btn_save_disabled">Save</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <v-dialog v-model="preview_offer" :fullscreen="$vuetify.breakpoint.mdAndDown">
+                <preview-offer :offer="preview_offer" :hide_actions="true" @closeOffer="closeOfferPreview" />
+            </v-dialog>
+            <v-dialog v-model="delete_dialog" persistent max-width="290">
+                <v-card>
+                    <v-card-title>Are you sure you want to delete "{{ deleteOffertitle }}"?</v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-card-subtitle>Your offer will no longer appear in promotions and bundle offers after this action.</v-card-subtitle>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary darken-1" text @click="cancelOfferDelete">No</v-btn>
+                        <v-btn color="error darken-1" @click="deleteOfferConfirmed">Yes</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <form-helpers :snackbar_visible="snackbar"
+                          :snack_color="snack_color"
+                          :snack_message="snack_message"
+                          :saving="saving" />
+        </v-layout>
     </v-container>
 </template>
 
@@ -262,13 +215,15 @@
     import Errors from '../custom/ErrorContainer'
     import originalPlaceholderImage from "./assets/placeholder-img.jpg";
     import PreviewOffer from '../tourist/custom/OfferDetails'
+    import OfferCard from './custom/OfferCard'
 
     export default {
         components: {
             TiptapVuetify,
             FormHelpers,
             Errors,
-            PreviewOffer
+            PreviewOffer,
+            OfferCard
         },
         watch: {
             offers(newVal, oldVal) {
@@ -292,6 +247,7 @@
             drawer: null,
             errors: [],
             offers: [],
+            offers_loaded: false,
 
             // declare extensions you want to use
             extensions: [
@@ -369,7 +325,7 @@
                         console.log('error fetching offers')
                     })
                     .then(() => {
-
+                        that.offers_loaded = true
                     })
             },
             getValuteHint() {

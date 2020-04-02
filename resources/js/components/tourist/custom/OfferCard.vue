@@ -11,7 +11,7 @@
             </v-img>
             <v-card-subtitle v-html="offer.short_description"></v-card-subtitle>
             <v-card-actions>
-                <v-row class="text-start">
+                <v-row class="text-start pl-2">
                     <v-col cols="12">
                         <div class="d-inline real-price-text grey--text caption">{{ offer.real_price }}</div>
                         <div class="d-inline grey--text" v-html="offer.owner_details.valute.sign" />
@@ -24,27 +24,13 @@
                 </v-row>
                 <v-spacer></v-spacer>
 
-                <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                    <span v-on="on">
-                        <v-btn icon @click="$emit('openOffer', offer)">
-                            <v-icon>mdi-eye</v-icon>
-                        </v-btn>
-                    </span>
-                    </template>
-                    <span>View offer</span>
-                </v-tooltip>
+                <v-btn icon @click="$emit('openOffer', offer)">
+                    <v-icon>mdi-eye</v-icon>
+                </v-btn>
 
-                <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                    <span v-on="on">
-                        <v-btn icon @click="$emit('buyTicket', offer)">
-                            <v-icon>mdi-basket</v-icon>
-                        </v-btn>
-                    </span>
-                    </template>
-                    <span>Buy ticket</span>
-                </v-tooltip>
+                <v-btn icon @click="$emit('buyTicket', offer)">
+                    <v-icon>mdi-basket</v-icon>
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-hover>

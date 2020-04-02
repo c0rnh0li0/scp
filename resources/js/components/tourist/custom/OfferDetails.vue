@@ -19,8 +19,13 @@
             </v-row>
         </v-parallax>
         <v-card-text>
-            <v-container grid-list-xl fluid fill-height>
+            <v-container grid-list-xl>
                 <v-layout row wrap>
+                    <v-flex xs12 sm12 md12 lg12 xl12>
+                        <span class="body-2">From: </span>
+                        <router-link class="body-1" :to="'/home/business/' + offer.owner.id + '/false'">{{ offer.owner.name }}</router-link>
+                    </v-flex>
+
                     <!-- long description -->
                     <v-flex xs12 sm12 md12 lg12 xl12>
                         <div v-html="offer.long_description" />

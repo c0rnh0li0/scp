@@ -7,6 +7,7 @@ export default new Vuex.Store({
     state: {
         sessionEndpoint: '/api/auth',
         session: {},
+        id: -1,
         username: '',
         email: '',
         picture: 'avatar_default.png',
@@ -37,6 +38,7 @@ export default new Vuex.Store({
                 { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place/scan' },
                 { icon: 'mdi-account', text: 'Profile', route: '/place/profile' },
                 { icon: 'mdi-book-plus', text: 'Offers', route: '/place/offers' },
+                { icon: 'mdi-account-circle', name: 'business_profile', text: 'Profile Preview', route: '/place/business/' },
                 { divider: true },
                 { icon: 'mdi-information-outline', text: 'About', route: '/about' },
             ],
@@ -79,6 +81,7 @@ export default new Vuex.Store({
               state.type = state.types['type_' + payload.type.id]
               state.menu = state.menus[state.type]
               state.quick = state.quicks[state.type]
+              state.id = payload.user.id
               state.username = payload.user.name
               state.email = payload.user.email
               state.picture = payload.picture ? payload.picture : state.picture
@@ -115,6 +118,9 @@ export default new Vuex.Store({
         },
         type: (state) => {
             return state.type
+        },
+        id: (state) => {
+            return state.id
         },
         username: (state) => {
             return state.username

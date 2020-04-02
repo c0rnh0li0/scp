@@ -1,22 +1,10 @@
 <template>
     <div>
-        <v-container grid-list-xl>
-            <v-layout row wrap>
-                <!-- google maps autocomplete -->
-                <v-flex xs12 sm12 md12 lg12 xl12>
-                    <v-col class="align-center justify-space-between" cols="12">
-                        <gmap-autocomplete
-                                class="introInput"
-                                placeholder="Search..."
-                                @place_changed="setPlace">
-                        </gmap-autocomplete>
-                        <v-divider></v-divider>
-                    </v-col>
-                </v-flex>
-
+        <v-container grid-list-xl class="ma-0 pa-0">
+            <v-layout row wrap class="ma-0 pa-0">
                 <!-- google map component -->
-                <v-flex xs12 sm12 md12 lg12 xl12>
-                    <v-col cols="12" id="map-container">
+                <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
+                    <v-col cols="12" id="map-container" class="ma-0 pa-0">
                         <gmap-map
                                 ref="map"
                                 :center="{lat:currentLocation.lat, lng:currentLocation.lng}"
@@ -50,6 +38,14 @@
                             />
                         </gmap-map>
                     </v-col>
+                    <v-col cols="12" id="controls-container">
+                        <v-select
+                                v-model="selected_travel_mode"
+                                :items="map_travel_modes"
+                                @change="changeTravelMode"
+                                label="Travel mode"
+                        ></v-select>
+                    </v-col>
                 </v-flex>
 
                 <v-btn bottom
@@ -62,15 +58,15 @@
                 </v-btn>
             </v-layout>
         </v-container>
-        <v-container grid-list-xl>
-            <v-layout row wrap>
-                <v-flex xs12 sm12 md12 lg12 xl12>
-                    <v-col cols="12" align="center" justify="center" v-if="tickets.length == 0">
+        <v-container grid-list-xl class="ma-0 pa-0">
+            <v-layout row wrap class="ma-0 pa-0">
+                <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
+                    <v-col cols="12" align="center" justify="center" v-if="tickets_loaded && tickets.length == 0">
                         <v-alert type="info" align="center" justify="center" max-width="400">
                             No tickets at this time...
                         </v-alert>
                     </v-col>
-                    <v-col cols="12" align="center" justify="center" v-else>
+                    <v-col cols="12" align="center" justify="center" class="ma-0 pa-0" v-else>
                         <v-card flat class="mb-2">
                             <v-card-title class="title">
                                 Your unused tickets
@@ -78,10 +74,10 @@
                                     <span class="caption">(Select an unused ticket to get directions to its location)</span>
                                 </v-card-subtitle>
                             </v-card-title>
-                            <v-card-text>
-                                <v-container grid-list-xl>
-                                    <v-layout row wrap>
-                                        <v-flex v-for="(ticket, i) in unused_tickets" :key="ticket.id" xs6 sm6 md4 lg2 xl2>
+                            <v-card-text class="ma-0 pa-0">
+                                <v-container grid-list-xl class="ma-0 pa-0">
+                                    <v-layout row wrap class="ma-0 pa-0">
+                                        <v-flex v-for="(ticket, i) in unused_tickets" :key="ticket.id" xs6 sm6 md4 lg2 xl2 class="ma-0 pa-0">
                                             <ticket-location :ticket="ticket" @showLocationDirections="showLocationDirections" />
                                         </v-flex>
                                     </v-layout>
@@ -121,6 +117,13 @@
                 }
             }],
 
+            directionsService: null,
+            directionsDisplay: null,
+            map_travel_modes: ['WALKING', 'DRIVING', 'BICYCLING', 'TRANSIT'],
+            selected_travel_mode: 'WALKING',
+            remove_previous_routes: true,
+            position_watcher: null,
+
             // geolocation tracking data
             gettingLocation: true,
             errorStr: '',
@@ -129,17 +132,17 @@
             coords: null,
             destination: null,
             tickets: [],
-            unused_tickets: []
+            unused_tickets: [],
+            tickets_loaded: false
         }),
         methods: {
-            geolocation : function() {
+            currentPosition: function() {
                 if (!("geolocation" in navigator)) {
                     this.errorStr = "Geolocation is not available.";
                     return;
                 }
 
-                this.gettingLocation = true
-                navigator.geolocation.watchPosition(
+                navigator.geolocation.getCurrentPosition(
                     pos => {
                         this.gettingLocation = false
 
@@ -151,38 +154,93 @@
                     err => {
                         this.gettingLocation = false
                         this.errorStr = err.message
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
                     }
                 )
             },
-            // TODO: remove duplicate routes
+            geolocation : function() {
+                if (!("geolocation" in navigator)) {
+                    this.errorStr = "Geolocation is not available.";
+                    return;
+                }
+
+                console.log('watching position')
+                this.gettingLocation = true
+
+                if (this.position_watcher) {
+                    navigator.geolocation.clearWatch(this.position_watcher)
+                    this.position_watcher = null
+                }
+
+                this.position_watcher = navigator.geolocation.watchPosition(
+                    pos => {
+                        console.log('watching position response', pos.coords)
+
+                        this.gettingLocation = false
+
+                        this.currentLocation = {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude
+                        }
+
+                        this.remove_previous_routes = false
+                    },
+                    err => {
+                        this.gettingLocation = false
+                        this.errorStr = err.message
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                )
+            },
             getDirection: function() {
                 if (typeof google == 'undefined') return
 
-                var directionsService = new google.maps.DirectionsService
-                var directionsDisplay = new google.maps.DirectionsRenderer
-                directionsDisplay.setMap(null)
-                directionsDisplay.setMap(this.$refs.map.$mapObject)
+                if (!this.directionsService)
+                    this.directionsService = new google.maps.DirectionsService
 
-                //google maps API's direction service
-                function calculateAndDisplayRoute(directionsService, directionsDisplay, start, destination) {
-                    directionsService.route({
-                        origin: start,
-                        destination: destination,
-                        travelMode: 'WALKING'
-                    }, function(response, status) {
-                        if (status === 'OK') {
-                            console.log('directions', response)
-                            directionsDisplay.setDirections(response)
-                        } else {
-                            window.alert('Directions request failed due to ' + status)
-                        }
-                    });
-                }
+                this.clearPreviousDirections()
+                this.directionsDisplay = new google.maps.DirectionsRenderer
+                this.directionsDisplay.setMap(this.$refs.map.$mapObject)
 
                 this.coords = this.currentLocation
                 this.destination = this.markers[0].position
 
-                calculateAndDisplayRoute(directionsService, directionsDisplay, this.coords, this.destination)
+                this.calculateAndDisplayRoute(this.directionsService, this.directionsDisplay, this.coords, this.destination, this.selected_travel_mode)
+            },
+            clearPreviousDirections() {
+                if (this.directionsDisplay != null && this.remove_previous_routes) {
+                    this.directionsDisplay.setMap(null)
+                    this.directionsDisplay.setPanel(null)
+                    this.directionsDisplay.set('directions', null);
+                    this.directionsDisplay = null
+                }
+            },
+            //google maps API's direction service
+            calculateAndDisplayRoute(directionsService, directionsDisplay, start, destination, travelMode) {
+                let that = this
+                directionsService.route({
+                    origin: start,
+                    destination: destination,
+                    travelMode: travelMode
+                }, function(response, status) {
+                    if (status === 'OK') {
+                        console.log('directions', response)
+                        directionsDisplay.setDirections(response)
+
+                        // start tourist location watching
+                        that.geolocation()
+                    } else {
+                        console.log('Directions request failed due to ' + status)
+                    }
+                })
             },
             setPlace(place) {
                 this.defaultCenter = {
@@ -211,11 +269,16 @@
                         lng: parseFloat(ticket.offer.owner_details.location.longitude)
                     }
                 })
-
+                this.remove_previous_routes = true
                 this.getDirection()
+
             },
             centerMyPosition() {
-                this.geolocation()
+                this.currentPosition()
+            },
+            changeTravelMode() {
+                this.remove_previous_routes = true
+                this.getDirection()
             },
             getTickets() {
                 let that = this
@@ -228,16 +291,19 @@
                         console.log('error fetching tickets')
                     })
                     .then(() => {
-
+                        that.tickets_loaded = true
                     })
             },
         },
-        mounted() {
-            console.log('Map mounted')
-            //this.geolocation()
+        created() {
             this.getTickets()
         },
-        created() {}
+        beforeDestroy() {
+            if (this.position_watcher) {
+                navigator.geolocation.clearWatch(this.position_watcher)
+                this.position_watcher = null
+            }
+        }
     }
 </script>
 
