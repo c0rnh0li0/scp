@@ -8,6 +8,11 @@ Vue.use(VueRouter)
 
 const routes = [
     {
+        path: '/',
+        component: require('../components/Home').default,
+        meta: { requiresAuth: false, type: 'guest' }
+    },
+    {
         path: '/admin',
         component: require('../components/admin/Index').default,
         children: AdminRoutes,
@@ -26,13 +31,19 @@ const routes = [
         meta: { requiresAuth: true, type: 'tourist', transitionName: 'fade' }
     },
     {
+        path: '/offline',
+        name: 'offline',
+        component: require('../components/Offline').default,
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/about',
         name: 'about',
         component: require('../components/Example').default,
         meta: { requiresAuth: false }
     },
-    { path: '/404', name: '404', component: require('../components/errors/404').default, meta: { requiresAuth: false } },
-    { path: '/401', name: '401', component: require('../components/errors/401').default, meta: { requiresAuth: false } },
+    { path: '/404', name: '404', component: require('../components/errors/Error404').default, meta: { requiresAuth: false } },
+    { path: '/401', name: '401', component: require('../components/errors/Error401').default, meta: { requiresAuth: false } },
 ]
 
 const router = new VueRouter({

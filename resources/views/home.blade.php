@@ -1,1 +1,1 @@
-@extends('layouts.tourist')
+@extends('layouts.app')

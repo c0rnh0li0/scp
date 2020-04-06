@@ -1,5 +1,29 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600');
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~@mdi/font/css/materialdesignicons.min.css';
+@import '~vuetify/dist/vuetify.min.css';
+
+
+
+@import '../homepage/css/bootstrap.css';
+@import '../homepage/css/style.css';
+@import '../homepage/css/font-awesome.css';
+@import '../homepage/css/bootoast.css';
+@import '../homepage/css/responsive.css';
+@import '../homepage/css/featherlight.min.css';
+@import '../homepage/css/animate.css';
+
 $color-pack: false;
 
 @import '~vuetify/src/styles/main.sass';
+
+hr { margin-top: 0px; margin-bottom: 0px; }
 a:hover { text-decoration: none; }
 hr { margin-top: 0px; margin-bottom: 0px; }

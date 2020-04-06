@@ -77,36 +77,56 @@ export default new Vuex.Store({
         tickets_path: '/storage/tickets/',
     },
     mutations: {
-          setSession (state, payload) {
-              state.type = state.types['type_' + payload.type.id]
-              state.menu = state.menus[state.type]
-              state.quick = state.quicks[state.type]
-              state.id = payload.user.id
-              state.username = payload.user.name
-              state.email = payload.user.email
-              state.picture = payload.picture ? payload.picture : state.picture
-              state.valute = payload.valute ? payload.valute.id : ''
-              state.session = payload
-          },
-          setLookups (state, payload) {
-              state.lookups.categories = payload.categories
-              state.lookups.cities = payload.cities
-              state.lookups.genders = payload.genders
-              state.lookups.valutes = payload.valutes
-              state.lookups.countries = payload.countries
-          },
+        triggerSession (state, payload) {
+            state.session.user = {}
+        },
+        setSession (state, payload) {
+            state.type = state.types['type_' + payload.type.id]
+            state.menu = state.menus[state.type]
+            state.quick = state.quicks[state.type]
+            state.id = payload.user.id
+            state.username = payload.user.name
+            state.email = payload.user.email
+            state.picture = payload.picture ? payload.picture : state.picture
+            state.valute = payload.valute ? payload.valute.id : ''
+            state.session = payload
+        },
+        destroySession(state) {
+            state.type = ''
+            state.menu = []
+            state.quick = []
+            state.id = -1
+            state.username = ''
+            state.email = ''
+            state.picture = ''
+            state.valute = ''
+            state.session = {}
+        },
+        setLookups (state, payload) {
+            state.lookups.categories = payload.categories
+            state.lookups.cities = payload.cities
+            state.lookups.genders = payload.genders
+            state.lookups.valutes = payload.valutes
+            state.lookups.countries = payload.countries
+        },
     },
     actions: {
-          async getSession({commit}) {
-              return await axios.post(this.state.sessionEndpoint).then((response) => {
-                  commit('setSession', response.data.data)
-              });
-          },
-          async getLookups({commit}) {
-              return await axios.post('/api/lookups').then((response) => {
-                  commit('setLookups', response.data)
-              });
-          }
+        async getSession({commit}) {
+            return await axios.post(this.state.sessionEndpoint).then((response) => {
+                commit('setSession', response.data.data)
+            });
+        },
+        destroySession({commit}) {
+            commit('destroySession')
+        },
+        triggerSession({commit}) {
+            commit('triggerSession')
+        },
+        async getLookups({commit}) {
+            return await axios.post('/api/lookups').then((response) => {
+                commit('setLookups', response.data)
+            });
+        }
     },
     modules: {},
     getters: {

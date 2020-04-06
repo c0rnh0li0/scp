@@ -14,7 +14,7 @@
                     <v-card-text>
                         <v-container grid-list-xl class="ma-0 pa-0">
                             <v-layout row wrap class="ma-0 pa-0">
-                                <v-flex v-for="(ticket, i) in unused_tickets" :key="ticket.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
+                                <v-flex v-for="(ticket, i) in unused_tickets" :key="'ticket_' + ticket.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
                                     <ticket-card :ticket="ticket" @openTicket="openTicket" />
                                 </v-flex>
                             </v-layout>

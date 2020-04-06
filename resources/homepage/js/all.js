@@ -1,5 +1,5 @@
-require('./jquery.1.8.3.min');
-require('./bootstrap');
+//require('./jquery.1.8.3.min');
+//require('./bootstrap');
 require('./jquery-scrolltofixed');
 require('./jquery.easing.1.3');
 require('./jquery.isotope');
@@ -17,3 +17,4 @@ window.wow = new WOW.WOW({
     live: false
 });
 window.wow.init();
+

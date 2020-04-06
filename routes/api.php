@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+//URL::forceScheme('https');
+
 Route::post('login', 'Api\AuthController@login')->name('api_login');
 Route::post('register', 'Api\AuthController@register')->name('api_register');;
 

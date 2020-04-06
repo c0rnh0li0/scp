@@ -58,7 +58,7 @@ class AuthController extends Controller
             }
 
             $success['token'] = $user->createToken($user->name . '@SCP')-> accessToken;
-            $success['goto'] = route(str_replace('/', '', $goto));
+            $success['goto'] = $goto;
 
             return response()->json(['success' => $success], $this->successStatus);
         } else{

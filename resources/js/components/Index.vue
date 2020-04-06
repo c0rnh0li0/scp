@@ -121,8 +121,9 @@
                 axios.post(window.Laravel.logoutUrl, {})
                     .then((response) => {
                         if (response.data.response.success) {
+                            this.$store.dispatch('destroySession');
                             window.localStorage.removeItem('token')
-                            window.location.href = response.data.response.goto
+                            that.$router.push('/');
                         }
                     })
                     .catch((err) => {
@@ -132,6 +133,15 @@
         },
         created() {
             this.avatar = this.$store.state.avatars_path + this.$store.state.picture
+
+        },
+        mounted() {
+            $('.v-content').removeAttr('style')
         }
     }
 </script>
+<style scoped>
+    .v-content {
+        padding: 0px !important;
+    }
+</style>

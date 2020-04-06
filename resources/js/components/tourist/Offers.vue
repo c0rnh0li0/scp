@@ -14,7 +14,7 @@
                     <v-card-text>
                         <v-container grid-list-xl class="ma-0 pa-0">
                             <v-layout row wrap class="ma-0 pa-0">
-                                <v-flex v-for="(offer, i) in featured_offers" :key="offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
+                                <v-flex v-for="(offer, i) in featured_offers" :key="'offer_' + offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
                                     <offer-card :offer="offer" @openOffer="openOffer" @buyTicket="buyTicket" />
                                 </v-flex>
                             </v-layout>
@@ -35,7 +35,7 @@
                     <v-card-text>
                         <v-container grid-list-xl class="ma-0 pa-0">
                             <v-layout row wrap class="ma-0 pa-0">
-                                <v-flex v-for="(offer, i) in other_offers" :key="offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
+                                <v-flex v-for="(offer, i) in other_offers" :key="'offer_' + offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
                                     <offer-card :offer="offer" @openOffer="openOffer" @buyTicket="buyTicket" />
                                 </v-flex>
                             </v-layout>

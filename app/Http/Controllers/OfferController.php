@@ -38,6 +38,7 @@ class OfferController extends Controller
                                 ->where('offers.include_global', 1)
                                 ->where('offers.featured', 1)
                                 ->orderBy('offers.created_at', 'desc')
+                                ->groupBy('offers.id')
                                 ->paginate($get);
 
         $other_offers = Offer::select('offers.*')
@@ -46,6 +47,7 @@ class OfferController extends Controller
                                ->where('offers.include_global', 1)
                                ->where('offers.featured', 0)
                                ->orderBy('offers.created_at', 'desc')
+                               ->groupBy('offers.id')
                                ->paginate($get);
 
         return response()->json([
