@@ -1,29 +1,7 @@
-//import 'babel-polyfill'
-
-var deferredPrompt;
-window.addEventListener('beforeinstallprompt', function(event) {
-    event.preventDefault();
-    deferredPrompt = event;
-    return false;
-});
-
-function addToHomeScreen() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function (choiceResult) {
-            console.log(choiceResult.outcome);
-            if (choiceResult.outcome === 'dismissed') {
-                console.log('User cancelled installation');
-            } else {
-                console.log('User added to home screen');
-            }
-        });
-        deferredPrompt = null;
-    }
-}
-
 require('./bootstrap');
 
+import './messaging'
+import './plugins/install'
 
 window.Vue = require('vue');
 
@@ -31,7 +9,7 @@ Vue.component('passport-clients', require('./components/passport/Clients.vue').d
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
 
-import './messaging'
+import './config';
 import router from './router/index';
 import store from './store/index';
 import vuetify from './plugins/vuetify';
@@ -54,47 +32,114 @@ axios.interceptors.response.use(function (response) {
     return Promise.reject(error.response);
 });
 
-Vue.module.exports = {
-    runtimeCompiler: true
-};
-
-Vue.component('Index', require('./components/Index.vue').default);
-Vue.component('Home', require('./components/Home.vue').default);
+import Home from './components/Home'
+import Index from './components/Index'
+import Loading from './components/Loading'
 
 import './../sass/main.scss'
+
+import { mapState } from 'vuex'
 
 const app = new Vue({
     el: '#app',
     store,
     router,
     vuetify: vuetify,
-    computed: {
-        inSession() {
-            return this.$store.state.session.user
-        },
+    components: {
+        Home,
+        Index,
+        Loading
     },
     watch: {
-        inSession(newVal, oldVal) {
+        session(newVal, oldVal) {
+            if (newVal.user) {
+                this.inSession = true
+                this.$router.push(this.$store.state.endpoint)
+            }
             return newVal
         },
     },
+    computed:
+        mapState({
+            session: state => state.session
+        })
+    ,
     data: () => ({
-        //inSession: null
+        inSession: false,
+        loading: false
     }),
+    methods: {
+        async login(endpoint, data) {
+            this.loading = true
+            let that = this
+            $.post(endpoint, data)
+                .done(async function(response, msg, jqx) {
+                    $('.featherlight-close').click()
+
+                    if (response.success) {
+                        window.localStorage.setItem('token', response.success.token);
+                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.success.token;
+
+                        await that.$store.dispatch('getSession')
+                        await that.$store.dispatch('getLookups')
+                    }
+                    else {
+                        alert('no login success')
+                    }
+                })
+                .fail(function(jqx, error, msg) {
+                    console.log('login fail', arguments);
+                })
+                .always(function() {
+                    that.loading = false
+                });
+        },
+        async logout() {
+            this.loading = true
+            let that = this
+            axios.post(window.Laravel.logoutUrl, {})
+                .then((response) => {
+                    if (response.data.response.success) {
+                        that.$store.dispatch('destroySession');
+                        window.localStorage.removeItem('token')
+                        that.inSession = false
+                        that.$router.push('/')
+                    }
+
+                    that.loading = false
+                })
+                .catch((err) => {
+                    console.log('logout', err);
+                    that.loading = false
+                });
+        },
+        register(endpoint, data) {
+            $.post(endpoint, data )
+                .done(async function(response, msg, jqx) {
+                    /*if (response.success) {
+                        window.localStorage.setItem('token', response.success.token);
+
+                        await this.$store.dispatch('getSession')
+                        await this.$store.dispatch('getLookups')
+
+                    }
+                    else {}*/
+                })
+                .fail(function(jqx, error, msg) {
+                    //$('.error-container').show();
+
+                    console.log('register fail', arguments);
+                })
+                .always(function() {
+                    // console.log('login always', arguments);
+                    //
+                });
+        }
+    },
     //render: h => h('home'),
     async beforeCreate() {
-        let allowedPages = [
-            '/',
-            '/offline',
-            '/about',
-            '/error',
-            '/404'
-        ]
-
-        if (allowedPages.indexOf(window.location.pathname) < 0) {
-            await this.$store.dispatch('getSession');
-            await this.$store.dispatch('getLookups');
-        }
+        await this.$store.dispatch('getSession')
+        await this.$store.dispatch('getLookups')
     },
     async created() {
 

@@ -4,7 +4,7 @@ const placeroutes = [
         component: require('./../components/place/Scan').default
     },
     {
-        path: 'statistics',
+        path: 'dashboard',
         component: require('./../components/place/Dashboard').default
     },
     {

@@ -90,7 +90,8 @@ p{
 
 .header{
 	text-align:center;
-	background:url(../img/skopje-1.jpg) left top repeat;
+	background:url(../img/skopje-1.jpg) left top no-repeat;
+	background-size: cover;
 	padding:280px 0;
 }
 .logo{

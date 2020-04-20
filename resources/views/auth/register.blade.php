@@ -5,7 +5,7 @@
     <div class="form register-form">
         <form action="{{ route('register') }}" method="post" role="form" class="contactForm">
             @csrf
-
+            <input type="hidden" name="will" value="register" />
             <div class="form-group">
                 <input id="name" type="text" placeholder="{{ __('Name') }}" class="form-control input-text @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                 <div class="validation"> @error('name') <strong>{{ $message }}</strong> @enderror </div>

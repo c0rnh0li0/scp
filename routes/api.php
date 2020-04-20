@@ -29,7 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('password', 'Api\AuthController@password');
 
     // lookup data
-    Route::post('lookups', 'HomeController@lookups');
+    Route::get('lookups', 'HomeController@lookups');
 
     // users
     Route::get('users', 'UserController@index');

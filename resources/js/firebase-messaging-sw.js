@@ -29,9 +29,11 @@ self.addEventListener('notificationclick', function(event) {
     });
     event.waitUntil(promise);
 });
+
 self.addEventListener('notificationclose', function(event) {
     console.log("notification close in sw", event);
 });
+
 function processNotification(notification) {
     var sAction = notification.data.action;
     var sUrl = notification.data.url;

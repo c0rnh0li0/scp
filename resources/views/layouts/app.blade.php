@@ -48,12 +48,13 @@
 <div id="app">
     <v-app>
         <v-content>
-            <Index v-if="inSession"></Index>
-            <Home v-else></Home>
+            <loading v-if="loading"></loading>
+            <index v-if="inSession" @logout="logout"></index>
+            <home v-else @login="login"></home>
         </v-content>
     </v-app>
 </div>
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}" defer type="module"></script>
+<script src="{{ asset('js/app.js') }}" type="module"></script>
 </body>
 </html>

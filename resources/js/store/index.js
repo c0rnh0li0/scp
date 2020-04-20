@@ -18,6 +18,12 @@ export default new Vuex.Store({
             type_3: 'place',
         },
         type: null,
+        endpoints: {
+            type_1: '/admin',
+            type_2: '/home',
+            type_3: '/place',
+        },
+        endpoint: null,
         menus: {
             admin: [
                 { divider: true },
@@ -82,6 +88,7 @@ export default new Vuex.Store({
         },
         setSession (state, payload) {
             state.type = state.types['type_' + payload.type.id]
+            state.endpoint = state.endpoints['type_' + payload.type.id]
             state.menu = state.menus[state.type]
             state.quick = state.quicks[state.type]
             state.id = payload.user.id
@@ -93,6 +100,7 @@ export default new Vuex.Store({
         },
         destroySession(state) {
             state.type = ''
+            state.endpoint = ''
             state.menu = []
             state.quick = []
             state.id = -1
@@ -123,7 +131,7 @@ export default new Vuex.Store({
             commit('triggerSession')
         },
         async getLookups({commit}) {
-            return await axios.post('/api/lookups').then((response) => {
+            return await axios.get('/api/lookups').then((response) => {
                 commit('setLookups', response.data)
             });
         }
@@ -141,6 +149,9 @@ export default new Vuex.Store({
         },
         id: (state) => {
             return state.id
+        },
+        endpoint: (state) => {
+            return state.endpoint
         },
         username: (state) => {
             return state.username

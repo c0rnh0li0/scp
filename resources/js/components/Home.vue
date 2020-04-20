@@ -419,34 +419,13 @@
                     e.preventDefault();
 
                     var frmData = toJSONString(this);
-
-                    $.post(this.action, frmData )
-                        .done(function(response, msg, jqx) {
-                            if (response.success) {
-                                window.localStorage.setItem('token', response.success.token);
-                                that.$store.dispatch('triggerSession')
-                                that.$router.push(response.success.goto);
-                                $('.featherlight-close').click();
-                            }
-                            else {}
-                        })
-                        .fail(function(jqx, error, msg) {
-                            $('.error-container').show();
-
-                            console.log('login fail', arguments);
-                        })
-                        .always(function() {
-                            // console.log('login always', arguments);
-                            //
-                        });
+                    that.$emit(frmData.will, this.action, frmData)
 
                     return false;
                 });
             }
         },
-        created() {
-            console.log('Component mounted.')
-
+        async created() {
             this.login_url = window.Laravel.loginUrl
             this.register_url = window.Laravel.registerUrl
             this.csrf = window.Laravel.csrf

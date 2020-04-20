@@ -8,5 +8,5 @@ module.exports = {
     ],
     'swDest': 'public/offline.js',
     'globIgnores': [],
-    'swSrc': 'resources/js/service-worker.js'
+    'swSrc': 'resources/js/sw.js'
 };

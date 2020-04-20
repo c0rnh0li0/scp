@@ -6,6 +6,7 @@
         {{-- <form action="{{ route('login') }}" method="post" role="form" class="contactForm"> --}}
         <form action="{{ route('api_login') }}" method="post" role="form" class="scp-form contactForm">
             @csrf
+            <input type="hidden" name="will" value="login" />
             <div class="form-group error-container">
                 <div class="alert alert-danger login-failed-alert" role="alert">
                     <i class="fa fa-exclamation-triangle float-left mt-1"></i>

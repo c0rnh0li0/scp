@@ -1,0 +1,7 @@
+module.exports = {
+  "globDirectory": "resources/",
+  "globPatterns": [
+    "**/*.{css,js,eot,svg,ttf,woff,woff2,otf,png,jpg,gif,vue,json,php,scss}"
+  ],
+  "swDest": "public/sw.js"
+};

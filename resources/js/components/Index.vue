@@ -1,7 +1,7 @@
 <template>
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer" color="grey lighten-5" light app>
-            <v-list>
+            <v-list nav>
                 <v-list-item>
                     <v-list-item-avatar>
                         <v-img :src="avatar"></v-img>
@@ -93,8 +93,13 @@
                 let menu_items = this.$store.state.menu
 
                 // for previewing profile from business scope only
-                if (menu_items.length && this.$store.state.type == this.$store.state.types.type_3)
-                    menu_items.find(m => m.name == 'business_profile').route += this.$store.state.id + '/true'
+                if (menu_items.length) {
+                    if (this.$store.state.type == this.$store.state.types.type_3)
+                        menu_items.find(m => m.name == 'business_profile').route += this.$store.state.id + '/true'
+
+                    // display the dashboard for all upon login
+                    this.$router.push(this.$store.state.endpoint + '/dashboard')
+                }
 
                 return menu_items
             },
@@ -108,6 +113,9 @@
                 return this.$store.state.email
             },
             picture() {
+                if (this.$store.state.picture)
+                    this.avatar = this.$store.state.avatars_path + this.$store.state.picture
+
                 return this.$store.state.picture
             },
         },
@@ -118,23 +126,11 @@
         }),
         methods: {
             logout () {
-                axios.post(window.Laravel.logoutUrl, {})
-                    .then((response) => {
-                        if (response.data.response.success) {
-                            this.$store.dispatch('destroySession');
-                            window.localStorage.removeItem('token')
-                            that.$router.push('/');
-                        }
-                    })
-                    .catch((err) => {
-                        console.log('logout', err);
-                    });
+                this.$emit('logout')
             }
         },
-        created() {
-            this.avatar = this.$store.state.avatars_path + this.$store.state.picture
-
-        },
+        async beforeCreate() {},
+        created() {},
         mounted() {
             $('.v-content').removeAttr('style')
         }
