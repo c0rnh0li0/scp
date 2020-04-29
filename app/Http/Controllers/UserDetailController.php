@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\City;
+use App\Gender;
 use App\Location;
 use App\User;
 use App\UserDetail;
+use App\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use App\Http\Resources\UserDetails as UserDetailResource;
@@ -16,12 +18,23 @@ class UserDetailController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = UserDetail::paginate(10);
-        return UserDetailResource::collection($users);
+
+    }
+
+    /*
+     * Get single user details
+     *
+     */
+    public function get($id)
+    {
+        $user = UserDetail::findOrFail($id);
+        $details = UserDetail::findOrFail($user->id);
+        return new UserDetailResource($details);
     }
 
     public function companies()
@@ -58,7 +71,7 @@ class UserDetailController extends Controller
         $data = json_decode($request->input('jsonstring'));
         $is_company = $request->input('is_company') == "1" ? true : false;
 
-        $userDetail = UserDetail::findOrFail($data->id);
+        $userDetail = $data->id > -1 ? UserDetail::findOrFail($data->id) : new UserDetail();
 
         if ($is_company) {
             $place_rules = [
@@ -73,7 +86,26 @@ class UserDetailController extends Controller
                 'subcategory_id' => 'numeric'
             ];
 
+            if ($data->id == -1) {
+                $place_rules['email'] = 'required|email';
+                $place_rules['password'] = 'required';
+            }
+
             $this->validate($request, $place_rules);
+
+            // save user data
+            $user = $data->id > -1 ? User::findOrFail($userDetail->user_id) : new User();
+            $user->name = $data->user->name;
+
+            if ($data->id == -1) {
+                $user->email = $data->user->email;
+                $user->password = bcrypt($data->user->password);
+            }
+
+            $user->save();
+
+            if ($data->id == -1)
+                $userDetail->user_id = $user->id;
 
             // save location data
             $location = $userDetail->location_id ? Location::findOrFail($userDetail->location_id) : new Location();
@@ -84,28 +116,46 @@ class UserDetailController extends Controller
             $location->category_id = $data->location->category_id;
             $location->subcategory_id = $data->location->subcategory_id;
 
-            if ($location->save()) {
+            if ($location->save())
                 $userDetail->location_id = $location->id;
-            }
-
-            // save user data
-            $user = User::findOrFail($userDetail->user_id);
-            $user->name = $data->user->name;
-            $user->save();
 
             // save user details data
             $userDetail->phone = $data->phone;
+            $userDetail->website = $data->website;
             $userDetail->description = $data->description;
-            $userDetail->gender_id = $data->gender;
+            $userDetail->gender_id = Gender::GENDER_UNDEFINED;
             $userDetail->valute_id = $data->valute;
+            $userDetail->is_company = 1;
             $userDetail->picture = $this->uploadAvatar($request, 'picture', $this->avatar_path, $userDetail->picture);
+
+            if ($data->id == -1 || !$userDetail->user_type_id)
+                $userDetail->user_type_id = UserType::COMPANY_USER_TYPE;
         }
         else {
             $tourist_rules = [
-                'name' => 'required|max:255'
+                'name' => 'required|max:255',
             ];
 
+            if ($data->id == -1) {
+                $tourist_rules['email'] = 'required|email';
+                $tourist_rules['password'] = 'required';
+            }
+
             $this->validate($request, $tourist_rules);
+
+            // save user data
+            $user = $data->id > -1 ? User::findOrFail($userDetail->user_id) : new User();
+            $user->name = $data->user->name;
+
+            if ($data->id == -1) {
+                $user->email = $data->user->email;
+                $user->password = bcrypt($data->user->password);
+            }
+
+            $user->save();
+
+            if ($data->id == -1)
+                $userDetail->user_id = $user->id;
 
             // save location data
             $location = $userDetail->location_id ? Location::findOrFail($userDetail->location_id) : new Location();
@@ -129,22 +179,21 @@ class UserDetailController extends Controller
                 $userDetail->location_id = $location->id;
             }
 
-            // save user data
-            $user = User::findOrFail($userDetail->user_id);
-            $user->name = $data->user->name;
-            $user->save();
-
             // save user details data
             $userDetail->phone = $data->phone;
             $userDetail->description = $data->description;
             $userDetail->gender_id = $data->gender_id;
             $userDetail->picture = $this->uploadAvatar($request, 'picture', $this->avatar_path, $userDetail->picture);
+
+            if ($data->id == -1 || !$userDetail->user_type_id)
+                $userDetail->user_type_id = UserType::TOURIST_USER_TYPE;
         }
 
         if ($userDetail->save()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Your profile info has been successfully saved!'
+                'message' => 'Profile info has been successfully saved!',
+                'user' => new UserDetailResource($userDetail)
             ], 201);
         }
         else {

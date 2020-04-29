@@ -1,8 +1,8 @@
 <template>
-    <v-container grid-list-xl class="ma-0 pa-0">
-        <v-layout row wrap class="ma-0 pa-0">
+    <div>
+        <v-layout row wrap class="pa-2">
             <!-- google maps autocomplete -->
-            <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
+            <v-flex xs12 sm12 md12 lg12 xl12 class="">
                 <v-col class="align-center justify-space-between mb-2" cols="12">
                     <gmap-autocomplete
                             class="introInput"
@@ -14,7 +14,7 @@
             </v-flex>
 
             <!-- google map component -->
-            <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
+            <v-flex xs12 sm12 md12 lg12 xl12 class="">
                 <v-col cols="12" id="map-container">
                     <gmap-map
                             ref="mapRef"
@@ -184,7 +184,9 @@
 
             <!-- description -->
             <v-flex xs12 sm12 md12 lg12 xl12>
-                <v-label>Description</v-label>
+                <div class="pl-3">
+                    <v-label>Description</v-label>
+                </div>
                 <v-col cols="12">
                     <tiptap-vuetify
                             v-model="description"
@@ -309,7 +311,7 @@
                       :snack_color="snack_color"
                       :snack_message="snack_message"
                       :saving="saving"></form-helpers>
-    </v-container>
+    </div>
 </template>
 
 <script>
@@ -351,7 +353,6 @@
                 this.setPageData(newVal)
             },
             lookupData(newVal, oldVal) {
-                console.log('lookups loaded')
                 this.setLookupData(newVal)
             },
         },
@@ -657,8 +658,6 @@
             },
         },
         mounted() {
-            console.log('Profile Component mounted, lookups.', this.$store.state.lookups)
-            console.log('Profile Component mounted, session.', this.$store.state.session)
             if (this.$store.state.session.user)
                 this.setPageData(this.$store.state.session)
 

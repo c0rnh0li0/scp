@@ -2,13 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\SCPModel;
 
-class Offer extends Model
+class Offer extends SCPModel
 {
-    use SoftDeletes;
-
     protected $fillable = [
         'title',
         'short_description',

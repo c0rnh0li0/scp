@@ -26,6 +26,7 @@ class Offer extends JsonResource
             'short_description' => $this->short_description,
             'long_description' => $this->long_description,
             'promo_image' => $this->promo_image,
+            'owner_id' => $this->owner_id,
             'owner' => new OwnerResource($this->owner),
             'owner_details' => new OwnerDetailResource($ownerDetails[0]),
             'real_price' => $this->real_price,

@@ -13,15 +13,61 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @return \App\Http\Resources\Ticket
+     */
+    public function index(Request $request)
+    {
+        $itemsPerPage = $request->input('itemsPerPage');
+        if ($itemsPerPage < 0)
+            $itemsPerPage = 1000;
+
+        $page = $request->input('page');
+
+        $sortBy = $request->input('sortBy');
+        //$sortBy = str_replace('offer.', 'offers.', $sortBy);
+
+        $dir = $request->input('dir');
+        $q = $request->input('q');
+
+        if ($sortBy == '')
+            $sortBy = 'created_at';
+
+        $tickets = Ticket::join('users', 'users.id', '=', 'tickets.user_id')
+            ->whereHas('user', function ($query) use ($q) {
+                if ($q && $q != '') {
+                    $query->where('name', 'like', "%$q%")
+                        ->orWhere('email', 'like', "%$q%");
+                }
+            })
+            /*->join('offers', 'offers.owner_id', '=', 'users.id')
+                ->whereHas('offer', function ($query) use ($q) {
+                    $query->join('users', 'users.id', '=', 'offers.owner_id')
+                            ->whereHas('owner', function ($inner_query) use ($q) {
+                                if ($q && $q != '') {
+                                    $inner_query->where('name', 'like', "%$q%")
+                                        ->orWhere('email', 'like', "%$q%");
+                                }
+                            });
+            })*/
+            ->select('tickets.*')
+            ->orderBy($sortBy, $dir)
+            ->paginate($itemsPerPage);
+
+        return TicketResource::collection($tickets);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function list()
     {
         $tickets = Ticket::where('deleted_at', null)
-                         ->where('used', 0)
-                         ->where('user_id', auth('api')->user()->id)
-                         ->orderBy('created_at', 'desc')
-                         ->paginate(30);
+            ->where('used', 0)
+            ->where('user_id', auth('api')->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(30);
 
         return TicketResource::collection($tickets);
     }

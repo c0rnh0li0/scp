@@ -1,17 +1,15 @@
 <template>
     <div>
-        <v-container grid-list-xl class="ma-0 pa-0">
-            <v-layout row wrap class="ma-0 pa-0">
+        <v-flex xs12 sm12 md12 lg12 xl12 class="">
+            <v-col cols="12" id="map-container" class="">
                 <!-- google map component -->
-                <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
-                    <v-col cols="12" id="map-container" class="ma-0 pa-0">
-                        <gmap-map
-                                ref="map"
-                                :center="{lat:currentLocation.lat, lng:currentLocation.lng}"
-                                :zoom="17"
-                                map-type-id="satellite"
-                                style="width: 100%; height: 500px;"
-                                :options="{
+                <gmap-map
+                        ref="map"
+                        :center="{lat:currentLocation.lat, lng:currentLocation.lng}"
+                        :zoom="17"
+                        map-type-id="satellite"
+                        style="width: 100%; height: 500px;"
+                        :options="{
                                    zoomControl: true,
                                    mapTypeControl: true,
                                    scaleControl: false,
@@ -22,72 +20,68 @@
                                    disableDefaultUi: true,
                                    gestureHandling: 'auto'
                                 }">
-                            <gmap-marker
-                                    :position="currentLocation"
-                                    :clickable="false"
-                                    :draggable="false"
-                                    :icon="currentLocationIcon"
-                            />
-                            <gmap-marker
-                                    :key="index"
-                                    v-for="(m, index) in markers"
-                                    :position="m.position"
-                                    :clickable="true"
-                                    :draggable="false"
-                                    @click="center=m.position"
-                            />
-                        </gmap-map>
-                    </v-col>
-                    <v-col cols="12" id="controls-container">
-                        <v-select
-                                v-model="selected_travel_mode"
-                                :items="map_travel_modes"
-                                @change="changeTravelMode"
-                                label="Travel mode"
-                        ></v-select>
-                    </v-col>
-                </v-flex>
+                    <gmap-marker
+                            :position="currentLocation"
+                            :clickable="false"
+                            :draggable="false"
+                            :icon="currentLocationIcon"
+                    />
+                    <gmap-marker
+                            :key="index"
+                            v-for="(m, index) in markers"
+                            :position="m.position"
+                            :clickable="true"
+                            :draggable="false"
+                            @click="center=m.position"
+                    />
+                </gmap-map>
+            </v-col>
+            <v-col cols="12" id="controls-container">
+                <v-select
+                        v-model="selected_travel_mode"
+                        :items="map_travel_modes"
+                        @change="changeTravelMode"
+                        label="Travel mode"
+                ></v-select>
+            </v-col>
+        </v-flex>
 
-                <v-btn bottom
-                       fab
-                       color="primary"
-                       fixed
-                       right
-                       @click="centerMyPosition">
-                    <v-icon light>mdi-crosshairs-gps</v-icon>
-                </v-btn>
+        <v-flex xs12 sm12 md12 lg12 xl12 class="">
+            <v-col cols="12" align="center" justify="center" v-if="tickets_loaded && tickets.length == 0">
+                <v-alert type="info" align="center" justify="center" max-width="400">
+                    No tickets at this time...
+                </v-alert>
+            </v-col>
+            <v-col cols="12" v-else>
+                <div row class="display-1 mb-2">Your unused tickets <span class="caption">(Select an unused ticket to get directions to its location)</span></div>
+                <v-layout row wrap class="">
+                    <v-flex v-for="(ticket, i) in unused_tickets" :key="ticket.id" xs6 sm6 md4 lg2 xl2 class="">
+                        <ticket-location :ticket="ticket" @showLocationDirections="showLocationDirections" />
+                    </v-flex>
+                </v-layout>
+            </v-col>
+        </v-flex>
+
+        <v-btn bottom
+               fab
+               color="primary"
+               fixed
+               right
+               @click="centerMyPosition">
+            <v-icon light>mdi-crosshairs-gps</v-icon>
+        </v-btn>
+
+        <!-- <v-container grid-list-xl class="">
+            <v-layout row wrap class="">
+
+
             </v-layout>
         </v-container>
-        <v-container grid-list-xl class="ma-0 pa-0">
-            <v-layout row wrap class="ma-0 pa-0">
-                <v-flex xs12 sm12 md12 lg12 xl12 class="ma-0 pa-0">
-                    <v-col cols="12" align="center" justify="center" v-if="tickets_loaded && tickets.length == 0">
-                        <v-alert type="info" align="center" justify="center" max-width="400">
-                            No tickets at this time...
-                        </v-alert>
-                    </v-col>
-                    <v-col cols="12" align="center" justify="center" class="ma-0 pa-0" v-else>
-                        <v-card flat class="mb-2">
-                            <v-card-title class="title">
-                                Your unused tickets
-                                <v-card-subtitle>
-                                    <span class="caption">(Select an unused ticket to get directions to its location)</span>
-                                </v-card-subtitle>
-                            </v-card-title>
-                            <v-card-text class="ma-0 pa-0">
-                                <v-container grid-list-xl class="ma-0 pa-0">
-                                    <v-layout row wrap class="ma-0 pa-0">
-                                        <v-flex v-for="(ticket, i) in unused_tickets" :key="ticket.id" xs6 sm6 md4 lg2 xl2 class="ma-0 pa-0">
-                                            <ticket-location :ticket="ticket" @showLocationDirections="showLocationDirections" />
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                </v-flex>
+        <v-container grid-list-xl class="">
+            <v-layout row wrap class="">
+
             </v-layout>
-        </v-container>
+        </v-container> -->
     </div>
 </template>
 

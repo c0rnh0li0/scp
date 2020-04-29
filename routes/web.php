@@ -17,7 +17,6 @@
 //URL::forceScheme('https');
 
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-//Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 
 Route::get('/', 'HomeController@home')->name('index');
@@ -28,4 +27,5 @@ Route::get('/home/{slug?}', 'HomeController@home')->name('home');
 Route::get('/about', 'HomeController@home')->name('about');
 Route::get('/offline', 'HomeController@home')->name('offline');
 Route::get('/error', 'HomeController@home')->name('error');
-//Route::get('/error', 'HomeController@home')->name('error');
+
+

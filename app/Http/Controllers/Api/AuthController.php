@@ -26,13 +26,21 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
+
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 
+        $is_company = $input['is_company'] && $input['is_company'] == 'true' ? 1 : 0;
+        UserDetail::create([
+            'user_id' => $user->id,
+            'user_type_id' => $is_company == 1 ? UserType::COMPANY_USER_TYPE : UserType::TOURIST_USER_TYPE,
+            'is_company' => $is_company
+        ]);
+
         $success['token'] =  $user->createToken('AppName')->accessToken;
 
-        return response()->json(['success'=>$success], $this->successStatus);
+        return response()->json(['success' => $success], $this->successStatus);
     }
 
     public function login(){

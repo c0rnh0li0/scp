@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddWebsiteColumnToUserTypesTable extends Migration
+class CreateTemplatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddWebsiteColumnToUserTypesTable extends Migration
      */
     public function up()
     {
-        Schema::table('user_types', function (Blueprint $table) {
-            $table->string('website')->nullable();
+        Schema::create('templates', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('file');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddWebsiteColumnToUserTypesTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_types', function (Blueprint $table) {
-            $table->dropColumn(['website']);
-        });
+        Schema::dropIfExists('templates');
     }
 }

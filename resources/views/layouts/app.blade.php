@@ -5,8 +5,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="manifest" href="{{url('/manifest.json')}}">
     <meta name="theme-color" content="#fff"/>
+    <meta name="mobile-wep-app-capable" content="yes">
+    <meta name="apple-mobile-wep-app-capable" content="yes">
+
+    <link rel="manifest" href="{{url('/manifest.json')}}">
 
     <link rel="icon" type="image/png" sizes="96x96" href="/img/icons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/img/icons/favicon-32x32.png">
@@ -26,35 +29,42 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="preconnect prerender stylesheet" href="{{ asset('css/app.css') }}">
     <script>
         window.Laravel = {!! json_encode([
                 'siteName' => config('app.name'),
                 'siteUrl' => config('app.url'),
                 'apiUrl' => config('app.url') . '/api',
-                'loginUrl' => route('login'),
-                'registerUrl' => route('register'),
+                'loginUrl' => route('api_login'),
+                'registerUrl' => route('api_register'),
                 'logoutUrl' => route('api_logout'),
                 'csrf' => csrf_token()
             ]) !!};
     </script>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" type="module"></script>
 </head>
 <body>
-<div id="app">
-    <v-app>
-        <v-content>
-            <loading v-if="loading"></loading>
-            <index v-if="inSession" @logout="logout"></index>
-            <home v-else @login="login"></home>
-        </v-content>
-    </v-app>
-</div>
-<!-- Scripts -->
-<script src="{{ asset('js/app.js') }}" type="module"></script>
+    <div id="app">
+        <v-app app>
+            <v-content app>
+                <v-offline @detected-condition="checkOnlineStatus"></v-offline>
+                <loading :isloading="loading"></loading>
+                <index v-if="inSession" @logout="logout"></index>
+                <home v-else @login="login"
+                             @register="register"
+                             @actions="actions"
+                             @loginclose="loginclose"
+                             @registerclose="registerclose"
+                             :login-errors="loginErrors"
+                             :register-errors="registerErrors"
+                             :register-dialog="registerDialog"
+                             :login-dialog="loginDialog">
+                </home>
+                <install-banner></install-banner>
+            </v-content>
+        </v-app>
+    </div>
 </body>
 </html>

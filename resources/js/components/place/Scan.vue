@@ -1,29 +1,28 @@
 <template>
-    <v-container fluid>
-        <v-row class="mx-2">
-            <v-col cols="12" id="scanner-container">
-                <v-card class="mx-auto" max-width="500" elevation="10" :loading="loading">
-                    <v-card-title>QR Code Scanner</v-card-title>
-                    <v-divider></v-divider>
-                    <v-card-subtitle v-if="error" class="red--text font-weight-bolder">{{ error }}</v-card-subtitle>
-                    <v-card-text>
-                        <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
-                            <div v-if="validationSuccess" class="validation-success">
-                                Ticket is valid
-                            </div>
+    <div>
+        <v-col cols="12" id="scanner-container">
+            <v-card class="mx-auto" max-width="500" elevation="10" :loading="loading">
+                <v-card-title>QR Code Scanner</v-card-title>
+                <v-divider></v-divider>
+                <v-card-subtitle v-if="error" class="red--text font-weight-bolder">{{ error }}</v-card-subtitle>
+                <v-card-text>
+                    <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
+                        <div v-if="validationSuccess" class="validation-success">
+                            Ticket is valid
+                        </div>
 
-                            <div v-if="validationFailure" class="validation-failure">
-                                Ticket is NOT valid!
-                            </div>
+                        <div v-if="validationFailure" class="validation-failure">
+                            Ticket is NOT valid!
+                        </div>
 
-                            <div v-if="validationPending" class="validation-pending">
-                                Long validation in progress...
-                            </div>
-                        </qrcode-stream>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
+                        <div v-if="validationPending" class="validation-pending">
+                            Long validation in progress...
+                        </div>
+                    </qrcode-stream>
+                </v-card-text>
+            </v-card>
+        </v-col>
+
         <v-dialog v-model="ticket_confirm_dialog" persistent max-width="600" :fullscreen="$vuetify.breakpoint.mdAndDown">
             <ticket-check :ticket="ticket_check"
                           @closeTicketCheck="closeTicketCheck"
@@ -37,7 +36,7 @@
                       :snack_message="snack_message"
                       :message="progress_message"
                       :saving="saving"></form-helpers>
-    </v-container>
+    </div>
 </template>
 
 <script>

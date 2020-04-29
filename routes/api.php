@@ -18,6 +18,11 @@ use Illuminate\Http\Request;
 Route::post('login', 'Api\AuthController@login')->name('api_login');
 Route::post('register', 'Api\AuthController@register')->name('api_register');;
 
+// settings data
+Route::middleware('api')->group(function () {
+    Route::get('settings', 'SettingsController@index');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -33,7 +38,6 @@ Route::middleware('auth:api')->group(function () {
 
     // users
     Route::get('users', 'UserController@index');
-    Route::get('user/{id}', 'UserController@show');
     Route::post('users', 'UserController@store');
     Route::put('users', 'UserController@store');
     Route::delete('users/{id}', 'UserController@destroy');
@@ -48,6 +52,7 @@ Route::middleware('auth:api')->group(function () {
 
     // places (ex: museums)
     Route::get('place', 'PlaceController@index');
+    Route::get('place/find', 'PlaceController@find');
     Route::get('place/{id}', 'PlaceController@show');
     Route::post('place', 'PlaceController@store');
     Route::put('place', 'PlaceController@store');
@@ -55,17 +60,23 @@ Route::middleware('auth:api')->group(function () {
 
     // user details
     Route::post('userdetails/save/{id}', 'UserDetailController@save');
+    Route::get('userdetails/{id}', 'UserDetailController@get');
 
     // offers
-    Route::get('offers/{id?}', 'OfferController@index');
+    Route::get('offers', 'OfferController@index');
+    Route::get('offers/list', 'OfferController@list');
     Route::get('offers/get/{fromDashboard?}', 'OfferController@get');
     Route::post('offers/save/{id}', 'OfferController@save');
     Route::post('offers/delete/{id}', 'OfferController@delete');
 
     // tickets
     Route::get('tickets', 'TicketController@index');
+    Route::get('tickets/list', 'TicketController@index');
     Route::post('tickets/buy', 'TicketController@buy');
     Route::post('tickets/check', 'TicketController@check');
     Route::post('tickets/use', 'TicketController@use');
     Route::get('tickets/qr/{user}/{offer}/{ticket}/{amount}', 'TicketController@qr');
+
+    // settings
+    Route::post('settings/save', 'SettingsController@save');
 });

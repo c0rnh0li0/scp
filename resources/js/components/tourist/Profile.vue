@@ -1,6 +1,6 @@
 <template>
-    <v-container grid-list-xl>
-        <v-layout row wrap>
+    <div>
+        <v-layout row wrap class="pa-2">
             <!-- avatar -->
             <v-flex xs12 sm12 md2 lg2 xl2>
                 <v-col class="text-center justify-space-between" cols="12">
@@ -130,7 +130,10 @@
 
             <!-- description -->
             <v-flex xs12 sm12 md12 lg12 xl12>
-                <v-label>Description</v-label>
+                <div class="pl-3">
+                    <v-label>Description</v-label>
+                </div>
+
                 <v-col cols="12">
                     <tiptap-vuetify
                             v-model="description"
@@ -160,7 +163,7 @@
                       :snack_color="snack_color"
                       :snack_message="snack_message"
                       :saving="saving"></form-helpers>
-    </v-container>
+    </div>
 </template>
 
 <script>

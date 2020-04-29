@@ -1,6 +1,6 @@
 <template>
     <div>
-        <tickets></tickets>
+        <tickets class="mb-4"></tickets>
         <offers :from-dashboard="true"></offers>
     </div>
 </template>
@@ -14,8 +14,6 @@
             Tickets,
             Offers
         },
-        created() {
-            console.log('tourist Dashboard Component mounted.')
-        }
+        created() {}
     }
 </script>

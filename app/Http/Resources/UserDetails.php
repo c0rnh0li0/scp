@@ -20,7 +20,7 @@ class UserDetails extends JsonResource
             'id' => $this->id,
             'phone' => $this->phone,
             'description' => $this->description,
-            'picture' => $this->picture,
+            'picture' => $this->picture ? $this->picture : 'avatar_default.png',
             'website' => $this->website,
             'user' => new UserResource($this->user),
             'type' => $this->type,

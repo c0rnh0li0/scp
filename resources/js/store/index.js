@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         sessionEndpoint: '/api/auth',
+        settingsEndpoint: '/api/settings',
         session: {},
+        settings: {},
         id: -1,
         username: '',
         email: '',
@@ -28,19 +30,33 @@ export default new Vuex.Store({
             admin: [
                 { divider: true },
                 { icon: 'mdi-home-modern', text: 'Home', route: '/admin/dashboard' },
+                { icon: 'mdi-cogs', text: 'Settings', route: '/admin/settings' },
+                {
+                    icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups', active: false,
+                    items: [
+                        { text: 'Categories', route: '/admin/lookups/categories' },
+                        { text: 'Countries', route: '/admin/lookups/countries' },
+                        { text: 'Cities', route: '/admin/lookups/cities' },
+                        { text: 'Genders', route: '/admin/lookups/genders' },
+                        { text: 'Languages', route: '/admin/lookups/languages' },
+                        { text: 'User types', route: '/admin/lookups/usertypes' },
+                        { text: 'Valutes', route: '/admin/lookups/valutes' },
+                    ]
+                },
+                { divider: true },
                 { icon: 'mdi-file-document-edit', text: 'Contracts', route: '/admin/contracts' },
                 { icon: 'mdi-bank', text: 'Places', route: '/admin/places' },
                 { icon: 'mdi-account', text: 'People', route: '/admin/people' },
+                { icon: 'mdi-book-plus', text: 'Offers', route: '/admin/offers' },
                 { icon: 'mdi-qrcode-scan', text: 'Tickets', route: '/admin/tickets' },
                 { divider: true },
-                { icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups' },
                 { icon: 'mdi-certificate-outline', text: 'Tokens', route: '/admin/tokens' },
                 { divider: true },
                 { icon: 'mdi-information-outline', text: 'About', route: '/about' },
             ],
             place: [
                 { divider: true },
-                { icon: 'mdi-home-modern', text: 'Dashboard', route: '/place/statistics' },
+                { icon: 'mdi-home-modern', text: 'Dashboard', route: '/place/dashboard' },
                 { icon: 'mdi-qrcode-scan', text: 'Scan', route: '/place/scan' },
                 { icon: 'mdi-account', text: 'Profile', route: '/place/profile' },
                 { icon: 'mdi-book-plus', text: 'Offers', route: '/place/offers' },
@@ -81,8 +97,12 @@ export default new Vuex.Store({
         avatars_path: '/storage/avatars/',
         promo_images_path: '/storage/promo_images/',
         tickets_path: '/storage/tickets/',
+        logo_path: '/storage/logo/',
     },
     mutations: {
+        setSettings (state, payload) {
+            state.settings = payload
+        },
         triggerSession (state, payload) {
             state.session.user = {}
         },
@@ -119,10 +139,21 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        async getSettings({commit}) {
+            return await axios.get(this.state.settingsEndpoint).then((response) => {
+                commit('setSettings', response.data.data)
+            });
+        },
+        updateSettings({commit}, payload) {
+            commit('setSettings', payload)
+        },
         async getSession({commit}) {
             return await axios.post(this.state.sessionEndpoint).then((response) => {
                 commit('setSession', response.data.data)
             });
+        },
+        setOfflineSession({commit}, payload) {
+            commit('setSession', payload)
         },
         destroySession({commit}) {
             commit('destroySession')
@@ -140,6 +171,9 @@ export default new Vuex.Store({
     getters: {
         session: async (state) => {
             return state.session
+        },
+        settings: async (state) => {
+            return state.settings
         },
         menu: (state, type) => {
             return state.menu
@@ -182,6 +216,9 @@ export default new Vuex.Store({
         },
         tickets_path: (state) => {
             return state.tickets_path
-        }
+        },
+        logo_path: (state) => {
+            return state.logo_path
+        },
     }
 })

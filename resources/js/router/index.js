@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from './../store/index';
 import VueRouter from 'vue-router'
 import AdminRoutes from './admin';
 import PlaceRoutes from './place';
@@ -10,13 +11,13 @@ const routes = [
     {
         path: '/',
         component: require('../components/Home').default,
-        meta: { requiresAuth: false, type: 'guest' }
+        meta: { requiresAuth: false }
     },
     {
         path: '/admin',
         component: require('../components/admin/Index').default,
         children: AdminRoutes,
-        meta: { requiresAuth: true, type: 'admin' }
+        meta: { requiresAuth: true, type: 'admin', transitionName: 'fade' }
     },
     {
         path: '/place',
@@ -54,24 +55,21 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth == false)) {
-        console.log('router no auth', to);
-        /*if (Vue.auth.isAuthenticated()) {
-            next({
-                name: 'Home'
-            })
-        } else*/ next()
-    }
-    else if (to.matched.some(record => record.meta.requiresAuth)) {
-        console.log('router yes auth', to);
-        /*if (!Vue.auth.isAuthenticated()) {
-            next({
-                path: '/401'
-            })
-        } else next()*/
         next()
     }
+    else if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.state.session.user) {
+            if (store.state.type == to.meta.type)
+                next()
+            else
+                next({
+                    path: '/401'
+                })
+        }
+        else
+            next()
+    }
     else  {
-        console.log('router just next');
         next()
     }
 });

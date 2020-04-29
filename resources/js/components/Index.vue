@@ -24,6 +24,19 @@
                         </v-col>
                     </v-row>
                     <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
+                    <v-list-group v-else-if="item.items" :key="i" v-model="item.active" :prepend-icon="item.icon" no-action>
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.text"></v-list-item-title>
+                            </v-list-item-content>
+                        </template>
+
+                        <v-list-item v-for="subItem in item.items" :key="subItem.text" :to="subItem.route">
+                            <v-list-item-content>
+                                <v-list-item-title v-text="subItem.text"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-group>
                     <v-list-item v-else :key="i" :to="item.route" >
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
@@ -98,7 +111,10 @@
                         menu_items.find(m => m.name == 'business_profile').route += this.$store.state.id + '/true'
 
                     // display the dashboard for all upon login
-                    this.$router.push(this.$store.state.endpoint + '/dashboard')
+                    if (this.$root.$data.isFreshLogin) {
+                        this.$router.push(this.$store.state.endpoint + '/dashboard')
+                        this.$root.$data.isFreshLogin = false
+                    }
                 }
 
                 return menu_items

@@ -3,9 +3,12 @@
 namespace App;
 
 use App\SCPModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Location extends SCPModel
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'longitude',
         'latitude',

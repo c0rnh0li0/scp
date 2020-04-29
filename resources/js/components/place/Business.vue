@@ -1,8 +1,8 @@
 <template>
-    <v-container grid-list-xl class="ma-0 pa-0">
-        <v-layout row wrap class="ma-0 pa-0">
+    <v-container grid-list-xl class="">
+        <v-layout row wrap class="">
             <!-- google map component -->
-            <v-flex xs12 sm12 md12 lg6 xl6 class="ma-0 pa-0">
+            <v-flex xs12 sm12 md12 lg6 xl6 class="">
                 <v-col cols="12" id="map-container">
                     <gmap-map
                             ref="mapRef"
@@ -32,7 +32,7 @@
             </v-flex>
 
             <!-- profile info -->
-            <v-flex xs12 sm12 md12 lg6 xl6 class="ma-0 pa-0">
+            <v-flex xs12 sm12 md12 lg6 xl6 class="">
                 <v-col class="text-center justify-space-between" cols="12">
                     <v-avatar size="150">
                         <v-img :src="placeholderImage" v-if="placeholderImage" class="avatar-img" aspect-ratio="1"></v-img>

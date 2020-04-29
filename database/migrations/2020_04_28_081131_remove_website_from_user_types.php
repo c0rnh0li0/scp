@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddWebsiteColumnToUserTypesTable extends Migration
+class RemoveWebsiteFromUserTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddWebsiteColumnToUserTypesTable extends Migration
     public function up()
     {
         Schema::table('user_types', function (Blueprint $table) {
-            $table->string('website')->nullable();
+            $table->dropColumn(['website']);
         });
     }
 

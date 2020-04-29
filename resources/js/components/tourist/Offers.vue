@@ -1,55 +1,41 @@
 <template>
-    <v-container fluid class="fill-height ma-0 pa-0">
-        <v-row class="mx-2">
-            <v-col cols="12" align="center" justify="center" v-if="offers_loaded && offers.length == 0">
-                <v-alert type="info" align="center" justify="center" max-width="400">
-                    No offers at this time...
-                </v-alert>
-            </v-col>
-            <v-col cols="12" align="center" justify="center" class="ma-0 pa-0" v-else>
-                <v-card flat class="ma-0 pa-0 mb-2">
-                    <v-card-title class="display-1">
-                        Featured offers
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container grid-list-xl class="ma-0 pa-0">
-                            <v-layout row wrap class="ma-0 pa-0">
-                                <v-flex v-for="(offer, i) in featured_offers" :key="'offer_' + offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
-                                    <offer-card :offer="offer" @openOffer="openOffer" @buyTicket="buyTicket" />
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions v-if="fromDashboard">
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="$router.push('/home/offers')">
-                            Show more
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
+    <div>
+        <v-col cols="12" v-if="offers_loaded && offers.length == 0">
+            <v-alert type="info" align="center" justify="center" max-width="400">
+                No offers at this time...
+            </v-alert>
+        </v-col>
+        <v-col cols="12" v-else>
+            <div row class="display-1 mb-2">Featured offers</div>
 
-                <v-card flat class="ma-0 pa-0 mb-2">
-                    <v-card-title class="display-1">
-                        Other offers
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container grid-list-xl class="ma-0 pa-0">
-                            <v-layout row wrap class="ma-0 pa-0">
-                                <v-flex v-for="(offer, i) in other_offers" :key="'offer_' + offer.id" xs12 sm6 md4 lg3 xl3 class="ma-0 pa-0">
-                                    <offer-card :offer="offer" @openOffer="openOffer" @buyTicket="buyTicket" />
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions v-if="fromDashboard">
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="$router.push('/home/offers')">
-                            Show more
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-        </v-row>
+            <v-layout row wrap>
+                <v-flex v-for="(offer, i) in featured_offers" :key="'offer_' + offer.id" xs12 sm6 md4 lg3 xl3 class="">
+                    <offer-card :offer="offer" @openOffer="openOffer" @buyTicket="buyTicket" />
+                </v-flex>
+            </v-layout>
+
+            <div v-if="fromDashboard" class="text-end mt-2">
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="$router.push('/home/offers')">
+                    Show more
+                </v-btn>
+            </div>
+
+            <div row class="display-1 mt-4 mb-2">Other offers</div>
+            <v-layout row wrap class="">
+                <v-flex v-for="(offer, i) in other_offers" :key="'offer_' + offer.id" xs12 sm6 md4 lg3 xl3 class="">
+                    <offer-card :offer="offer" @openOffer="openOffer" @buyTicket="buyTicket" />
+                </v-flex>
+            </v-layout>
+
+            <div v-if="fromDashboard" class="text-end mt-2">
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="$router.push('/home/offers')">
+                    Show more
+                </v-btn>
+            </div>
+        </v-col>
+
         <v-dialog v-model="view_offer_dialog" persistent scrollable max-width="1000" :fullscreen="$vuetify.breakpoint.mdAndDown">
             <offer-details :offer="viewOffer" :hide_actions="false" @closeOffer="closeOffer" @buyTicket="buyTicket" />
         </v-dialog>
@@ -66,7 +52,9 @@
                       :snack_message="snack_message"
                       :dialog_title="form_helper_saving_message"
                       :saving="saving"></form-helpers>
-    </v-container>
+    </div>
+
+
 </template>
 
 <script>

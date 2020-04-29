@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\SCPModel;
 
-class Valute extends Model
+class Valute extends SCPModel
 {
     protected $fillable = [
         'name',

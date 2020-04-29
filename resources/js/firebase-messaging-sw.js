@@ -16,11 +16,13 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(function(payload) {
+    console.log('background notification received', payload)
     const notificationOptions = buildNotificationOptions(payload);
     return self.registration.showNotification(payload.data.title, notificationOptions);
 });
 
 self.addEventListener('notificationclick', function(event) {
+    console.log('background notification clicked', event)
     event.notification.close();
     var promise = new Promise(function(resolve) {
         setTimeout(resolve, 3000);
@@ -31,6 +33,7 @@ self.addEventListener('notificationclick', function(event) {
 });
 
 self.addEventListener('notificationclose', function(event) {
+    console.log('background notification closed', event)
     console.log("notification close in sw", event);
 });
 
@@ -89,3 +92,4 @@ function buildNotificationOptions(payload) {
         options.silent = (typeof payload.data.silent != 'undefined' ? payload.data.silent : false);
     return options;
 }
+

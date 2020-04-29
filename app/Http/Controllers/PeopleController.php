@@ -3,33 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserDetails as UserDetailResource;
-use App\User;
 use App\UserDetail;
-use App\UserType;
+use function foo\func;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\DB;
 
 class PeopleController extends UserDetailController
 {
-    public function index()
+    /**
+     * People table data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function index(Request $request)
     {
-        $sort = FacadesRequest::get('sort', 'created_at');
-        $dir = FacadesRequest::get('direction', 'asc');
-        $search = FacadesRequest::get('q', '');
+        $itemsPerPage = $request->input('itemsPerPage');
+        $page = $request->input('page');
 
-        if ($sort == '')
-            $sort = 'created_at';
+        $sortBy = $request->input('sortBy');
+        $sortBy = str_replace('user.', 'users.', $sortBy);
 
-        if ($search != '') {
-            $users = UserDetail::where('is_company', 0)
-                ->where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('description', 'LIKE', '%' . $search . '%')
-                ->paginate(10);
-        }
-        else {
-            $users = UserDetail::where('is_company', 0)->orderBy($sort, $dir)->paginate(10);
-        }
+        $dir = $request->input('dir');
+        $q = $request->input('q');
+
+        if ($sortBy == '')
+            $sortBy = 'user_details.created_at';
+
+        $users = UserDetail::join('users', 'users.id', '=', 'user_details.user_id')
+                ->where('user_details.is_company', 0)
+                ->orderBy($sortBy, $dir)
+                ->whereHas('user', function ($query) use ($q) {
+                    if ($q && $q != '') {
+                        $query->where('name', 'like', "%$q%")
+                            ->orWhere('email', 'like', "%$q%");
+                    }
+                })
+                ->select('user_details.*')
+                ->paginate($itemsPerPage);
 
         return UserDetailResource::collection($users);
     }

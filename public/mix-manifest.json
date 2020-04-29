@@ -2,6 +2,5 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/manifest.json": "/manifest.json",
-    "/sw.js": "/sw.js",
-    "/firebase-messaging-sw.js": "/firebase-messaging-sw.js"
+    "/sw.js": "/sw.js"
 }

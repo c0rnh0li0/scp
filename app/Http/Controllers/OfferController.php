@@ -4,19 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Offer;
 use App\Http\Resources\Offer as OfferResource;
-use App\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OfferController extends Controller
 {
     private $promo_image_path = 'public/promo_images';
+
+    /**
+     * Offers table data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \App\Http\Resources\Offer
+     */
+    public function index(Request $request)
+    {
+        $itemsPerPage = $request->input('itemsPerPage');
+        if ($itemsPerPage < 0)
+            $itemsPerPage = 1000;
+
+        $page = $request->input('page');
+
+        $sortBy = $request->input('sortBy');
+        //$sortBy = str_replace('offer.', 'offers.', $sortBy);
+
+        $dir = $request->input('dir');
+        $q = $request->input('q');
+
+        if ($sortBy == '')
+            $sortBy = 'created_at';
+
+        $offers = Offer::whereNull('deleted_at')
+            ->where('title', 'like', "%$q%")
+            ->orderBy($sortBy, $dir)
+            ->paginate($itemsPerPage);
+
+        return OfferResource::collection($offers);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id = null)
+    public function list($id = null)
     {
         $owner_id = $id ? $id : auth('api')->user()->id;
 
@@ -70,32 +103,36 @@ class OfferController extends Controller
         $rules = [
             'title' => 'required|max:255',
             'short_description' => 'required',
-            'promo_image' => 'image|nullable|max:2048|mimes:jpeg,png,jpg',
             'real_price' => 'required',
-            'offered_price' => 'required'
+            'offered_price' => 'required',
+            'owner_id' => 'required'
         ];
+
+        if ($request->hasFile('promo_image'))
+            $rules['promo_image'] = 'image|nullable|max:2048|mimes:jpeg,png,jpg';
 
         $this->validate($request, $rules);
 
-        //$data = json_decode($request->input('jsonstring'));
-
-        $offer = $request->input('id') == 0 ? new Offer() : Offer::findOrFail($request->input('id'));
+        $offer = $request->input('id') <= 0 ? new Offer() : Offer::findOrFail($request->input('id'));
 
         $offer->title = $request->input('title');
         $offer->short_description = $request->input('short_description');
         $offer->long_description = $request->input('long_description');
-        $offer->promo_image = $this->uploadPromoImage($request, 'promo_image', $this->promo_image_path, $offer->promo_image);
         $offer->real_price = $request->input('real_price');
         $offer->offered_price = $request->input('offered_price');
         $offer->include_global = $request->input('include_global') ? 1 : 0;
         $offer->featured = $request->input('featured') ? 1 : 0;
         $offer->notes = $request->input('notes');
-        $offer->owner_id = auth('api')->user()->id;
+        $offer->owner_id = $request->input('owner_id');
+
+        if ($request->hasFile('promo_image'))
+            $offer->promo_image = $this->uploadPromoImage($request, 'promo_image', $this->promo_image_path, $offer->promo_image);
 
         if ($offer->save()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Offer successfully saved!'
+                'message' => 'Offer successfully saved!',
+                'offer' => new OfferResource($offer)
             ], 201);
         }
         else {

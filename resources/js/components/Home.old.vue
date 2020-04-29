@@ -1,32 +1,12 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, maximum-scale=1">
-
-        <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <script>window.Laravel = { csrfToken: '{{ csrf_token() }}'}; </script>
-
-        <title>{{ config('app.name') }}</title>
-        <link rel="shortcut icon" type="image/png" sizes="96x96" href="/img/icons/favicon-96x96.png">
-        <link rel="shortcut icon" type="image/png" sizes="32x32" href="/img/icons/favicon-32x32.png">
-        <link rel="shortcut icon" type="image/png" sizes="16x16" href="/img/icons/favicon-16x16.png">
-
-        <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600' rel='stylesheet' type='text/css'>
-
-        <link href="{{ asset('css/home/all.css') }}" rel="stylesheet" type="text/css">
-        <script type="text/javascript" src="{{ asset('js/home/all.js') }}"></script>
-    </head>
-    <body>
+<template>
+    <div>
         <header class="header" id="header">
             <!--header-start-->
             <div class="container">
                 <figure class="logo animated fadeInDown delay-07s">
-                    <a href="#"><img src="img/skopje-logo-w.png" alt=""></a>
+                    <a href="#"><img src="/img/skopje-logo-w.png" alt=""></a>
                 </figure>
-                <h1 class="animated fadeInDown delay-07s">Welcome To {{ config('app.name') }}</h1>
+                <h1 class="animated fadeInDown delay-07s">Welcome To {{ app_name }}</h1>
                 <ul class="we-create animated fadeInUp delay-1s">
                     <li>Visit Skopje with few click away</li>
                 </ul>
@@ -44,23 +24,12 @@
                     <li><a href="#team">Team</a></li>
                     <!-- <li><a href="#Portfolio">Portfolio</a></li>
                     <li><a href="#client">Clients</a></li> -->
-                    <li class="small-logo"><a href="#header"><img width="60" height="60" src="img/skopje-logo-b.png" alt=""></a></li>
+                    <li class="small-logo"><a href="#header"><img width="60" height="60" src="/img/skopje-logo-b.png" alt=""></a></li>
 
                     <li><a href="#contact">Contact</a></li>
-                    <li><a class="popup-link" href="{{ route('login') }}">Sign in</a></li>
+                    <li><a class="popup-link" @click="showLogin" href="#">Sign in</a></li>
 
-                    @if (Route::has('register'))
-                        <li><a class="popup-link" href="{{ route('register') }}">Sign up</a></li>
-                    @endif
-                    {{-- @auth
-                        <li><a href="{{ route('logout') }}">Logout</a></li>
-                    @else
-                        <li><a class="popup-link" href="{{ route('login') }}">Sign in</a></li>
-
-                        @if (Route::has('register'))
-                            <li><a class="popup-link" href="{{ route('register') }}">Sign up</a></li>
-                        @endif
-                    @endauth--}}
+                    <li><a class="popup-link" @click="showRegister" href="#">Sign up</a></li>
                 </ul>
                 <a class="res-nav_click" href="#"><i class="fa fa-bars"></i></a>
             </div>
@@ -112,7 +81,7 @@
                         </div>
                     </div>
                     <figure class="col-lg-8 col-sm-6  text-right wow fadeInUp delay-02s">
-                        <img src="img/macbook-pro.png" alt="">
+                        <img src="/img/macbook-pro.png" alt="">
                     </figure>
 
                 </div>
@@ -127,7 +96,7 @@
             <div class="container">
                 <div class="row">
                     <figure class="col-lg-5 col-sm-4 wow fadeInLeft">
-                        <img src="img/iphone.png" alt="">
+                        <img src="/img/iphone.png" alt="">
                     </figure>
                     <div class="col-lg-7 col-sm-8 featured-work">
                         <h2>featured work</h2>
@@ -186,32 +155,32 @@
             </div>
             <div class="portfolioContainer wow fadeInUp delay-04s">
                 <div class=" Portfolio-box printdesign">
-                    <a href="img/Portfolio-pic1.jpg"><img src="img/Portfolio-pic1.jpg" alt=""></a>
+                    <a href="/img/Portfolio-pic1.jpg"><img src="/img/Portfolio-pic1.jpg" alt=""></a>
                     <h3>Foto Album</h3>
                     <p>Print Design</p>
                 </div>
                 <div class="Portfolio-box webdesign">
-                    <a href="img/Portfolio-pic2.jpg"><img src="img/Portfolio-pic2.jpg" alt=""></a>
+                    <a href="/img/Portfolio-pic2.jpg"><img src="/img/Portfolio-pic2.jpg" alt=""></a>
                     <h3>Luca Theme</h3>
                     <p>Web Design</p>
                 </div>
                 <div class=" Portfolio-box branding">
-                    <a href="img/Portfolio-pic3.jpg"><img src="img/Portfolio-pic3.jpg" alt=""></a>
+                    <a href="/img/Portfolio-pic3.jpg"><img src="/img/Portfolio-pic3.jpg" alt=""></a>
                     <h3>Uni Sans</h3>
                     <p>Branding</p>
                 </div>
                 <div class=" Portfolio-box photography">
-                    <a href="img/Portfolio-pic4.jpg"><img src="img/Portfolio-pic4.jpg" alt=""></a>
+                    <a href="/img/Portfolio-pic4.jpg"><img src="/img/Portfolio-pic4.jpg" alt=""></a>
                     <h3>Vinyl Record</h3>
                     <p>Photography</p>
                 </div>
                 <div class=" Portfolio-box branding">
-                    <a href="img/Portfolio-pic5.jpg"><img src="img/Portfolio-pic5.jpg" alt=""></a>
+                    <a href="/img/Portfolio-pic5.jpg"><img src="/img/Portfolio-pic5.jpg" alt=""></a>
                     <h3>Hipster</h3>
                     <p>Branding</p>
                 </div>
                 <div class=" Portfolio-box photography">
-                    <a href="img/Portfolio-pic6.jpg"><img src="img/Portfolio-pic6.jpg" alt=""></a>
+                    <a href="/img/Portfolio-pic6.jpg"><img src="/img/Portfolio-pic6.jpg" alt=""></a>
                     <h3>Windmills</h3>
                     <p>Photography</p>
                 </div>
@@ -231,10 +200,10 @@
                 </div>
                 <ul class="client wow fadeIn delay-05s">
                     <li><a href="#">
-                            <img src="img/client-pic1.jpg" alt="">
-                            <h3>James Bond</h3>
-                            <span>License To Drink Inc.</span>
-                        </a></li>
+                        <img src="/img/client-pic1.jpg" alt="">
+                        <h3>James Bond</h3>
+                        <span>License To Drink Inc.</span>
+                    </a></li>
                 </ul>
             </div>
         </section>
@@ -243,11 +212,11 @@
             <!--c-logo-part-start-->
             <div class="container">
                 <ul>
-                    <li><a href="#"><img src="img/c-liogo1.png" alt=""></a></li>
-                    <li><a href="#"><img src="img/c-liogo2.png" alt=""></a></li>
-                    <li><a href="#"><img src="img/c-liogo3.png" alt=""></a></li>
-                    <li><a href="#"><img src="img/c-liogo4.png" alt=""></a></li>
-                    <li><a href="#"><img src="img/c-liogo5.png" alt=""></a></li>
+                    <li><a href="#"><img src="/img/c-liogo1.png" alt=""></a></li>
+                    <li><a href="#"><img src="/img/c-liogo2.png" alt=""></a></li>
+                    <li><a href="#"><img src="/img/c-liogo3.png" alt=""></a></li>
+                    <li><a href="#"><img src="/img/c-liogo4.png" alt=""></a></li>
+                    <li><a href="#"><img src="/img/c-liogo5.png" alt=""></a></li>
                 </ul>
             </div>
         </div>
@@ -261,7 +230,7 @@
                     <div class="team-leader-box">
                         <div class="team-leader wow fadeInDown delay-03s">
                             <div class="team-leader-shadow"><a href="#"></a></div>
-                            <img src="img/team-leader-pic1.jpg" alt="">
+                            <img src="/img/team-leader-pic1.jpg" alt="">
                             <ul>
                                 <li><a href="#" class="fa fa-twitter"></a></li>
                                 <li><a href="#" class="fa fa-facebook"></a></li>
@@ -276,7 +245,7 @@
                     <div class="team-leader-box">
                         <div class="team-leader  wow fadeInDown delay-06s">
                             <div class="team-leader-shadow"><a href="#"></a></div>
-                            <img src="img/team-leader-pic2.jpg" alt="">
+                            <img src="/img/team-leader-pic2.jpg" alt="">
                             <ul>
                                 <li><a href="#" class="fa fa-twitter"></a></li>
                                 <li><a href="#" class="fa fa-facebook"></a></li>
@@ -291,7 +260,7 @@
                     <div class="team-leader-box">
                         <div class="team-leader wow fadeInDown delay-09s">
                             <div class="team-leader-shadow"><a href="#"></a></div>
-                            <img src="img/team-leader-pic3.jpg" alt="">
+                            <img src="/img/team-leader-pic3.jpg" alt="">
                             <ul>
                                 <li><a href="#" class="fa fa-twitter"></a></li>
                                 <li><a href="#" class="fa fa-facebook"></a></li>
@@ -378,12 +347,97 @@
         </div>
         <footer class="footer">
             <div class="container">
-                <div class="footer-logo"><a href="#"><img width="70" height="70" src="img/skopje-logo-w.png" alt=""></a></div>
+                <div class="footer-logo"><a href="#"><img width="70" height="70" src="/img/skopje-logo-w.png" alt=""></a></div>
                 <span class="copyright">&copy; SCP Team. All Rights Reserved</span>
                 <!-- <div class="credits">
                     Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
                 </div> -->
             </div>
         </footer>
-    </body>
-</html>
+    </div>
+</template>
+
+<script>
+    function toJSONString( form ) {
+        var obj = {};
+        var elements = form.querySelectorAll( "input, select, textarea" );
+        for( var i = 0; i < elements.length; ++i ) {
+            var element = elements[i];
+            var name = element.name;
+            var value = element.value;
+
+            if( name ) {
+                obj[ name ] = value;
+            }
+        }
+
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    export default {
+        data: () => ({
+            login_url: '',
+            register_url: '',
+            csrf: '',
+            app_name: '',
+            site_url: ''
+        }),
+        methods: {
+            showRegister(e) {
+                e.preventDefault()
+                let that = this
+
+                $.get(this.register_url, function (response) {
+                    $.featherlight(response, {
+                        variant: null,
+                        afterContent: function () {
+                            that.initializeForms();
+                        }
+                    });
+                });
+
+                return false
+            },
+            showLogin(e) {
+                e.preventDefault()
+                let that = this
+
+                $.get(this.login_url, function (response) {
+                    $.featherlight(response, {
+                        variant: null,
+                        afterContent: function () {
+                            that.initializeForms();
+                        }
+                    });
+                });
+
+                return false
+            },
+            initializeForms() {
+                let that = this
+                $('.scp-form').off('submit').on('submit', function (e) {
+                    e.preventDefault();
+
+                    var frmData = toJSONString(this);
+                    that.$emit(frmData.will, this.action, frmData)
+
+                    return false;
+                });
+            }
+        },
+        async created() {
+            this.login_url = window.Laravel.loginUrl
+            this.register_url = window.Laravel.registerUrl
+            this.csrf = window.Laravel.csrf
+            this.app_name = window.Laravel.siteName
+            this.site_url = window.Laravel.siteUrl
+        },
+        mounted() {}
+    }
+</script>
+<style scoped>
+    ul.main-nav {
+        margin: 0;
+        padding: 0;
+    }
+</style>
