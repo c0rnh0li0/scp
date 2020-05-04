@@ -23,10 +23,10 @@ class TicketController extends Controller
 
         $page = $request->input('page');
 
-        $sortBy = $request->input('sortBy');
+        $sortBy = $request->input('sortBy', 'created_at');
         //$sortBy = str_replace('offer.', 'offers.', $sortBy);
 
-        $dir = $request->input('dir');
+        $dir = $request->input('dir', 'desc');
         $q = $request->input('q');
 
         if ($sortBy == '')

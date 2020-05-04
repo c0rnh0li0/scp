@@ -12,6 +12,7 @@ class Ticket extends SCPModel
         'used',
         'amount',
         'qr_code',
+        'used_at',
         'created_at',
         'updated_at',
         'modified_by',

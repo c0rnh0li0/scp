@@ -756,7 +756,6 @@
                 this.latitude = marker.latLng.lat()
             },
             setPlace(place) {
-                console.log(place)
                 this.defaultCenter = {
                     lat: place.geometry.location.lat(),
                     lng: place.geometry.location.lng()
@@ -866,8 +865,6 @@
                 this.markers.push({
                     position: this.defaultCenter
                 })
-
-                console.log('after update: ', this.editedItem)
             },
             editItem (item) {
                 this.setEditedItem(item)

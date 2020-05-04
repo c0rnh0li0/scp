@@ -18,6 +18,8 @@ class Category extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'children' => $this->children,
+            'parent' => $this->parent,
+            'parent_id' => $this->parent_id,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),
             'updated_at' => ($this->updated_at ? $this->updated_at->format('d F, Y') : ''),
         ];

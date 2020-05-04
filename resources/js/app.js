@@ -1,6 +1,6 @@
 require('./bootstrap');
 
-import './messaging'
+//import './messaging'
 
 window.Vue = require('vue');
 

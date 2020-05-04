@@ -16,7 +16,7 @@ class Valute extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name . ' (' . $this->sign . ')',
+            'name' => $this->name,
             'sign' => $this->sign,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),
             'updated_at' => ($this->updated_at ? $this->updated_at->format('d F, Y') : ''),

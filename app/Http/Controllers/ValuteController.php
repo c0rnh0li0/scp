@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Valute;
+use App\Http\Resources\Valute as ValuteResource;
 use Illuminate\Http\Request;
 
 class ValuteController extends Controller
@@ -12,9 +13,27 @@ class ValuteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $itemsPerPage = $request->input('itemsPerPage');
+        if ($itemsPerPage < 0)
+            $itemsPerPage = 10000;
+
+        $page = $request->input('page');
+
+        $sortBy = $request->input('sortBy');
+        $sortBy = str_replace('user.', 'users.', $sortBy);
+
+        $dir = $request->input('dir');
+
+        if ($sortBy == '')
+            $sortBy = 'created_at';
+
+        $q = $request->input('q');
+
+        $valutes = Valute::where('name', 'like', "%$q%")->orderBy($sortBy, $dir)->paginate($itemsPerPage);
+
+        return ValuteResource::collection($valutes);
     }
 
     /**
@@ -33,9 +52,32 @@ class ValuteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function save(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required|max:191',
+            'sign' => 'required'
+        ];
+
+        $this->validate($request, $rules);
+
+        $valute = $request->input('id') <= 0 ? new Valute() : Valute::findOrFail($request->input('id'));
+        $valute->name = $request->input('name');
+        $valute->sign = $request->input('sign');
+
+        if ($valute->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Valute successfully saved!',
+                'item' => new ValuteResource($valute)
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error saving valute!'
+            ], 201);
+        }
     }
 
     /**
@@ -78,8 +120,21 @@ class ValuteController extends Controller
      * @param  \App\Valute  $valute
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Valute $valute)
+    public function delete($id)
     {
-        //
+        $valute = Valute::findOrFail($id);
+
+        if ($valute->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Valute successfully deleted!'
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting valute!'
+            ], 201);
+        }
     }
 }

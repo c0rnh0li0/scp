@@ -4,7 +4,7 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" :class="[$vuetify.breakpoint.smAndDown ? 'display-3 mr-3': 'd-none']"></v-app-bar-nav-icon>
 
             <v-avatar :class="[$vuetify.breakpoint.smAndDown ? 'd-none': 'mr-3']" :size="avatarSizeScrollBased">
-                <v-img contain max-height="90%" src="/img/skopje-logo-b.png"></v-img>
+                <v-img contain max-height="90%" :src="site_logo"></v-img>
             </v-avatar>
 
             <v-toolbar-title class="font-weight-black headline">
@@ -22,7 +22,7 @@
         <v-navigation-drawer v-model="drawer" fixed temporary>
             <v-list-item class="justify-center text-center">
                 <v-avatar size="120">
-                    <v-img contain src="/img/skopje-logo-b.png"></v-img>
+                    <v-img contain :src="site_logo"></v-img>
                 </v-avatar>
             </v-list-item>
 
@@ -52,7 +52,7 @@
                                         </span>
                                     </v-col>
                                     <v-avatar class="mr-3 mt-3" color="grey lighten-5" size="130">
-                                        <v-img contain max-height="90%" src="/img/skopje-logo-b.png"></v-img>
+                                        <v-img contain max-height="90%" :src="site_logo"></v-img>
                                     </v-avatar>
                                 </v-row>
                             </v-container>
@@ -305,6 +305,7 @@
 
     import LoginForm from './LoginForm'
     import RegisterForm from './RegisterForm'
+    import { mapState } from 'vuex'
 
     export default {
         components: {
@@ -317,6 +318,11 @@
             'loginErrors',
             'registerErrors',
         ],
+        computed:
+            mapState({
+                settings: state => state.settings
+            })
+        ,
         watch: {
             loginDialog(newVal, oldVal) {
                 return newVal
@@ -330,6 +336,10 @@
             registerErrors(newVal, oldVal) {
                 return newVal
             },
+            settings(newVal, oldVal) {
+                this.setSettingsData(newVal)
+                return newVal
+            }
         },
         data: () => ({
             login_url: '',
@@ -337,6 +347,7 @@
             csrf: '',
             app_name: '',
             site_url: '',
+            site_logo: '',
             offsetTop: 0,
             barHeightScrollBased: 110,
             avatarSizeScrollBased: 90,
@@ -350,7 +361,6 @@
                 { title: 'Sign up', click: 'register' },
                 { title: 'Contact', route: '#contact' },
             ],
-
             articles: [
                 {
                     src: 'https://images.unsplash.com/photo-1423784346385-c1d4dac9893a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
@@ -416,6 +426,10 @@
                 this.barHeightScrollBased = scrollOffset > 100 ? 70 : 110
                 this.avatarSizeScrollBased = scrollOffset > 100 ? 60 : 90
             },
+            setSettingsData(data) {
+                this.app_name = data.site_name || window.Laravel.siteName
+                this.site_logo = this.$store.state.logo_path + data.site_logo || '/img/skopje-logo-b.png'
+            }
         },
         async created() {
             this.login_url = window.Laravel.loginUrl

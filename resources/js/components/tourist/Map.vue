@@ -276,7 +276,7 @@
             },
             getTickets() {
                 let that = this
-                axios.get('/api/tickets/')
+                axios.get('/api/tickets/list')
                     .then(response => {
                         that.tickets = response.data.data
                         that.unused_tickets = that.tickets.filter(o => o.used == 0)

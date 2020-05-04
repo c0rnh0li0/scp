@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer v-model="drawer" color="grey lighten-5" light app>
+        <v-navigation-drawer v-model="drawer" color="grey lighten-5" app>
             <v-list nav>
                 <v-list-item>
                     <v-list-item-avatar>
@@ -68,7 +68,7 @@
         <v-app-bar app color="light-blue darken-4" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <v-toolbar-title>Skopje City Pass</v-toolbar-title>
-            <v-spacer />
+            <v-spacer></v-spacer>
             <div v-for="(qitem, j) in quick_items" :key="j">
                 <v-btn icon :to="qitem.route">
                     <v-icon>{{ qitem.icon }}</v-icon>

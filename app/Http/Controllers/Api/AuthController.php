@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Resources\UserDetails as UserDetailResource;
+use App\Login;
 use App\Providers\RouteServiceProvider;
 use App\UserDetail;
 use App\UserType;
@@ -47,6 +48,10 @@ class AuthController extends Controller
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $details = UserDetail::find($user->id);
+
+            $login = new Login();
+            $login->user_id = $user->id;
+            $login->save();
 
             $goto = RouteServiceProvider::INDEX;
 

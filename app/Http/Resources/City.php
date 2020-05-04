@@ -20,6 +20,7 @@ class City extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'country_id' => $this->country_id,
+            'country' => $this->country,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),
             'updated_at' => ($this->updated_at ? $this->updated_at->format('d F, Y') : ''),
         ];

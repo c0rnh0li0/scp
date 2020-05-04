@@ -583,8 +583,6 @@
                 this.placeholderImage = this.defaultPlaceholderImage
                 this.editedIndex = -1
                 this.images = []
-
-                console.log('after update: ', this.editedItem)
             },
             editItem (item) {
                 this.setEditedItem(item)
@@ -669,7 +667,8 @@
                         that.close()
                     })
                     .catch(error => {
-                        that.errors = error.data.errors
+                        if (error.data.errors)
+                            that.errors = error.data.errors
                         that.snack_message = error.data.message
                         that.snack_color = 'error'
                     })

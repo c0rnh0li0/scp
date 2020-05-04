@@ -33,8 +33,15 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', 'Api\AuthController@logout')->name('api_logout');
     Route::post('password', 'Api\AuthController@password');
 
-    // lookup data
-    Route::get('lookups', 'HomeController@lookups');
+    // charts data
+    Route::get('monthlytickets', 'ChartsController@monthlytickets');
+    Route::get('yearlytickets', 'ChartsController@yearlytickets');
+    Route::get('yearlyvisitors', 'ChartsController@yearlyvisitors');
+    Route::get('dailyticketsdata', 'ChartsController@dailyticketsdata');
+    Route::get('dailyvisitorsdata', 'ChartsController@dailyvisitorsdata');
+    Route::get('dailytouristsdata', 'ChartsController@dailytouristsdata');
+    Route::get('dailyvisitsdata', 'ChartsController@dailyvisitsdata');
+    Route::get('mostvisitedplaces', 'ChartsController@mostvisitedplaces');
 
     // users
     Route::get('users', 'UserController@index');
@@ -79,4 +86,35 @@ Route::middleware('auth:api')->group(function () {
 
     // settings
     Route::post('settings/save', 'SettingsController@save');
+
+    // lookup data
+    Route::get('lookups', 'HomeController@lookups');
+
+    Route::get('categories', 'CategoryController@index');
+    Route::post('categories/save', 'CategoryController@save');
+    Route::post('categories/delete/{id}', 'CategoryController@delete');
+
+    Route::get('countries', 'CountryController@index');
+    Route::post('countries/save', 'CountryController@save');
+    Route::post('countries/delete/{id}', 'CountryController@delete');
+
+    Route::get('cities', 'CityController@index');
+    Route::post('cities/save', 'CityController@save');
+    Route::post('cities/delete/{id}', 'CityController@delete');
+
+    Route::get('genders', 'GenderController@index');
+    Route::post('genders/save', 'GenderController@save');
+    Route::post('genders/delete/{id}', 'GenderController@delete');
+
+    Route::get('languages', 'LanguageController@index');
+    Route::post('languages/save', 'LanguageController@save');
+    Route::post('languages/delete/{id}', 'LanguageController@delete');
+
+    Route::get('usertypes', 'UserTypeController@index');
+    Route::post('usertypes/save', 'UserTypeController@save');
+    Route::post('usertypes/delete/{id}', 'UserTypeController@delete');
+
+    Route::get('valutes', 'ValuteController@index');
+    Route::post('valutes/save', 'ValuteController@save');
+    Route::post('valutes/delete/{id}', 'ValuteController@delete');
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Gender;
+use App\Http\Resources\Gender as GenderResource;
 use Illuminate\Http\Request;
 
 class GenderController extends Controller
@@ -12,9 +13,26 @@ class GenderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $itemsPerPage = $request->input('itemsPerPage');
+        if ($itemsPerPage < 0)
+            $itemsPerPage = 10000;
+        $page = $request->input('page');
+
+        $sortBy = $request->input('sortBy');
+        $sortBy = str_replace('user.', 'users.', $sortBy);
+
+        $dir = $request->input('dir');
+
+        if ($sortBy == '')
+            $sortBy = 'created_at';
+
+        $q = $request->input('q');
+
+        $genders = Gender::where('name', 'like', "%$q%")->orderBy($sortBy, $dir)->paginate($itemsPerPage);
+
+        return GenderResource::collection($genders);
     }
 
     /**
@@ -33,9 +51,30 @@ class GenderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function save(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required|max:191'
+        ];
+
+        $this->validate($request, $rules);
+
+        $gender = $request->input('id') <= 0 ? new Gender() : Gender::findOrFail($request->input('id'));
+        $gender->name = $request->input('name');
+
+        if ($gender->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Gender successfully saved!',
+                'item' => new GenderResource($gender)
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error saving gender!'
+            ], 201);
+        }
     }
 
     /**
@@ -78,8 +117,21 @@ class GenderController extends Controller
      * @param  \App\Gender  $gender
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Gender $gender)
+    public function delete($id)
     {
-        //
+        $gender = Gender::findOrFail($id);
+
+        if ($gender->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Gender successfully deleted!'
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting gender!'
+            ], 201);
+        }
     }
 }

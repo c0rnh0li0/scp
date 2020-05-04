@@ -15,10 +15,13 @@
   },
   "dependencies": {
     "@vue/cli-service": "^4.3.1",
+    "animated-number-vue": "^1.0.0",
     "bootstrap-vue": "^2.12.0",
+    "chart.js": "^2.9.3",
     "firebase": "^7.14.1",
     "tiptap-vuetify": "^2.13.2",
     "v-offline": "^1.2.1",
+    "vue-chartjs": "^3.5.0",
     "vue-crypt": "^1.0.0",
     "vue-qrcode-reader": "^2.1.1",
     "vue-router": "^3.1.6",

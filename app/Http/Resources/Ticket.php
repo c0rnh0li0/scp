@@ -28,6 +28,7 @@ class Ticket extends JsonResource
             'used' => $this->used,
             'amount' => $this->amount,
             'qr_code' => $this->qr_code,
+            'used_at' => ($this->used_at ? $this->used_at->format('d F, Y') : ''),
             'modified_by' => $this->modified_by,
             'deleted_by' => $this->deleted_by,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),
