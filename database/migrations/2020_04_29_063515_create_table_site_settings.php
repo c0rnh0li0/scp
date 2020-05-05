@@ -17,7 +17,7 @@ class CreateTableSiteSettings extends Migration
             $table->bigIncrements('id');
             $table->string('site_name');
             $table->string('site_logo');
-            $table->string('frontpage_template')->nullable();
+            $table->bigInteger('frontpage_template')->unsigned();
             $table->string('phone');
             $table->string('address');
             $table->string('email');

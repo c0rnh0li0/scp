@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Contract as ContractResource;
 
-class User extends JsonResource
+class ContractLength extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +17,13 @@ class User extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
+            'duration' => $this->duration,
+            'price' => $this->price,
+            'valute_id' => $this->valute_id,
+            'valute' => $this->valute,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),
             'updated_at' => ($this->updated_at ? $this->updated_at->format('d F, Y') : ''),
+            'deleted_at' => ($this->deleted_at ? $this->deleted_at->format('d F, Y') : ''),
         ];
     }
 }

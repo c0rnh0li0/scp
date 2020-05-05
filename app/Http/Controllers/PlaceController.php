@@ -23,13 +23,13 @@ class PlaceController extends UserDetailController
      */
     public function index(Request $request)
     {
-        $itemsPerPage = $request->input('itemsPerPage');
+        $itemsPerPage = $request->input('itemsPerPage', 1000);
         $page = $request->input('page');
 
         $sortBy = $request->input('sortBy');
         $sortBy = str_replace('user.', 'users.', $sortBy);
 
-        $dir = $request->input('dir');
+        $dir = $request->input('dir', 'asc');
         $q = $request->input('q');
 
         if ($sortBy == '')

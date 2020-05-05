@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import vuetify from './vuetify'
+import vuetify from './../vuetify'
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 // don't forget to import styles
 import 'tiptap-vuetify/dist/main.css'

@@ -14,7 +14,6 @@ class ChangeTemplateColumnInSettingsTable extends Migration
     public function up()
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->bigInteger('frontpage_template')->nullable()->unsigned()->change();
             //$table->foreign('frontpage_template')->references('id')->on('templates')->onDelete('cascade');
         });
     }

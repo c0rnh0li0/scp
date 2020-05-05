@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import i18n from './../translations'
 
 Vue.use(Vuex)
 
@@ -34,12 +35,13 @@ export default new Vuex.Store({
                 {
                     icon: 'mdi-database', text: 'Lookup data', route: '/admin/lookups', active: false,
                     items: [
+                        { text: 'Contract Lengths', route: '/admin/lookups/contractlengths' },
+                        { text: 'Languages', route: '/admin/lookups/languages' },
+                        { text: 'User types', route: '/admin/lookups/usertypes' },
                         { text: 'Categories', route: '/admin/lookups/categories' },
                         { text: 'Countries', route: '/admin/lookups/countries' },
                         { text: 'Cities', route: '/admin/lookups/cities' },
                         { text: 'Genders', route: '/admin/lookups/genders' },
-                        { text: 'Languages', route: '/admin/lookups/languages' },
-                        { text: 'User types', route: '/admin/lookups/usertypes' },
                         { text: 'Valutes', route: '/admin/lookups/valutes' },
                     ]
                 },

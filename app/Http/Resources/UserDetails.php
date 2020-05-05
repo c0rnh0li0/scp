@@ -16,6 +16,8 @@ class UserDetails extends JsonResource
      */
     public function toArray($request)
     {
+        $contract = \App\Contract::where('owner_id', $this->user->id)->get();
+
         return [
             'id' => $this->id,
             'phone' => $this->phone,
@@ -27,6 +29,7 @@ class UserDetails extends JsonResource
             'gender' => $this->gender,
             'location' => new LocationResource($this->location),
             'valute' => $this->valute,
+            'contract' => sizeof($contract) ? new Contract($contract[0]) : null,
             'modified_by' => $this->modified_by,
             'deleted_by' => $this->deleted_by,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),

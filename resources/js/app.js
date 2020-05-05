@@ -11,7 +11,7 @@ Vue.component('passport-personal-access-tokens', require('./components/passport/
 import './config';
 import router from './router/index';
 import store from './store/index';
-import vuetify from './plugins/vuetify';
+import vuetify from './vuetify';
 import './plugins/google-maps'
 import './plugins/tiptap-vuetify'
 
@@ -30,8 +30,9 @@ axios.interceptors.response.use(function (response) {
 });
 
 import VueCrypt from 'vue-crypt'
-import VOffline from 'v-offline';
-import InstallBanner from './components/InstallBanner';
+import VOffline from 'v-offline'
+import InstallBanner from './components/InstallBanner'
+import i18n from './translations'
 
 Vue.use(VueCrypt)
 Vue.use(VOffline)
@@ -44,6 +45,7 @@ import { mapState } from 'vuex'
 
 const app = new Vue({
     el: '#app',
+    i18n,
     store,
     router,
     vuetify: vuetify,

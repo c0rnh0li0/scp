@@ -10,6 +10,11 @@ const placeroutes = [
         meta: { requiresAuth: true, type: 'place', transitionName: 'fade' }
     },
     {
+        path: 'contract', name: 'contract',
+        component: require('./../components/place/Contract').default,
+        meta: { requiresAuth: true, type: 'place', transitionName: 'fade' }
+    },
+    {
         path: 'profile',
         component: require('./../components/place/Profile').default,
         meta: { requiresAuth: true, type: 'place', transitionName: 'fade' }

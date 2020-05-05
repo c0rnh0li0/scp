@@ -11,17 +11,22 @@
                 class="elevation-1">
             <template v-slot:top>
                 <v-toolbar flat color="white">
+                    <template v-slot:extension>
+                        <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
+                        <v-text-field
+                                v-model="search"
+                                append-icon="mdi-magnify"
+                                label="Search"
+                                single-line
+                                hide-details
+                                @change="searchChanged"
+                        ></v-text-field>
+                        <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
+                    </template>
+
                     <v-toolbar-title>Places</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            single-line
-                            hide-details
-                            @change="searchChanged"
-                    ></v-text-field>
-                    <v-spacer></v-spacer>
+
                     <v-dialog v-model="dialog" max-width="1000px" scrollable :fullscreen="$vuetify.breakpoint.mdAndDown">
                         <template v-slot:activator="{ on }">
                             <v-btn color="success" dark class="mb-2" v-on="on">New Place</v-btn>

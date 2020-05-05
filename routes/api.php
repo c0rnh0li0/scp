@@ -117,4 +117,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('valutes', 'ValuteController@index');
     Route::post('valutes/save', 'ValuteController@save');
     Route::post('valutes/delete/{id}', 'ValuteController@delete');
+
+    Route::get('contractlengths', 'ContractLengthController@index');
+    Route::post('contractlengths/save', 'ContractLengthController@save');
+    Route::post('contractlengths/delete/{id}', 'ContractLengthController@delete');
+
+    Route::get('contracts', 'ContractController@index');
+    Route::post('contracts/save', 'ContractController@save');
 });

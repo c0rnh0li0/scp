@@ -11,17 +11,22 @@
                 class="elevation-1">
             <template v-slot:top>
                 <v-toolbar flat color="white">
+                    <template v-slot:extension>
+                        <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
+                        <v-text-field
+                                v-model="search"
+                                append-icon="mdi-magnify"
+                                label="Search"
+                                single-line
+                                hide-details
+                                @change="searchChanged"
+                        ></v-text-field>
+                        <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
+                    </template>
+
                     <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            single-line
-                            hide-details
-                            @change="searchChanged"
-                    ></v-text-field>
-                    <v-spacer></v-spacer>
+
                     <v-dialog v-model="dialog" max-width="1000px" scrollable :fullscreen="$vuetify.breakpoint.mdAndDown">
                         <template v-slot:activator="{ on }">
                             <v-btn color="success" dark class="mb-2" v-on="on">{{ newItemTitle }}</v-btn>
@@ -92,10 +97,12 @@
 
 <script>
     import FormHelpers from '../../custom/FormHelpers'
+    import Component from "vue2-google-maps/examples/src/auto/component";
 
     export default {
         name: "Index",
         components: {
+            Component,
             FormHelpers
         },
         props: {
@@ -140,6 +147,8 @@
             totalItems: 0,
             loading: false,
 
+            list: null,
+
             dialog: false,
             formTitle: '',
             form: null,
@@ -172,6 +181,9 @@
                     // data table options
                 this.headers = data.headers
                 this.form = data.form
+
+                if (data.list)
+                    this.list = data.list
 
                 this.newItemTitle = data.newItemTitle
                 this.formTitle = data.formTitle

@@ -39,6 +39,11 @@ const adminroutes = [
         component: { render: h => h('router-view') },
         children: [
             {
+                path: 'contractlengths',
+                component: require('./../components/admin/lookups/contractlengths/Crud').default,
+                meta: { requiresAuth: true, type: 'admin', transitionName: 'fade' }
+            },
+            {
                 path: 'categories',
                 component: require('./../components/admin/lookups/categories/Crud').default,
                 meta: { requiresAuth: true, type: 'admin', transitionName: 'fade' }

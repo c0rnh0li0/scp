@@ -53,14 +53,36 @@ const router = new VueRouter({
     routes
 })
 
+const isContractValid = function(contract) {
+    if (!contract)
+        return false
+    if (!contract.valid || !contract.paid)
+        return false
+    if (new Date() > new Date(Date.parse(contract.expires_at)))
+        return false
+    if (new Date() < new Date(Date.parse(contract.start_at)))
+        return false
+
+    return true
+}
+
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth == false)) {
         next()
     }
     else if (to.matched.some(record => record.meta.requiresAuth)) {
         if (store.state.session.user) {
-            if (store.state.type == to.meta.type)
-                next()
+            if (store.state.type == to.meta.type) {
+                if (store.state.type == 'place' && !isContractValid(store.state.session.contract)) {
+                    if (to.name == 'contract')
+                        next()
+                    else
+                        next({
+                            path: '/place/contract'
+                        })
+                }
+                else next()
+            }
             else
                 next({
                     path: '/401'

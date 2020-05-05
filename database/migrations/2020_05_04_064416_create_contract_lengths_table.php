@@ -18,7 +18,10 @@ class CreateContractLengthsTable extends Migration
             $table->string('name');
             $table->integer('duration');
             $table->double('price');
+            $table->bigInteger('valute_id')->unsigned();
+            $table->foreign('valute_id')->references('id')->on('valutes')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\UserDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\UserDetails as UserDetailResource;
@@ -28,7 +29,7 @@ class Ticket extends JsonResource
             'used' => $this->used,
             'amount' => $this->amount,
             'qr_code' => $this->qr_code,
-            'used_at' => ($this->used_at ? $this->used_at->format('d F, Y') : ''),
+            'used_at' => ($this->used_at ? Carbon::parse($this->used_at)->format('d F, Y') : ''),
             'modified_by' => $this->modified_by,
             'deleted_by' => $this->deleted_by,
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),

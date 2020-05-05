@@ -22,7 +22,7 @@
             today: 0,
             this_week: 0,
             this_month: 0,
-            today_text: 'Tickets bought today',
+            today_text: this.$t('widgets.todaytickets.todaytext'),
             week_text: 'This week',
             month_text: 'This month',
             box_icon: 'mdi-card-text',
