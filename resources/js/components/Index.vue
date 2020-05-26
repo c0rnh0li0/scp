@@ -27,13 +27,13 @@
                     <v-list-group v-else-if="item.items" :key="i" v-model="item.active" :prepend-icon="item.icon" no-action>
                         <template v-slot:activator>
                             <v-list-item-content>
-                                <v-list-item-title v-text="item.text"></v-list-item-title>
+                                <v-list-item-title v-text="$t(item.text)"></v-list-item-title>
                             </v-list-item-content>
                         </template>
 
                         <v-list-item v-for="subItem in item.items" :key="subItem.text" :to="subItem.route">
                             <v-list-item-content>
-                                <v-list-item-title v-text="subItem.text"></v-list-item-title>
+                                <v-list-item-title v-text="$t(subItem.text)"></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
@@ -43,7 +43,7 @@
                         </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>
-                                {{ item.text }}
+                                {{ $t(item.text) }}
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
@@ -55,7 +55,7 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="red--text darken-4">
-                            Logout
+                            {{ $t('message.menus.admin.menu.items.logout') }}
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -69,6 +69,7 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <v-toolbar-title>Skopje City Pass</v-toolbar-title>
             <v-spacer></v-spacer>
+            <language-selector></language-selector>
             <div v-for="(qitem, j) in quick_items" :key="j">
                 <v-btn icon :to="qitem.route">
                     <v-icon>{{ qitem.icon }}</v-icon>
@@ -88,7 +89,12 @@
 </template>
 
 <script>
+    import LanguageSelector from './LanguageSelector'
+
     export default {
+        components: {
+            LanguageSelector
+        },
         props: {
             source: String,
         },

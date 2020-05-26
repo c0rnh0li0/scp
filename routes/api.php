@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'Api\AuthController@login')->name('api_login');
 Route::post('register', 'Api\AuthController@register')->name('api_register');;
+Route::get('languages', 'LanguageController@index');
 
 // settings data
 Route::middleware('api')->group(function () {
@@ -55,7 +56,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('people/{id}', 'PeopleController@show');
     Route::post('people', 'PeopleController@store');
     Route::put('people', 'PeopleController@store');
-    Route::delete('people/{id}', 'PeopleController@destroy');
+    Route::post('people/delete/{id}', 'PeopleController@delete');
 
     // places (ex: museums)
     Route::get('place', 'PlaceController@index');
@@ -63,7 +64,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('place/{id}', 'PlaceController@show');
     Route::post('place', 'PlaceController@store');
     Route::put('place', 'PlaceController@store');
-    Route::delete('place/{id}', 'PlaceController@destroy');
+    Route::post('place/delete/{id}', 'PlaceController@delete');
 
     // user details
     Route::post('userdetails/save/{id}', 'UserDetailController@save');
@@ -71,14 +72,14 @@ Route::middleware('auth:api')->group(function () {
 
     // offers
     Route::get('offers', 'OfferController@index');
-    Route::get('offers/list', 'OfferController@list');
+    Route::get('offers/list/{id?}', 'OfferController@list');
     Route::get('offers/get/{fromDashboard?}', 'OfferController@get');
     Route::post('offers/save/{id}', 'OfferController@save');
     Route::post('offers/delete/{id}', 'OfferController@delete');
 
     // tickets
     Route::get('tickets', 'TicketController@index');
-    Route::get('tickets/list', 'TicketController@index');
+    Route::get('tickets/list', 'TicketController@list');
     Route::post('tickets/buy', 'TicketController@buy');
     Route::post('tickets/check', 'TicketController@check');
     Route::post('tickets/use', 'TicketController@use');
@@ -106,7 +107,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('genders/save', 'GenderController@save');
     Route::post('genders/delete/{id}', 'GenderController@delete');
 
-    Route::get('languages', 'LanguageController@index');
     Route::post('languages/save', 'LanguageController@save');
     Route::post('languages/delete/{id}', 'LanguageController@delete');
 

@@ -1,22 +1,20 @@
 <template>
     <div>
         <v-card>
-            <v-card-title>Settings</v-card-title>
-            <v-card-subtitle>Manage your site settings</v-card-subtitle>
+            <v-card-title>{{ $t('message.sections.settings.settings_title') }}</v-card-title>
+            <v-card-subtitle>{{ $t('message.sections.settings.settings_subtitle') }}</v-card-subtitle>
             <v-divider></v-divider>
             <v-card-text>
                 <v-layout row wrap class="pa-2">
-                    <!-- <v-flex xs12 sm12 md2 lg2 xl2> -->
-
                     <v-flex xs12 sm12 md6 lg6 xl6 class="justify-center d-flex align-center">
                         <v-col cols="12">
-                            <v-text-field prepend-icon="mdi-earth" v-model="site_name" label="Site name" :error-messages="errors.site_name" />
+                            <v-text-field prepend-icon="mdi-earth" v-model="site_name" :label="$t('message.sections.settings.labels.site_name')" :error-messages="errors.site_name" />
                         </v-col>
                     </v-flex>
 
                     <v-flex xs12 sm12 md6 lg6 xl6>
                         <v-col class="text-center justify-space-between" cols="12">
-                            <v-label @click.stop="pickFile">Site logo</v-label>
+                            <v-label @click.stop="pickFile">{{ $t('message.sections.settings.labels.site_logo') }}</v-label>
 
                             <input type="file"
                                    style="display: none;"
@@ -36,7 +34,7 @@
                         <v-col cols="12">
                             <v-select
                                     prepend-icon="mdi-page-layout-header-footer"
-                                    label="Frontpage template"
+                                    :label="$t('message.sections.settings.labels.frontpage_template')"
                                     :items="templates"
                                     item-text="name"
                                     item-value="id"
@@ -48,19 +46,19 @@
 
                     <v-flex xs12 sm12 md6 lg6 xl6>
                         <v-col cols="12">
-                            <v-text-field prepend-icon="mdi-phone" v-model="phone" label="Contact phone" :error-messages="errors.phone" />
+                            <v-text-field prepend-icon="mdi-phone" v-model="phone" :label="$t('message.sections.settings.labels.contact_phone')" :error-messages="errors.phone" />
                         </v-col>
                     </v-flex>
 
                     <v-flex xs12 sm12 md6 lg6 xl6>
                         <v-col cols="12">
-                            <v-text-field prepend-icon="mdi-mail" v-model="email" label="Contact Email" :error-messages="errors.email" />
+                            <v-text-field prepend-icon="mdi-mail" v-model="email" :label="$t('message.sections.settings.labels.contact_email')" :error-messages="errors.email" />
                         </v-col>
                     </v-flex>
 
                     <v-flex xs12 sm12 md6 lg6 xl6>
                         <v-col cols="12">
-                            <v-text-field prepend-icon="mdi-city" v-model="address" label="Contact Address" :error-messages="errors.address" />
+                            <v-text-field prepend-icon="mdi-city" v-model="address" :label="$t('message.sections.settings.labels.contact_address')" :error-messages="errors.address" />
                         </v-col>
                     </v-flex>
 
@@ -68,7 +66,7 @@
                         <v-col cols="12">
                             <v-select
                                     prepend-icon="mdi-translate"
-                                    label="Default language"
+                                    :label="$t('message.sections.settings.labels.default_language')"
                                     :items="languages"
                                     item-text="name"
                                     item-value="id"
@@ -77,6 +75,26 @@
                             />
                         </v-col>
                     </v-flex>
+
+                    <v-flex xs12 sm12 md6 lg6 xl6>
+                        <v-col cols="12">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on }">
+                                    <span v-on="on">
+                                        <v-switch
+                                                prepend-icon="mdi-file-document-edit"
+                                                v-model="contract_check"
+                                                :label="$t('message.sections.settings.labels.contract_check')"
+                                        ></v-switch>
+                                    </span>
+                                </template>
+                                <span>{{ $t('message.sections.settings.labels.contract_check_hint') }}</span>
+                            </v-tooltip>
+
+                        </v-col>
+                    </v-flex>
+
+
                     <!-- <v-flex xs12 sm12 md6 lg6 xl6>
                         <v-col cols="12">
                             <v-text-field v-model="longitude" label="Longitude" :error-messages="errors.longitude" />
@@ -93,10 +111,10 @@
             <v-divider></v-divider>
             <v-card-actions>
                 <span class="caption">
-                    Last updated: {{ updated_at }}
+                    {{ $t('message.sections.settings.labels.last_updated') }}: {{ updated_at }}
                 </span>
                 <v-spacer></v-spacer>
-                <v-btn large color="success" @click="save">Save</v-btn>
+                <v-btn large color="success" @click="save">{{ $t('message.global.btn_save') }}</v-btn>
             </v-card-actions>
         </v-card>
         <form-helpers :snackbar_visible="snackbar"
@@ -137,9 +155,7 @@
             templates: [
                 { id: 1, name: 'Default template' }
             ],
-            languages: [
-                { id: 1, name: 'English' }
-            ],
+            languages: [],
 
             // form helpers stuff
             saving: false,
@@ -156,6 +172,7 @@
             phone: '',
             address: '',
             email: '',
+            contract_check: 0,
             language: 0,
             longitude: '',
             latitude: '',
@@ -170,6 +187,7 @@
                 phone: '',
                 address: '',
                 email: '',
+                contract_check: 0,
                 longitude: '',
                 latitude: '',
                 created_at: '',
@@ -186,6 +204,7 @@
                 this.editedItem.phone = this.phone = data ? data.phone : ''
                 this.editedItem.address = this.address = data ? data.address : ''
                 this.editedItem.email = this.email = data ? data.email : ''
+                this.editedItem.contract_check = this.contract_check = data ? data.contract_check : ''
                 this.editedItem.longitude = this.longitude = data ? data.longitude : ''
                 this.editedItem.latitude = this.latitude = data ? data.latitude : ''
                 this.editedItem.created_at = this.created_at = data ? data.created_at : ''
@@ -204,6 +223,7 @@
                 this.editedItem.phone = this.phone
                 this.editedItem.address = this.address
                 this.editedItem.email = this.email
+                this.editedItem.contract_check = this.contract_check
                 this.editedItem.language_id = this.language
                 this.editedItem.longitude = this.longitude
                 this.editedItem.latitude = this.latitude
@@ -266,9 +286,20 @@
                     this.images = []
                 }
             },
+            getLanguages() {
+                axios.get('/api/languages')
+                    .then(response => {
+                        this.languages = response.data.data
+                    })
+                    .catch(err => {
+                        console.log('Error fetching languages')
+                    })
+            }
         },
         mounted() {
             this.setSettings(this.$store.state.settings)
+            if (this.languages.length == 0)
+                this.getLanguages()
         }
     }
 </script>

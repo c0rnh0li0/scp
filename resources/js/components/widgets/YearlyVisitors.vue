@@ -3,7 +3,7 @@
         <v-toolbar color="indigo darken-2" dark dense elevation="1">
             <v-icon>mdi-account-heart</v-icon>
             <v-card-title>
-                This year's visitors
+                {{ $t('message.widgets.yearlyvisitors.title') }}
             </v-card-title>
         </v-toolbar>
         <v-card-text class="pa-2">
@@ -12,7 +12,7 @@
         <v-divider></v-divider>
         <v-card-actions>
             <v-card-subtitle>
-                Visitors flow this year
+                {{ $t('message.widgets.yearlyvisitors.footer') }}
             </v-card-subtitle>
         </v-card-actions>
     </v-card>
@@ -73,7 +73,7 @@
                         labels: ticketsData.data.chartdata.labels,
                         datasets: [
                             {
-                                label: 'Visitors',
+                                label: this.$t('message.widgets.yearlyvisitors.total_visitors_lbl'),
                                 data: ticketsData.data.chartdata.datasets.all.data,
                                 backgroundColor: 'transparent',
                                 borderColor: '#1A237E',

@@ -3,11 +3,11 @@
         <v-icon slot="icon" color="success" size="36">
             mdi-download
         </v-icon>
-        Do you want to install Skopje City Pass as an application?
+        {{ $t('message.other.install_banner.text') }}
 
         <template v-slot:actions>
-            <v-btn text color="warning darken-3" @click="dismissInstall">Dismiss</v-btn>
-            <v-btn text color="success darken-1" @click="installApp">Install</v-btn>
+            <v-btn text color="warning darken-3" @click="dismissInstall">{{ $t('message.other.install_banner.btn_dismiss') }}</v-btn>
+            <v-btn text color="success darken-1" @click="installApp">{{ $t('message.other.install_banner.btn_install') }}</v-btn>
         </template>
     </v-banner>
 </template>

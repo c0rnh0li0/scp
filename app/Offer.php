@@ -16,7 +16,14 @@ class Offer extends SCPModel
         'include_global',
         'featured',
         'notes',
+        'starts_at',
+        'ends_at',
         'owner_id'
+    ];
+
+    protected $casts = [
+        'starts_at' => 'date',
+        'ends_at' => 'date'
     ];
 
     public function owner() {

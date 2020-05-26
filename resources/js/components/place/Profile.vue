@@ -6,7 +6,7 @@
                 <v-col class="align-center justify-space-between mb-2" cols="12">
                     <gmap-autocomplete
                             class="introInput"
-                            placeholder="Search for your location..."
+                            :placeholder="$t('message.sections.place.sections.profile.form.fields.location')"
                             @place_changed="setPlace">
                     </gmap-autocomplete>
                     <v-divider></v-divider>
@@ -48,7 +48,7 @@
             <!-- avatar -->
             <v-flex xs12 sm12 md2 lg2 xl2>
                 <v-col class="text-center justify-space-between" cols="12">
-                    <v-label @click.stop="pickFile">Avatar</v-label>
+                    <v-label @click.stop="pickFile">{{ $t('message.sections.place.sections.profile.form.fields.avatar') }}</v-label>
 
                     <input type="file"
                            style="display: none;"
@@ -67,7 +67,7 @@
             <!-- profile name -->
             <v-flex xs12 sm12 md5 lg5 xl5 class="justify-center d-flex align-center">
                 <v-col cols="12">
-                    <v-text-field v-model="name" label="Name" :error-messages="errors.name" />
+                    <v-text-field v-model="name" :label="$t('message.sections.place.sections.profile.form.fields.name')" :error-messages="errors.name" />
                 </v-col>
             </v-flex>
 
@@ -76,14 +76,14 @@
                 <v-col cols="12">
                     <v-text-field
                             prepend-icon="mdi-mail"
-                            label="Email"
+                            :label="$t('message.sections.place.sections.profile.form.fields.email')"
                             disabled
                             v-model="email"
                     />
                     <v-text-field
                             type="password"
                             prepend-icon="mdi-lock-question"
-                            label="Password"
+                            :label="$t('message.sections.place.sections.profile.form.fields.password')"
                             v-model="password"
                             readonly
                             @click="openPasswordModal"
@@ -97,7 +97,7 @@
                     <v-text-field
                             type="tel"
                             prepend-icon="mdi-phone"
-                            label="Telephone"
+                            :label="$t('message.sections.place.sections.profile.form.fields.phone')"
                             v-model="phone"
                     />
                 </v-col>
@@ -108,7 +108,7 @@
                 <v-col cols="12">
                     <v-text-field
                             prepend-icon="mdi-earth"
-                            label="Website"
+                            :label="$t('message.sections.place.sections.profile.form.fields.website')"
                             v-model="website"
                     />
                 </v-col>
@@ -123,7 +123,7 @@
                             value="valute"
                             :items="valutes"
                             item-value="id"
-                            label="Currency"
+                            :label="$t('message.sections.place.sections.profile.form.fields.valute')"
                             :error-messages="errors.valute_id"
                     >
                         <template v-slot:item='{item}'> <div v-html='item.name'/> </template>
@@ -142,7 +142,7 @@
                             :items="cities"
                             item-text="name"
                             item-value="id"
-                            label="City"
+                            :label="$t('message.sections.place.sections.profile.form.fields.city')"
                             :error-messages="errors.city_id"
                     ></v-select>
                 </v-col>
@@ -159,7 +159,7 @@
                             :items="categories"
                             item-text="name"
                             item-value="id"
-                            label="Category"
+                            :label="$t('message.sections.place.sections.profile.form.fields.category')"
                             @change="categoryChanged"
                             :error-messages="errors.category_id"
                     ></v-select>
@@ -177,7 +177,7 @@
                             value="subcategory"
                             item-text="name"
                             item-value="id"
-                            label="Subcategory"
+                            :label="$t('message.sections.place.sections.profile.form.fields.subcategory')"
                     ></v-select>
                 </v-col>
             </v-flex>
@@ -185,13 +185,13 @@
             <!-- description -->
             <v-flex xs12 sm12 md12 lg12 xl12>
                 <div class="pl-3">
-                    <v-label>Description</v-label>
+                    <v-label>{{ $t('message.sections.place.sections.profile.form.fields.description') }}</v-label>
                 </div>
                 <v-col cols="12">
                     <tiptap-vuetify
                             v-model="description"
                             :extensions="extensions"
-                            placeholder="Describe your place here…"
+                            :placeholder="$t('message.sections.place.sections.profile.form.fields.description_placeholder')"
                     />
                 </v-col>
             </v-flex>
@@ -202,7 +202,7 @@
                 <v-col cols="12">
                     <v-text-field
                             prepend-icon="mdi-city"
-                            label="Address"
+                            :label="$t('message.sections.place.sections.profile.form.fields.address')"
                             v-model="address"
                             :error-messages="errors.address"
                     />
@@ -214,7 +214,7 @@
                 <v-col cols="12">
                     <v-text-field
                             prepend-icon="mdi-longitude"
-                            label="Longitude"
+                            :label="$t('message.sections.place.sections.profile.form.fields.longitude')"
                             v-model="longitude"
                             :error-messages="errors.longitude"
                     />
@@ -226,7 +226,7 @@
                 <v-col cols="12">
                     <v-text-field
                             prepend-icon="mdi-latitude"
-                            label="Latitude"
+                            :label="$t('message.sections.place.sections.profile.form.fields.latitude')"
                             v-model="latitude"
                             :error-messages="errors.latitude"
                     />
@@ -240,7 +240,7 @@
                         max-width="300"
                         tile>
                     <v-card-text>
-                        This place contains informations about the place you chose. Would you like to use that data?
+                        {{ $t('message.sections.place.msg.place_contains_info') }}
                     </v-card-text>
 
                     <v-list disabled>
@@ -284,11 +284,11 @@
                         <v-btn class="mt-6"
                                text
                                color="red"
-                               @click="bottomSheet = !bottomSheet">No</v-btn>
+                               @click="bottomSheet = !bottomSheet">{{ $t('message.global.btn_no') }}</v-btn>
                         <v-btn class="mt-6"
                                text
                                color="success"
-                               @click="useSuggestedData">Yes</v-btn>
+                               @click="useSuggestedData">{{ $t('message.global.btn_yes') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-sheet>
@@ -533,9 +533,7 @@
                 this.subcategories = this.$store.state.lookups.categories.find(cat => cat.id == this.category).children
                 this.subcategory = this.subcategories[0].id
             },
-            categoriesLoaded() {
-                console.log('categoriesLoaded')
-            },
+            categoriesLoaded() {},
             setLookupData(data) {
                 this.categories = data.categories
                 this.cities = data.cities
@@ -579,8 +577,6 @@
             async saveData() {
                 this.saving = this.btn_save_disabled = true
                 this.snackbar = false
-
-                console.log('saving')
 
                 if (!this.profileData.user)
                     this.profileData = this.sessionData

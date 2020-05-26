@@ -17,7 +17,7 @@
                         <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('message.global.lbl_search')"
                                 single-line
                                 hide-details
                                 @change="searchChanged"
@@ -25,12 +25,12 @@
                         <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
                     </template>
 
-                    <v-toolbar-title>Contracts</v-toolbar-title>
+                    <v-toolbar-title>{{ $t('message.sections.contracts.section_title') }}</v-toolbar-title>
 
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="1000px" scrollable :fullscreen="$vuetify.breakpoint.mdAndDown">
                         <template v-slot:activator="{ on }">
-                            <v-btn color="success" dark class="mb-2" v-on="on">New contract</v-btn>
+                            <v-btn color="success" dark class="mb-2" v-on="on">{{ $t('message.sections.contracts.btn_new_title') }}</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -55,11 +55,11 @@
                                                     prepend-icon="mdi-bank"
                                                     hide-no-data
                                                     hide-details
-                                                    label="Select a place">
+                                                    :label="$t('message.sections.contracts.form.fields.owner')">
                                                 <template v-slot:no-data>
                                                     <v-list-item>
                                                         <v-list-item-title>
-                                                            Search for place
+                                                            {{ $t('message.sections.contracts.form.fields.owner') }}
                                                         </v-list-item-title>
                                                     </v-list-item>
                                                 </template>
@@ -85,7 +85,7 @@
                                                     :items="contract_lengths"
                                                     item-value="id"
                                                     item-text="name"
-                                                    label="Contract length"
+                                                    :label="$t('message.sections.contracts.form.fields.length')"
                                                     :error-messages="errors.contract_length_id">
                                             </v-select>
                                         </v-col>
@@ -93,7 +93,7 @@
 
                                     <v-flex xs12 sm12 md6 lg6 xl6>
                                         <v-col cols="12">
-                                            <v-text-field label="Price" readonly v-model="price" prepend-inner-icon="mdi-cash"></v-text-field>
+                                            <v-text-field :label="$t('message.sections.contracts.form.fields.price')" readonly v-model="price" prepend-inner-icon="mdi-cash"></v-text-field>
                                         </v-col>
                                     </v-flex>
 
@@ -110,15 +110,15 @@
                                                 <template v-slot:activator="{ on }">
                                                     <v-text-field
                                                             v-model="formatted_start_date"
-                                                            label="Starts at"
+                                                            :label="$t('message.sections.contracts.form.fields.starts_at')"
                                                             prepend-icon="mdi-calendar-month"
                                                             readonly
                                                             v-on="on"></v-text-field>
                                                 </template>
                                                 <v-date-picker v-model="start_date" no-title scrollable>
                                                     <v-spacer></v-spacer>
-                                                    <v-btn text color="primary" @click="start_date_menu = false">Cancel</v-btn>
-                                                    <v-btn text color="primary" @click="processStartDate(start_date)">OK</v-btn>
+                                                    <v-btn text color="primary" @click="start_date_menu = false">{{ $t('message.global.btn_close') }}</v-btn>
+                                                    <v-btn text color="primary" @click="processStartDate(start_date)">{{ $t('message.global.btn_ok') }}</v-btn>
                                                 </v-date-picker>
                                             </v-menu>
                                         </v-col>
@@ -128,7 +128,7 @@
                                         <v-col cols="12">
                                             <v-text-field
                                                 v-model="formatted_end_date"
-                                                label="Expires at"
+                                                :label="$t('message.sections.contracts.form.fields.expires_at')"
                                                 prepend-icon="mdi-calendar-month"
                                                 readonly></v-text-field>
                                         </v-col>
@@ -136,22 +136,22 @@
 
                                     <v-flex xs12 sm12 md6 lg6 xl6>
                                         <v-col cols="12">
-                                            <v-checkbox v-model="paid" class="mx-2" label="Paid"></v-checkbox>
+                                            <v-checkbox v-model="paid" class="mx-2" :label="$t('message.sections.contracts.form.fields.paid')"></v-checkbox>
                                         </v-col>
                                     </v-flex>
 
                                     <v-flex xs12 sm12 md6 lg6 xl6>
                                         <v-col cols="12">
-                                            <v-checkbox v-model="valid" class="mx-2" label="Valid"></v-checkbox>
+                                            <v-checkbox v-model="valid" class="mx-2" :label="$t('message.sections.contracts.form.fields.valid')"></v-checkbox>
                                         </v-col>
                                     </v-flex>
                                 </v-layout>
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
-                                <v-btn text color="primary" @click="dialog = !dialog">Close</v-btn>
+                                <v-btn text color="primary" @click="dialog = !dialog">{{ $t('message.global.btn_close') }}</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn text color="success" @click="save">Save</v-btn>
+                                <v-btn text color="success" @click="save">{{ $t('message.global.btn_save') }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -159,14 +159,14 @@
                 <v-divider></v-divider>
                 <v-expansion-panels flat v-model="filters">
                     <v-expansion-panel>
-                        <v-expansion-panel-header>Filters</v-expansion-panel-header>
+                        <v-expansion-panel-header>{{ $t('message.global.lbl_filters') }}</v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <v-layout row wrap class="pa-2">
                                 <v-flex xs6 sm6 md4 lg2 xl2>
                                     <v-col cols="12">
                                         <v-select
                                                 :items="paid_filter_items"
-                                                label="Paid contracts"
+                                                :label="$t('message.sections.contracts.filters.lbl_paid')"
                                                 item-text="text"
                                                 item-value="value"
                                                 v-model="filter_paid"
@@ -178,7 +178,7 @@
                                     <v-col cols="12">
                                         <v-select
                                                 :items="valid_filter_items"
-                                                label="Valid contracts"
+                                                :label="$t('message.sections.contracts.filters.lbl_valid')"
                                                 item-text="text"
                                                 item-value="value"
                                                 v-model="filter_valid"
@@ -190,7 +190,7 @@
                                     <v-col cols="12">
                                         <v-select
                                                 :items="expired_filter_items"
-                                                label="Expired contracts"
+                                                :label="$t('message.sections.contracts.filters.lbl_expired')"
                                                 item-text="text"
                                                 item-value="value"
                                                 v-model="filter_expired"
@@ -234,7 +234,7 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <v-btn color="primary" @click="getDataFromApi">Reset</v-btn>
+                <v-btn color="primary" @click="getDataFromApi">{{ $t('message.global.lbl_reset') }}</v-btn>
             </template>
         </v-data-table>
 
@@ -259,8 +259,21 @@
         },
         computed: {
             formTitle () {
-                //return this.editedIndex === -1 ? 'New offer' : 'Edit offer "' + this.editedItem.title + '"'
-                return this.editedIndex === -1 ? 'New contract' : 'Edit contract '
+                return this.editedIndex === -1 ? this.$i18n.t('message.sections.contracts.form.form_title_new') : this.$i18n.t('message.sections.contracts.form.form_title_edit')
+            },
+            headers() {
+                return [
+                    {text: this.$t('message.sections.contracts.headers.owner'), value: 'owner.name', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.paid'), value: 'paid', align: 'center', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.valid'), value: 'valid', align: 'center', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.duration'), value: 'length.duration', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.price'), value: 'length.price', align: 'center', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.created'), value: 'created_at', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.starts_at'), value: 'start_at_list', align: 'left', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.expires_at'), value: 'expires_at_list', sortable: false},
+                    {text: this.$t('message.sections.contracts.headers.reminders'), value: 'reminders', align: 'center', sortable: false},
+                    {text: '', align: 'right', value: 'action', sortable: false},
+                ]
             },
         },
         watch: {
@@ -330,7 +343,7 @@
                     })
             }
         },
-        data () {
+        data: function() {
             return {
                 api: 'contracts',
                 dialog: false,
@@ -338,18 +351,7 @@
                 items: [],
                 loading: true,
                 options: {},
-                headers: [
-                    {text: 'Owner', value: 'owner.name', sortable: false},
-                    {text: 'Paid', value: 'paid', align: 'center', sortable: false},
-                    {text: 'Valid', value: 'valid', align: 'center', sortable: false},
-                    {text: 'Duration', value: 'length.duration', sortable: false},
-                    {text: 'Price', value: 'length.price', align: 'center', sortable: false},
-                    {text: 'Created on', value: 'created_at', sortable: false},
-                    {text: 'Starts on', value: 'start_at_list', align: 'left', sortable: false},
-                    {text: 'Ends on', value: 'expires_at_list', sortable: false},
-                    {text: 'Reminders', value: 'reminders', align: 'center', sortable: false},
-                    {text: '', align: 'right', value: 'action', sortable: false},
-                ],
+
                 search: '',
                 errors: [],
 
@@ -377,21 +379,21 @@
                 // filters
                 filters: false,
                 paid_filter_items: [
-                    { value: '', text: 'All' },
-                    { value: 1, text: 'Paid' },
-                    { value: 0, text: 'Unpaid' },
+                    { value: '', text: this.$i18n.t('message.sections.contracts.filters.paid.all') },
+                    { value: 1, text: this.$i18n.t('message.sections.contracts.filters.paid.paid') },
+                    { value: 0, text: this.$i18n.t('message.sections.contracts.filters.paid.unpaid') },
                 ],
                 filter_paid: '',
                 valid_filter_items: [
-                    { value: '', text: 'All' },
-                    { value: 1, text: 'Valid' },
-                    { value: 0, text: 'Invalid' },
+                    { value: '', text: this.$i18n.t('message.sections.contracts.filters.valid.all') },
+                    { value: 1, text: this.$i18n.t('message.sections.contracts.filters.valid.valid') },
+                    { value: 0, text: this.$i18n.t('message.sections.contracts.filters.valid.invalid') },
                 ],
                 filter_valid: '',
                 expired_filter_items: [
-                    { value: '', text: 'All' },
-                    { value: 1, text: 'Valid' },
-                    { value: 0, text: 'Expired' },
+                    { value: '', text: this.$i18n.t('message.sections.contracts.filters.expired.all') },
+                    { value: 1, text: this.$i18n.t('message.sections.contracts.filters.expired.valid') },
+                    { value: 0, text: this.$i18n.t('message.sections.contracts.filters.expired.expired') },
                 ],
                 filter_expired: '',
 

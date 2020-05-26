@@ -10,6 +10,10 @@
                 <v-card-title class="font-weight-bold" v-text="offer.title"></v-card-title>
             </v-img>
             <v-card-subtitle v-html="offer.short_description"></v-card-subtitle>
+            <v-card-subtitle>
+                {{ $t('message.sections.place.sections.offers.expires_at') }}:
+                {{ formatted_ends_at }}
+            </v-card-subtitle>
             <v-card-actions>
                 <v-row class="text-start pl-2">
                     <v-col cols="12">
@@ -37,6 +41,8 @@
 </template>
 
 <script>
+    import { format, parseISO } from 'date-fns'
+
     export default {
         name: "OfferCard",
         props: ['offer'],
@@ -46,8 +52,12 @@
             },
         },
         data: () => ({
-
-        })
+            formatted_ends_at: ''
+        }),
+        mounted() {
+            if (this.offer.ends_at)
+                this.formatted_ends_at = format(parseISO(this.offer.ends_at), 'EEEE, MMMM do yyyy')
+        }
     }
 </script>
 

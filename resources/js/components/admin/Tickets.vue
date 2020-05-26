@@ -17,7 +17,7 @@
                         <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('message.global.lbl_search')"
                                 single-line
                                 hide-details
                                 @change="searchChanged"
@@ -25,7 +25,7 @@
                         <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
                     </template>
 
-                    <v-toolbar-title>Tickets</v-toolbar-title>
+                    <v-toolbar-title>{{ $t('message.sections.tickets.section_title') }}</v-toolbar-title>
                 </v-toolbar>
             </template>
             <template v-slot:item.offer.owner.name="{ item }">
@@ -58,15 +58,15 @@
 
         <v-dialog v-model="use_dialog" persistent max-width="290">
             <v-card>
-                <v-card-title>Are you sure you want to use this ticket??</v-card-title>
+                <v-card-title>{{ $t('message.sections.tickets.msg.use_ticket_title') }}</v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-                    <v-card-subtitle>If you use this ticket it will be displayed as USED when the <b>{{ useTicket_user_name }}</b> visits <b>{{ useTicket_owner_name }}</b>.</v-card-subtitle>
+                    <v-card-subtitle>{{ $t('message.sections.tickets.msg.use_ticket_msg') }} <b>{{ useTicket_user_name }}</b> {{ $t('message.sections.tickets.msg.used_ticket_visit_txt') }} <b>{{ useTicket_owner_name }}</b>.</v-card-subtitle>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary darken-1" text @click="cancelUseTicket">No</v-btn>
-                    <v-btn color="error darken-1" @click="confirmUseTicket">Yes</v-btn>
+                    <v-btn color="primary darken-1" text @click="cancelUseTicket">{{ $t('message.global.btn_no') }}</v-btn>
+                    <v-btn color="error darken-1" @click="confirmUseTicket">{{ $t('message.global.btn_yes') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -87,7 +87,16 @@
             FormHelpers
         },
         computed: {
-
+            headers() {
+                return [
+                    {text: this.$t('message.sections.tickets.headers.tourist'), align: 'left', value: 'user.name', sortable: false },
+                    {text: this.$t('message.sections.tickets.headers.place'), value: 'offer.owner.name', sortable: false },
+                    {text: this.$t('message.sections.tickets.headers.amount'), value: 'amount', sortable: false },
+                    {text: this.$t('message.sections.tickets.headers.created'), value: 'created_at', sortable: false },
+                    {text: this.$t('message.sections.tickets.headers.used'), value: 'used', sortable: false },
+                    {text: '', align: 'right', value: 'action', sortable: false},
+                ]
+            },
         },
         watch: {
             dialog (val) {
@@ -119,14 +128,6 @@
                 items: [],
                 loading: true,
                 options: {},
-                headers: [
-                    {text: 'Tourist', align: 'left', value: 'user.name', sortable: false },
-                    {text: 'Place', value: 'offer.owner.name', sortable: false },
-                    {text: 'Amount', value: 'amount', sortable: false },
-                    {text: 'Bought on', value: 'created_at', sortable: false },
-                    {text: 'Used', value: 'used', sortable: false },
-                    {text: '', align: 'right', value: 'action', sortable: false},
-                ],
                 search: '',
                 errors: [],
 

@@ -3,7 +3,7 @@
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-col cols="12">
                 <v-text-field
-                        label="Name"
+                        :label="$t('message.sections.lookups.contract_lengths.form.fields.name')"
                         v-model="editedItem.name"
                         :error-messages="errors.name"
                 />
@@ -18,7 +18,7 @@
                         :items="durations"
                         item-text="name"
                         item-value="id"
-                        label="Duration"
+                        :label="$t('message.sections.lookups.contract_lengths.form.fields.duration')"
                         :error-messages="errors.duration"
                 ></v-select>
             </v-col>
@@ -27,7 +27,7 @@
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-col cols="12">
                 <v-text-field
-                        label="Price"
+                        :label="$t('message.sections.lookups.contract_lengths.form.fields.price')"
                         type="numeric"
                         v-model="editedItem.price"
                         :error-messages="errors.price"
@@ -43,7 +43,7 @@
                         :items="$store.state.lookups.valutes"
                         item-text="name"
                         item-value="id"
-                        label="Valute"
+                        :label="$t('message.sections.lookups.contract_lengths.form.fields.valute')"
                         :error-messages="errors.valute_id"
                 ></v-select>
             </v-col>
@@ -71,15 +71,15 @@
                 default: []
             },
         },
-        data () {
+        data: function () {
             return {
                 durations: [
-                    { id: 1, name: 'One month' },
-                    { id: 3, name: 'Three months' },
-                    { id: 6, name: 'Six months' },
-                    { id: 12, name: 'One year' },
-                    { id: 24, name: 'Two years' },
-                    { id: 36, name: 'Three Years' },
+                    { id: 1, name: this.$i18n.t('message.sections.lookups.contract_lengths.durations.months_1') },
+                    { id: 3, name: this.$i18n.t('message.sections.lookups.contract_lengths.durations.months_3') },
+                    { id: 6, name: this.$i18n.t('message.sections.lookups.contract_lengths.durations.months_6') },
+                    { id: 12, name: this.$i18n.t('message.sections.lookups.contract_lengths.durations.months_12') },
+                    { id: 24, name: this.$i18n.t('message.sections.lookups.contract_lengths.durations.months_24') },
+                    { id: 36, name: this.$i18n.t('message.sections.lookups.contract_lengths.durations.months_36') },
                 ],
             }
         }

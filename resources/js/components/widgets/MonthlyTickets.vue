@@ -3,7 +3,7 @@
         <v-toolbar color="blue darken-1" dark dense elevation="1">
             <v-icon>mdi-card-plus</v-icon>
             <v-card-title>
-                This month's tickets
+                {{ $t('message.widgets.monthlytickets.title') }}
             </v-card-title>
         </v-toolbar>
         <v-card-text class="pa-2">
@@ -12,7 +12,7 @@
         <v-divider></v-divider>
         <v-card-actions>
             <v-card-subtitle>
-                Total amount of tickets sold this month
+                {{ $t('message.widgets.monthlytickets.footer') }}
             </v-card-subtitle>
         </v-card-actions>
     </v-card>
@@ -73,13 +73,13 @@
                         labels: ticketsData.data.chartdata.labels,
                         datasets: [
                             {
-                                label: 'Total tickets',
+                                label: this.$t('message.widgets.monthlytickets.total_tickets_lbl'),
                                 data: ticketsData.data.chartdata.datasets.all.data,
                                 backgroundColor: '#42A5F5',
                                 //barPercentage: 0.4
                             },
                             {
-                                label: 'Used tickets',
+                                label: this.$t('message.widgets.monthlytickets.used_tickets_lbl'),
                                 data: ticketsData.data.chartdata.datasets.used.data,
                                 backgroundColor: '#4DB6AC',
                                 //barPercentage: 0.4

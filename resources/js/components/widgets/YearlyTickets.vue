@@ -3,7 +3,7 @@
         <v-toolbar color="yellow darken-3" dark dense elevation="1">
             <v-icon>mdi-card-text</v-icon>
             <v-card-title>
-                This year's tickets
+                {{ $t('message.widgets.yearlytickets.title') }}
             </v-card-title>
         </v-toolbar>
         <v-card-text class="pa-2">
@@ -12,7 +12,7 @@
         <v-divider></v-divider>
         <v-card-actions>
             <v-card-subtitle>
-                Tickets flow this year
+                {{ $t('message.widgets.yearlytickets.footer') }}
             </v-card-subtitle>
         </v-card-actions>
     </v-card>
@@ -73,7 +73,7 @@
                         labels: ticketsData.data.chartdata.labels,
                         datasets: [
                             {
-                                label: 'Total tickets',
+                                label: this.$t('message.widgets.yearlytickets.total_tickets_lbl'),
                                 data: ticketsData.data.chartdata.datasets.all.data,
                                 backgroundColor: 'transparent',
                                 borderColor: '#FDD835',
@@ -84,7 +84,7 @@
                                 //barPercentage: 0.4
                             },
                             {
-                                label: 'Used tickets',
+                                label: this.$t('message.widgets.yearlytickets.used_tickets_lbl'),
                                 data: ticketsData.data.chartdata.datasets.used.data,
                                 backgroundColor: 'transparent',
                                 borderColor: '#EF6C00',

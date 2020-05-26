@@ -3,7 +3,7 @@
         <v-toolbar color="green darken-1" dark dense elevation="1">
             <v-icon>mdi-bank</v-icon>
             <v-card-title>
-                Most visited places
+                {{ $t('message.widgets.mostvisitedplaces.title') }}
             </v-card-title>
         </v-toolbar>
         <v-card-text class="pa-2" style="overflow-y: auto;">
@@ -11,8 +11,8 @@
                 <template v-slot:default>
                     <thead>
                         <tr>
-                            <th class="text-left">Place</th>
-                            <th class="text-end pr-2">Visits</th>
+                            <th class="text-left">{{ $t('message.widgets.mostvisitedplaces.header_place') }}</th>
+                            <th class="text-end pr-2">{{ $t('message.widgets.mostvisitedplaces.header_visits') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,7 +27,7 @@
         <v-divider></v-divider>
         <v-card-actions>
             <v-card-subtitle>
-                Most visited places of all time
+                {{ $t('message.widgets.mostvisitedplaces.footer') }}
             </v-card-subtitle>
         </v-card-actions>
     </v-card>

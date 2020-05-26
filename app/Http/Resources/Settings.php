@@ -22,6 +22,7 @@ class Settings extends JsonResource
             'phone' => $this->phone,
             'address' => $this->address,
             'email' => $this->email,
+            'contract_check' => $this->contract_check,
             'language_id' => $this->language_id,
             'longitude' => $this->longitude,
             'latitude' => $this->latitude,

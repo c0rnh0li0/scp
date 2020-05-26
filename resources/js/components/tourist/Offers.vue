@@ -6,6 +6,31 @@
             </v-alert>
         </v-col>
         <v-col cols="12" v-else>
+            <v-toolbar flat v-if="!fromDashboard">
+                <v-select
+                        prepend-icon="mdi-format-list-bulleted-square"
+                        v-model="category"
+                        ref="category"
+                        value="category"
+                        :items="categories"
+                        item-text="name"
+                        item-value="id"
+                        :label="$t('message.sections.place.sections.profile.form.fields.category')"
+                        @change="categoryChanged"
+                ></v-select>
+
+                <v-select
+                        prepend-icon="mdi-format-list-checkbox"
+                        v-model="subcategory"
+                        ref="subcategory"
+                        :items="subcategories"
+                        value="subcategory"
+                        item-text="name"
+                        item-value="id"
+                        :label="$t('message.sections.place.sections.profile.form.fields.subcategory')"
+                        @change="subcategoryChanged"
+                ></v-select>
+            </v-toolbar>
             <div row class="display-1 mb-2">Featured offers</div>
 
             <v-layout row wrap>
@@ -85,6 +110,17 @@
                 return newVal
             }
         },
+        computed: {
+            categories () {
+                let temp_categories = this.$store.state.lookups.categories
+                temp_categories.unshift({
+                    id: '',
+                    name: 'All'
+                })
+
+                return temp_categories
+            },
+        },
         data: () => ({
             // form helpers stuff
             snackbar: false,
@@ -104,14 +140,24 @@
             qr_ticket_dialog: false,
             qrOfferTicket: null,
             previewTicket: null,
-            offers_loaded: false
+            offers_loaded: false,
+
+            // filters
+            category: '',
+            subcategory: '',
+            subcategories: []
         }),
         methods: {
             getOffers() {
                 let that = this
                 let touristOffersUrl = '/api/offers/get/' + (this.fromDashboard ? this.fromDashboard : false)
 
-                axios.get(touristOffersUrl)
+                let data = {
+                    category: this.category,
+                    subcategory: this.subcategory
+                }
+
+                axios.get(touristOffersUrl, { params: data })
                     .then(response => {
                         that.offers = []
                         that.featured_offers = []
@@ -133,7 +179,7 @@
             getBusinessOffers(id) {
                 let that = this
 
-                axios.get('/api/offers/' + id)
+                axios.get('/api/offers/list/' + id)
                     .then(response => {
                         that.offers = response.data.data
                         that.featured_offers = that.offers.filter(o => o.featured == 1)
@@ -145,6 +191,27 @@
                     .then(() => {
                         that.offers_loaded = true
                     })
+            },
+            categoryChanged() {
+                this.subcategories = this.$store.state.lookups.categories.find(cat => cat.id == this.category).children
+
+                if (this.subcategories) {
+                    let temp_subcategories = this.subcategories
+                    temp_subcategories.unshift({
+                        id: '',
+                        name: 'All'
+                    })
+                    this.subcategories = temp_subcategories
+                    this.subcategory = this.subcategories[0].id
+                }
+
+
+                this.getOffers()
+            },
+            subcategoryChanged() {
+                //this.subcategories = this.$store.state.lookups.categories.find(cat => cat.id == this.category).children
+                //this.subcategory = this.subcategories[0].id
+                this.getOffers()
             },
             getValuteHint() {
                 this.valute = '[please select a currency from your profile settings]'
@@ -200,17 +267,26 @@
                     .then(async response => {
                         console.log('ticket bought: ', response.data)
 
-                        that.qrOfferTicket = offer
-                        that.qr_ticket_dialog = true
-                        that.buy_ticket_dialog = false
-                        that.previewTicket = response.data.ticket
+                        if (!response.data.success) {
+                            that.snack_message = response.data.message
+                            that.snack_color = 'error'
+                            that.buy_ticket_dialog = false
+                        }
+                        else {
+                            that.qrOfferTicket = offer
+                            that.qr_ticket_dialog = true
+                            that.buy_ticket_dialog = false
+                            that.previewTicket = response.data.ticket
 
-                        that.snack_message = response.data.message
-                        that.snack_color = response.data.success ? 'success' : 'error'
+                            that.snack_message = response.data.message
+                            that.snack_color = response.data.success ? 'success' : 'error'
+                        }
                     })
                     .catch(error => {
                         console.log('error buying')
-                        that.errors = error.data.errors
+                        if (error.data.errors)
+                            that.errors = error.data.errors
+
                         that.snack_message = error.data.message
                         that.snack_color = 'error'
                     })

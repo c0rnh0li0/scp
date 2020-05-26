@@ -16,6 +16,9 @@
                 <v-btn text v-for="item in items" :key="'btn_' + item.title" @click="item.route ? $vuetify.goTo(item.route) && menuClick(item.route) : menuClick(item.click)">
                     {{ item.title }}
                 </v-btn>
+                <v-btn depressed text elevation="0">
+                    <language-selector></language-selector>
+                </v-btn>
             </div>
         </v-app-bar>
 
@@ -32,6 +35,12 @@
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <language-selector></language-selector>
+                    </v-list-item-content>
+                </v-list-item>
+
             </v-list>
         </v-navigation-drawer>
 
@@ -44,7 +53,7 @@
                                 <v-row align="center" class="white--text mx-auto" justify="center">
                                     <v-col class="white--text text-center" cols="12" tag="h1">
                                         <span class="font-weight-light" :class="[$vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2']">
-                                            Welcome to
+                                            {{ $t("message.homepage.welcome_text") }}
                                         </span>
                                         <br>
                                         <span :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']" class="font-weight-black">
@@ -64,7 +73,7 @@
             <section id="about-me">
                 <div class="py-12"></div>
                 <v-container class="text-center">
-                    <h2 class="display-2 font-weight-bold mb-3">About us</h2>
+                    <h2 class="display-2 font-weight-bold mb-3">{{ $t("message.homepage.about_us_title") }}</h2>
 
                     <v-responsive class="mx-auto mb-8" width="56">
                         <v-divider class="mb-1"></v-divider>
@@ -72,7 +81,7 @@
                     </v-responsive>
 
                     <v-responsive class="mx-auto body-2 font-weight-light mb-8" max-width="720">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae porttitor ex. Aliquam erat volutpat. Morbi vitae tristique purus. Nunc dapibus sem at feugiat finibus. Etiam euismod sapien diam. Nullam tincidunt maximus quam porta hendrerit. Integer vel tempus nulla. Aenean sed sem facilisis, dignissim sem at, elementum neque. Mauris eu justo at sapien efficitur tempus.
+                        {{ $t("message.homepage.about_us_text") }}
                     </v-responsive>
 
                     <v-avatar class="elevation-12 mb-12" size="128">
@@ -90,7 +99,7 @@
             <section id="features" class="grey lighten-3">
                 <div class="py-12"></div>
                 <v-container class="text-center">
-                    <h2 class="display-2 font-weight-bold mb-3">SCP FEATURES</h2>
+                    <h2 class="display-2 font-weight-bold mb-3">{{ $t("message.homepage.features_title") }}</h2>
 
                     <v-responsive class="mx-auto mb-12" width="56">
                         <v-divider class="mb-1"></v-divider>
@@ -153,7 +162,7 @@
                 <div class="py-12"></div>
 
                 <v-container>
-                    <h2 class="display-2 font-weight-bold mb-3 text-uppercase text-center">Blog</h2>
+                    <h2 class="display-2 font-weight-bold mb-3 text-uppercase text-center">{{ $t("message.homepage.blog_title") }}</h2>
 
                     <v-responsive
                             class="mx-auto mb-12"
@@ -211,7 +220,7 @@
                 <div class="py-12"></div>
 
                 <v-container>
-                    <h2 class="display-2 font-weight-bold mb-3 text-uppercase text-center">Contact Me</h2>
+                    <h2 class="display-2 font-weight-bold mb-3 text-uppercase text-center">{{ $t("message.homepage.contact_us_title") }}</h2>
 
                     <v-responsive
                             class="mx-auto mb-12"
@@ -305,12 +314,15 @@
 
     import LoginForm from './LoginForm'
     import RegisterForm from './RegisterForm'
+    import LanguageSelector from './LanguageSelector'
+
     import { mapState } from 'vuex'
 
     export default {
         components: {
             LoginForm,
-            RegisterForm
+            RegisterForm,
+            LanguageSelector
         },
         props: [
             'loginDialog',
@@ -429,6 +441,9 @@
             setSettingsData(data) {
                 this.app_name = data.site_name || window.Laravel.siteName
                 this.site_logo = this.$store.state.logo_path + data.site_logo || '/img/skopje-logo-b.png'
+            },
+            isObjectEmpty(obj) {
+                return Object.keys(obj).length === 0 && obj.constructor === Object
             }
         },
         async created() {
@@ -443,7 +458,10 @@
                 that.animateAppBar(window.scrollY)
             });
         },
-        mounted() {}
+        mounted() {
+            if (!this.isObjectEmpty(this.$store.state.settings))
+                this.setSettingsData(this.$store.state.settings)
+        },
     }
 </script>
 <style scoped>

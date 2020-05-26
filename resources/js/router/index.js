@@ -73,7 +73,7 @@ router.beforeEach((to, from, next) => {
     else if (to.matched.some(record => record.meta.requiresAuth)) {
         if (store.state.session.user) {
             if (store.state.type == to.meta.type) {
-                if (store.state.type == 'place' && !isContractValid(store.state.session.contract)) {
+                if (store.state.type == 'place' && store.state.settings.contract_check == 1 && !isContractValid(store.state.session.contract)) {
                     if (to.name == 'contract')
                         next()
                     else

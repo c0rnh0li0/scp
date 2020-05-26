@@ -3,7 +3,7 @@
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-col cols="12">
                 <v-text-field
-                        label="Name"
+                        :label="$t('message.sections.lookups.countries.form.fields.name')"
                         v-model="editedItem.name"
                         :error-messages="errors.name"
                 />
@@ -13,7 +13,7 @@
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-col cols="12">
                 <v-text-field
-                        label="Code"
+                        :label="$t('message.sections.lookups.countries.form.fields.code')"
                         v-model="editedItem.code"
                         :error-messages="errors.code"
                 />

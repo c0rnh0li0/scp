@@ -17,7 +17,7 @@
                         <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('message.global.lbl_search')"
                                 single-line
                                 hide-details
                                 @change="searchChanged"
@@ -25,12 +25,12 @@
                         <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
                     </template>
 
-                    <v-toolbar-title>People</v-toolbar-title>
+                    <v-toolbar-title>{{ $t('message.sections.offers.section_title') }}</v-toolbar-title>
                     <v-spacer></v-spacer>
 
                     <v-dialog v-model="dialog" max-width="1000px" scrollable :fullscreen="$vuetify.breakpoint.mdAndDown">
                         <template v-slot:activator="{ on }">
-                            <v-btn color="success" dark class="mb-2" v-on="on">New offer</v-btn>
+                            <v-btn color="success" dark class="mb-2" v-on="on">{{ $t('message.sections.offers.btn_new_title') }}</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -54,11 +54,11 @@
                                                 prepend-icon="mdi-bank"
                                                 hide-no-data
                                                 hide-details
-                                                label="Select a place">
+                                                :label="$t('message.sections.offers.form.fields.owner')">
                                             <template v-slot:no-data>
                                                 <v-list-item>
                                                     <v-list-item-title>
-                                                        Search for place
+                                                        {{ $t('message.sections.offers.form.fields.owner') }}
                                                     </v-list-item-title>
                                                 </v-list-item>
                                             </template>
@@ -80,36 +80,36 @@
                                         <v-input name="owner_id" hidden v-model="owner_id" />
                                         <v-text-field
                                                 prepend-icon="mdi-tag"
-                                                label="Offer Title"
+                                                :label="$t('message.sections.offers.form.fields.title')"
                                                 v-model="title"
                                                 :error-messages="errors.title" />
                                     </v-flex>
 
                                     <!-- short description -->
                                     <v-flex xs12 sm12 md12 lg12 xl12 class="mt-2">
-                                        <v-label ref="shortDescriptionLabel">Short Description</v-label>
+                                        <v-label ref="shortDescriptionLabel">{{ $t('message.sections.offers.form.fields.short_description') }}</v-label>
                                         <tiptap-vuetify
                                                 v-model="short_description"
                                                 :extensions="extensions"
                                                 ref="shortDescription"
-                                                placeholder="Add a short description for your offer…"
+                                                :placeholder="$t('message.sections.offers.form.fields.short_description_placeholder')"
                                         />
                                         <errors :message="errors.short_description" />
                                     </v-flex>
 
                                     <!-- long description -->
                                     <v-flex xs12 sm12 md12 lg12 xl12 class="mt-2">
-                                        <v-label>Long Description</v-label>
+                                        <v-label>{{ $t('message.sections.offers.form.fields.long_description') }}</v-label>
                                         <tiptap-vuetify
                                                 v-model="long_description"
                                                 :extensions="extensions"
-                                                placeholder="Add a nice and long description for your offer…"
+                                                :placeholder="$t('message.sections.offers.form.fields.long_description_placeholder')"
                                         />
                                     </v-flex>
 
                                     <!-- promo image -->
                                     <v-flex xs12 sm12 md6 lg6 xl6 class="text-center justify-space-between mt-5 pr-4">
-                                        <v-label @click.stop="pickFile">Promo image</v-label>
+                                        <v-label @click.stop="pickFile">{{ $t('message.sections.offers.form.fields.promo_image') }}</v-label>
 
                                         <input type="file"
                                                style="display: none;"
@@ -128,7 +128,7 @@
                                                 <v-col cols="11">
                                                     <v-text-field
                                                             prepend-icon="mdi-cash"
-                                                            label="Real Price"
+                                                            :label="$t('message.sections.offers.form.fields.real_price')"
                                                             v-model="real_price"
                                                             :error-messages="errors.real_price"
                                                     />
@@ -141,7 +141,7 @@
                                                 <v-col cols="11">
                                                     <v-text-field
                                                             prepend-icon="mdi-cash-refund"
-                                                            label="Offered Price"
+                                                            :label="$t('message.sections.offers.form.fields.offered_price')"
                                                             v-model="offered_price"
                                                             :error-messages="errors.offered_price"
                                                     />
@@ -154,20 +154,20 @@
                                                 <v-tooltip top>
                                                     <template v-slot:activator="{ on }">
                                     <span v-on="on">
-                                        <v-checkbox v-model="include_global" class="mx-2" label="Include in global offers?"></v-checkbox>
+                                        <v-checkbox v-model="include_global" class="mx-2" :label="$t('message.sections.offers.form.fields.global_offer')"></v-checkbox>
                                     </span>
                                                     </template>
-                                                    <span>Can this offer be displayed publicly for tourists and can it be used in the creation of bundles (multiple offers) by our system?</span>
+                                                    <span>{{ $t('message.sections.offers.form.fields.global_offer_hint') }}</span>
                                                 </v-tooltip>
                                             </v-row>
                                             <v-row>
                                                 <v-tooltip top>
                                                     <template v-slot:activator="{ on }">
                                     <span v-on="on">
-                                        <v-checkbox v-model="featured" class="mx-2" label="Display as featured offer?"></v-checkbox>
+                                        <v-checkbox v-model="featured" class="mx-2" :label="$t('message.sections.offers.form.fields.featured')"></v-checkbox>
                                     </span>
                                                     </template>
-                                                    <span>Can this offer be displayed as a featured offer in the top section publicly and for tourists?</span>
+                                                    <span>{{ $t('message.sections.offers.form.fields.featured_hint') }}</span>
                                                 </v-tooltip>
                                             </v-row>
                                         </v-col>
@@ -175,20 +175,20 @@
 
                                     <!-- notes -->
                                     <v-flex xs12 sm12 md12 lg12 xl12 class="mt-2">
-                                        <v-label>Notes about this offer</v-label>
+                                        <v-label>{{ $t('message.sections.offers.form.fields.notes') }}</v-label>
                                         <tiptap-vuetify
                                                 v-model="notes"
                                                 :extensions="extensions"
-                                                placeholder="Add few notes about your offer…"
+                                                :placeholder="$t('message.sections.offers.form.fields.notes_placeholder')"
                                         />
                                     </v-flex>
                                 </v-layout>
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
-                                <v-btn text color="primary" @click="dialog = !dialog">Close</v-btn>
+                                <v-btn text color="primary" @click="dialog = !dialog">{{ $t('message.global.btn_close') }}</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn text color="success" @click="save">Save</v-btn>
+                                <v-btn text color="success" @click="save">{{ $t('message.global.btn_save') }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -213,21 +213,21 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <v-btn color="primary" @click="getDataFromApi">Reset</v-btn>
+                <v-btn color="primary" @click="getDataFromApi">{{ $t('message.global.lbl_reset') }}</v-btn>
             </template>
         </v-data-table>
 
         <v-dialog v-model="delete_dialog" persistent max-width="290">
             <v-card>
-                <v-card-title>Are you sure you want to delete "{{ deleteOffertitle }}"?</v-card-title>
+                <v-card-title>{{ $t('message.global.msg.delete_ask') }} "{{ deleteOffertitle }}"?</v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-                    <v-card-subtitle>Your offer will no longer appear in promotions and bundle offers after this action.</v-card-subtitle>
+                    <v-card-subtitle>"{{ deleteOffertitle }}" {{ $t('message.global.msg.delete_ask_msg') }}.</v-card-subtitle>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary darken-1" text @click="cancelOfferDelete">No</v-btn>
-                    <v-btn color="error darken-1" @click="deleteOfferConfirmed">Yes</v-btn>
+                    <v-btn color="primary darken-1" text @click="cancelOfferDelete">{{ $t('message.global.btn_no') }}</v-btn>
+                    <v-btn color="error darken-1" @click="deleteOfferConfirmed">{{ $t('message.global.btn_yes') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -276,7 +276,16 @@
         computed: {
             formTitle () {
                 //return this.editedIndex === -1 ? 'New offer' : 'Edit offer "' + this.editedItem.title + '"'
-                return this.editedIndex === -1 ? 'New offer' : 'Edit offer '
+                return this.editedIndex === -1 ? this.$i18n.t('message.sections.offers.form.form_title_new') : this.$i18n.t('message.sections.offers.form.form_title_edit') + '"' + this.editedItem.title + '"'
+            },
+            headers() {
+                return [
+                    {text: this.$t('message.sections.offers.headers.title'), align: 'left', sortable: true, value: 'title'},
+                    {text: this.$t('message.sections.offers.headers.offered_price'), value: 'offered_price', sortable: true},
+                    {text: this.$t('message.sections.offers.headers.owner'), value: 'owner.name', sortable: false},
+                    {text: this.$t('message.sections.offers.headers.created'), value: 'created_at', sortable: true},
+                    {text: '', align: 'right', value: 'action', sortable: false},
+                ]
             },
         },
         watch: {
@@ -329,13 +338,6 @@
                 items: [],
                 loading: true,
                 options: {},
-                headers: [
-                    {text: 'Title', align: 'left', sortable: true, value: 'title'},
-                    {text: 'Price', value: 'offered_price', sortable: true},
-                    {text: 'Owner', value: 'owner.name', sortable: false},
-                    {text: 'Since', value: 'created_at', sortable: true},
-                    {text: '', align: 'right', value: 'action', sortable: false},
-                ],
                 search: '',
                 errors: [],
 
@@ -585,12 +587,9 @@
                     notes: this.notes
                 }
 
-                //let stringified = JSON.stringify(this.editedObject)
                 this.editedObject.method = 'POST'
-                //this.editedObject.stringData = stringified
 
                 let formData = new FormData()
-                //formData.append('jsonstring', this.editedObject.stringData)
 
                 for (var property in this.editedObject) {
                     if (property == 'promo_image' && this.images.length == 1)

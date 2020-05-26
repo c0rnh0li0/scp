@@ -1,10 +1,10 @@
 <template>
     <info-cube :today="today"
-               :today-text="today_text"
+               :today-text="$t('message.widgets.dailynewusers.today_text')"
                :this-week="this_week"
-               :week-text="week_text"
+               :week-text="$t('message.widgets.dailynewusers.week_text')"
                :this-month="this_month"
-               :month-text="month_text"
+               :month-text="$t('message.widgets.dailynewusers.month_text')"
                :box-icon="box_icon"
                :box-color="box_color">
     </info-cube>
@@ -14,7 +14,7 @@
     import InfoCube from '../custom/widgets/InfoCube'
 
     export default {
-        name: "DailyVisitors",
+        name: "DailyNewUsers",
         components: {
             InfoCube
         },
@@ -35,13 +35,11 @@
                 this.this_week = Number(ticketsData.data.chartdata.week)
                 this.this_month = Number(ticketsData.data.chartdata.month)
             },
-            formatInt(val) {
-                return Number.parseInt(val)
-            },
         },
         async mounted() {
             await this.getData()
-        }
+        },
+        created() {}
     }
 </script>
 

@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Http\Resources\User as UserResource;
 use App\UserDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\User as OwnerResource;
 use App\Http\Resources\UserDetails as OwnerDetailResource;
@@ -36,6 +37,9 @@ class Offer extends JsonResource
             'notes' => $this->notes,
             'modified_by' => $this->modified_by,
             'deleted_by' => $this->deleted_by,
+            'starts_at' => $this->starts_at ? $this->starts_at : '',
+            'ends_at' => $this->ends_at ? $this->ends_at : '',
+            'expired' => $this->ends_at < Carbon::now(),
             'created_at' => ($this->created_at ? $this->created_at->format('d F, Y') : ''),
             'updated_at' => ($this->updated_at ? $this->updated_at->format('d F, Y') : ''),
             'deleted_at' => ($this->deleted_at ? $this->deleted_at->format('d F, Y') : '')

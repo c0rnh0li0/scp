@@ -2,21 +2,21 @@
     <div>
         <v-col cols="12" id="scanner-container">
             <v-card class="mx-auto" max-width="500" elevation="10" :loading="loading">
-                <v-card-title>QR Code Scanner</v-card-title>
+                <v-card-title>{{ $t(('message.sections.place.sections.scan.section_title')) }}</v-card-title>
                 <v-divider></v-divider>
                 <v-card-subtitle v-if="error" class="red--text font-weight-bolder">{{ error }}</v-card-subtitle>
                 <v-card-text>
                     <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
                         <div v-if="validationSuccess" class="validation-success">
-                            Ticket is valid
+                            {{ $t(('message.sections.place.sections.scan.ticket_valid')) }}
                         </div>
 
                         <div v-if="validationFailure" class="validation-failure">
-                            Ticket is NOT valid!
+                            {{ $t(('message.sections.place.sections.scan.ticket_invalid')) }}
                         </div>
 
                         <div v-if="validationPending" class="validation-pending">
-                            Long validation in progress...
+                            {{ $t(('message.sections.place.sections.scan.ticket_progress')) }}
                         </div>
                     </qrcode-stream>
                 </v-card-text>
@@ -27,14 +27,14 @@
             <ticket-check :ticket="ticket_check"
                           @closeTicketCheck="closeTicketCheck"
                           @confirmTicketCheck="confirmTicketCheck"
-                          :validation_message="ticket_valid_message"
+                          :validation_message="$t(ticket_valid_message)"
                           :ticket_validity="ticket_validity"
                           :button_disabled="confirm_button_disabled" />
         </v-dialog>
         <form-helpers :snackbar_visible="snackbar"
                       :snack_color="snack_color"
                       :snack_message="snack_message"
-                      :message="progress_message"
+                      :message="$t(progress_message)"
                       :saving="saving"></form-helpers>
     </div>
 </template>
@@ -141,7 +141,7 @@
             getTicketConfirmation(ticket, user, amount, date) {
                 this.saving = true
                 this.snackbar = false
-                this.progress_message = 'Verifying ticket...'
+                this.progress_message = 'message.sections.place.sections.scan.validating_ticket'
 
                 let formData = new FormData()
                 formData.append('method', 'POST')
@@ -175,18 +175,18 @@
                 this.ticket_check = ticketData.ticket
 
                 if (this.ticket_check.used == 1) {
-                    this.ticket_valid_message = "Ticket has already been used"
+                    this.ticket_valid_message = "message.sections.place.sections.scan.ticket_used"
                     this.ticket_validity = 'error--text'
                     this.confirm_button_disabled = true
                 }
                 else {
                     if (this.ticket_check.offer.owner.id == this.$store.state.session.user.id) {
-                        this.ticket_valid_message = "Ticket is valid and ready to use"
+                        this.ticket_valid_message = "message.sections.place.sections.scan.ticket_valid_for_usage"
                         this.ticket_validity = 'text-success'
                         this.confirm_button_disabled = false
                     }
                     else {
-                        this.ticket_valid_message = "Ticket is for another location:\n" + this.ticket_check.offer.owner.name
+                        this.ticket_valid_message = '"message.sections.place.sections.scan.ticket_another_location:", [this.ticket_check.offer.owner.name]'
                         this.ticket_validity = 'error--text'
                         this.confirm_button_disabled = true
                     }
@@ -203,7 +203,7 @@
                 this.confirm_button_disabled = true
                 this.saving = true
                 this.snackbar = false
-                this.progress_message = 'Using ticket...'
+                this.progress_message = 'message.sections.place.sections.scan.using_ticket'
 
                 let formData = new FormData()
                 formData.append('method', 'POST')

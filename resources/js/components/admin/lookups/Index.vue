@@ -16,7 +16,7 @@
                         <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('message.global.lbl_search')"
                                 single-line
                                 hide-details
                                 @change="searchChanged"
@@ -24,7 +24,7 @@
                         <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
                     </template>
 
-                    <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+                    <v-toolbar-title>{{ sectionTitle }}</v-toolbar-title>
                     <v-spacer></v-spacer>
 
                     <v-dialog v-model="dialog" max-width="1000px" scrollable :fullscreen="$vuetify.breakpoint.mdAndDown">
@@ -45,9 +45,9 @@
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
-                                <v-btn text color="primary" @click="dialog = !dialog">Close</v-btn>
+                                <v-btn text color="primary" @click="dialog = !dialog">{{ $t('message.global.btn_close') }}</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn text color="success" @click="saveItem">Save</v-btn>
+                                <v-btn text color="success" @click="saveItem">{{ $t('message.global.btn_save') }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -69,21 +69,21 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <v-btn color="primary" @click="getData">Reset</v-btn>
+                <v-btn color="primary" @click="getData">{{ $t('message.global.lbl_reset') }}</v-btn>
             </template>
         </v-data-table>
 
         <v-dialog v-model="delete_dialog" persistent max-width="290">
             <v-card>
-                <v-card-title>Are you sure you want to delete "{{ deleteItemTitle }}"?</v-card-title>
+                <v-card-title>{{ $t('message.global.msg.delete_ask') }} "{{ deleteItemTitle }}"?</v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-                    <v-card-subtitle>"{{ deleteItemTitle }}" will no longer be present in the system.</v-card-subtitle>
+                    <v-card-subtitle>"{{ deleteItemTitle }}" {{ $t('message.global.msg.delete_ask_msg') }}.</v-card-subtitle>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary darken-1" text @click="cancelItemDelete">No</v-btn>
-                    <v-btn color="error darken-1" @click="deleteItemConfirmed">Yes</v-btn>
+                    <v-btn color="primary darken-1" text @click="cancelItemDelete">{{ $t('message.global.btn_no') }}</v-btn>
+                    <v-btn color="error darken-1" @click="deleteItemConfirmed">{{ $t('message.global.btn_yes') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -106,7 +106,16 @@
             FormHelpers
         },
         props: {
-            crudData: { type: Object, required: false, default: {}}
+            crudData: { type: Object, required: false, default: {}},
+        },
+        computed: {
+            formTitle () {
+                //return this.editedIndex === -1 ? 'New offer' : 'Edit offer "' + this.editedItem.title + '"'
+                return this.editedIndex === -1 ? this.formTitleNew : this.formTitleEdit
+            },
+            /*headers() {
+                return []
+            },*/
         },
         watch: {
             dialog (val) {
@@ -141,7 +150,6 @@
             apiDeleteUrl: '',
 
             // data table options
-            headers: [],
             items: [],
             options: {},
             totalItems: 0,
@@ -150,7 +158,9 @@
             list: null,
 
             dialog: false,
-            formTitle: '',
+            sectionTitle: '',
+            formTitleNew: '',
+            formTitleEdit: '',
             form: null,
             newItemTitle: '',
 
@@ -178,15 +188,17 @@
                 this.apiSaveUrl = data.apiSaveUrl
                 this.apiDeleteUrl = data.apiDeleteUrl
 
-                    // data table options
+                // data table options
                 this.headers = data.headers
                 this.form = data.form
 
                 if (data.list)
                     this.list = data.list
 
+                this.sectionTitle = data.sectionTitle
                 this.newItemTitle = data.newItemTitle
-                this.formTitle = data.formTitle
+                this.formTitleNew = data.formTitleNew
+                this.formTitleEdit = data.formTitleEdit
                 this.form = data.form
 
                 this.editedItem = data.editedItem

@@ -72,6 +72,7 @@ class SettingsController extends Controller
         $settings->longitude = $request->input('longitude');
         $settings->latitude = $request->input('latitude');
         $settings->language_id = $request->input('language_id');
+        $settings->contract_check = $request->input('contract_check') == 'false' ? 0 : 1;
 
         if ($settings->save()) {
             return response()->json([

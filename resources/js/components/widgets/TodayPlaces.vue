@@ -1,10 +1,10 @@
 <template>
     <info-cube :today="today"
-               :today-text="today_text"
+               :today-text="$t('message.widgets.todayplaces.today_text')"
                :this-week="this_week"
-               :week-text="week_text"
+               :week-text="$t('message.widgets.todayplaces.week_text')"
                :this-month="this_month"
-               :month-text="month_text"
+               :month-text="$t('message.widgets.todayplaces.month_text')"
                :box-icon="box_icon"
                :box-color="box_color">
     </info-cube>
@@ -38,7 +38,8 @@
         },
         async mounted() {
             await this.getData()
-        }
+        },
+        created() {}
     }
 </script>
 

@@ -87,10 +87,20 @@ class TicketController extends Controller
 
         $this->validate($request, $rules);
 
-        $ticket = new Ticket();
-
-        $amount = $request->input('amount');
         $user = auth('api')->user();
+        $hasTickets = Ticket::where('user_id', $user->id)
+                            ->where('offer_id', $request->input('offer_id'))
+                            ->count();
+
+        if ($hasTickets > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You already have bought a ticket for this offer!'
+            ], 201);
+        }
+
+        $ticket = new Ticket();
+        $amount = $request->input('amount');
         $offer = Offer::findOrFail($request->input('offer_id'));
 
         $ticket->user_id = $user->id;

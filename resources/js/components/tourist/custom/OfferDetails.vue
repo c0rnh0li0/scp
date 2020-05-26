@@ -26,6 +26,11 @@
                         <router-link class="body-1" :to="'/home/business/' + offer.owner.id + '/false'">{{ offer.owner.name }}</router-link>
                     </v-flex>
 
+                    <v-flex xs12 sm12 md12 lg12 xl12>
+                        {{ $t('message.sections.place.sections.offers.expires_at') }}:
+                        <span class="font-weight-bold">{{ formatted_ends_at }}</span>
+                    </v-flex>
+
                     <!-- long description -->
                     <v-flex xs12 sm12 md12 lg12 xl12>
                         <div v-html="offer.long_description" />
@@ -72,6 +77,7 @@
 </template>
 
 <script>
+    import { format, parseISO } from 'date-fns'
     export default {
         name: "OfferDetails",
         props: ['offer', 'hide_actions'],
@@ -85,8 +91,12 @@
             },
         },
         data: () => ({
-
-        })
+            formatted_ends_at: ''
+        }),
+        mounted() {
+            if (this.offer.ends_at)
+                this.formatted_ends_at = format(parseISO(this.offer.ends_at), 'EEEE, MMMM do yyyy')
+        }
     }
 </script>
 

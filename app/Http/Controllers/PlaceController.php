@@ -76,81 +76,27 @@ class PlaceController extends UserDetailController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Delete the specified resource from storage.
      *
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function delete($id)
     {
-        //
-    }
+        $user_detail = UserDetail::findOrFail($id);
+        $user = User::findOrFail($user_detail->user_id);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        /*$user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        $is_company = array_key_exists('is_company', $data) && $data['is_company'] == 'on' ? 1 : 0;
-        UserDetail::create([
-            'user_id' => $user->id,
-            'user_type_id' => $is_company == 1 ? UserType::COMPANY_USER_TYPE : UserType::TOURIST_USER_TYPE,
-            'is_company' => $is_company
-        ]);
-
-        return $user;*/
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\UserDetail $userDetail
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserDetail $userDetail)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\UserDetail $userDetail
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserDetail $userDetail)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\UserDetail $userDetail
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserDetail $userDetail)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\UserDetail $userDetail
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(UserDetail $userDetail)
-    {
-        //
+        if ($user_detail->delete() && $user->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'User successfully deleted!'
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting user!'
+            ], 201);
+        }
     }
 }

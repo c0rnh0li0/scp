@@ -16,7 +16,7 @@
                         <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('message.global.lbl_search')"
                                 single-line
                                 hide-details
                                 @change="searchChanged"
@@ -24,12 +24,12 @@
                         <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
                     </template>
 
-                    <v-toolbar-title>Places</v-toolbar-title>
+                    <v-toolbar-title>{{ $t('message.sections.places.section_title') }}</v-toolbar-title>
                     <v-spacer></v-spacer>
 
                     <v-dialog v-model="dialog" max-width="1000px" scrollable :fullscreen="$vuetify.breakpoint.mdAndDown">
                         <template v-slot:activator="{ on }">
-                            <v-btn color="success" dark class="mb-2" v-on="on">New Place</v-btn>
+                            <v-btn color="success" dark class="mb-2" v-on="on">{{ $t('message.sections.places.btn_new_title') }}</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -48,7 +48,7 @@
                                         <v-col class="align-center justify-space-between mb-2" cols="12">
                                             <gmap-autocomplete
                                                     class="introInput"
-                                                    placeholder="Search for your location..."
+                                                    :placeholder="$t('message.sections.places.form.fields.location')"
                                                     @place_changed="setPlace">
                                             </gmap-autocomplete>
                                             <v-divider></v-divider>
@@ -90,7 +90,7 @@
                                     <!-- avatar -->
                                     <v-flex xs12 sm12 md2 lg2 xl2>
                                         <v-col class="text-center justify-space-between" cols="12">
-                                            <v-label @click.stop="pickFile">Avatar</v-label>
+                                            <v-label @click.stop="pickFile">{{ $t('message.sections.places.form.fields.avatar') }}</v-label>
 
                                             <input type="file"
                                                    style="display: none;"
@@ -109,7 +109,7 @@
                                     <!-- profile name -->
                                     <v-flex xs12 sm12 md5 lg5 xl5 class="justify-center d-flex align-center">
                                         <v-col cols="12">
-                                            <v-text-field v-model="name" label="Name" :error-messages="errors.name" />
+                                            <v-text-field v-model="name" :label="$t('message.sections.places.form.fields.name')" :error-messages="errors.name" />
                                         </v-col>
                                     </v-flex>
 
@@ -118,7 +118,7 @@
                                         <v-col cols="12">
                                             <v-text-field
                                                     prepend-icon="mdi-mail"
-                                                    label="Email"
+                                                    :label="$t('message.sections.places.form.fields.email')"
                                                     :disabled="editedIndex > -1"
                                                     v-model="email"
                                                     :error-messages="errors.email"
@@ -126,7 +126,7 @@
                                             <v-text-field
                                                     type="password"
                                                     prepend-icon="mdi-lock-question"
-                                                    label="Password"
+                                                    :label="$t('message.sections.places.form.fields.password')"
                                                     v-model="password"
                                                     :readonly="editedIndex > -1"
                                                     :error-messages="errors.password"
@@ -140,7 +140,7 @@
                                             <v-text-field
                                                     type="tel"
                                                     prepend-icon="mdi-phone"
-                                                    label="Telephone"
+                                                    :label="$t('message.sections.places.form.fields.phone')"
                                                     v-model="phone"
                                             />
                                         </v-col>
@@ -151,7 +151,7 @@
                                         <v-col cols="12">
                                             <v-text-field
                                                     prepend-icon="mdi-earth"
-                                                    label="Website"
+                                                    :label="$t('message.sections.places.form.fields.website')"
                                                     v-model="website"
                                             />
                                         </v-col>
@@ -166,7 +166,7 @@
                                                     value="valute"
                                                     :items="valutes"
                                                     item-value="id"
-                                                    label="Currency"
+                                                    :label="$t('message.sections.places.form.fields.valute')"
                                                     :error-messages="errors.valute_id"
                                             >
                                                 <template v-slot:item='{item}'> <div v-html='item.name'/> </template>
@@ -185,7 +185,7 @@
                                                     :items="cities"
                                                     item-text="name"
                                                     item-value="id"
-                                                    label="City"
+                                                    :label="$t('message.sections.places.form.fields.city')"
                                                     :error-messages="errors.city_id"
                                             ></v-select>
                                         </v-col>
@@ -202,7 +202,7 @@
                                                     :items="categories"
                                                     item-text="name"
                                                     item-value="id"
-                                                    label="Category"
+                                                    :label="$t('message.sections.places.form.fields.category')"
                                                     @change="categoryChanged"
                                                     :error-messages="errors.category_id"
                                             ></v-select>
@@ -220,7 +220,7 @@
                                                     value="subcategory"
                                                     item-text="name"
                                                     item-value="id"
-                                                    label="Subcategory"
+                                                    :label="$t('message.sections.places.form.fields.subcategory')"
                                                     :error-messages="errors.subcategory_id"
                                             ></v-select>
                                         </v-col>
@@ -229,13 +229,13 @@
                                     <!-- description -->
                                     <v-flex xs12 sm12 md12 lg12 xl12>
                                         <div class="pl-3">
-                                            <v-label>Description</v-label>
+                                            <v-label>{{ $t('message.sections.places.form.fields.description') }}</v-label>
                                         </div>
                                         <v-col cols="12">
                                             <tiptap-vuetify
                                                     v-model="description"
                                                     :extensions="extensions"
-                                                    placeholder="Describe your place here…"
+                                                    :placeholder="$t('message.sections.places.form.fields.description_placeholder')"
                                             />
                                         </v-col>
                                     </v-flex>
@@ -246,7 +246,7 @@
                                         <v-col cols="12">
                                             <v-text-field
                                                     prepend-icon="mdi-city"
-                                                    label="Address"
+                                                    :label="$t('message.sections.places.form.fields.address')"
                                                     v-model="address"
                                                     :error-messages="errors.address"
                                             />
@@ -258,7 +258,7 @@
                                         <v-col cols="12">
                                             <v-text-field
                                                     prepend-icon="mdi-longitude"
-                                                    label="Longitude"
+                                                    :label="$t('message.sections.places.form.fields.longitude')"
                                                     v-model="longitude"
                                                     :error-messages="errors.longitude"
                                             />
@@ -270,7 +270,7 @@
                                         <v-col cols="12">
                                             <v-text-field
                                                     prepend-icon="mdi-latitude"
-                                                    label="Latitude"
+                                                    :label="$t('message.sections.places.form.fields.latitude')"
                                                     v-model="latitude"
                                                     :error-messages="errors.latitude"
                                             />
@@ -280,9 +280,9 @@
                             </v-card-text>
 
                             <v-card-actions>
-                                <v-btn text color="primary" @click="close">Close</v-btn>
+                                <v-btn text color="primary" @click="close">{{ $t('message.global.btn_close') }}</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn text color="success" @click="save">Save</v-btn>
+                                <v-btn text color="success" @click="save">{{ $t('message.global.btn_save') }}</v-btn>
                             </v-card-actions>
                         </v-card>
 
@@ -292,7 +292,7 @@
                                         max-width="300"
                                         tile>
                                     <v-card-text>
-                                        This place contains informations about the place you chose. Would you like to use that data?
+                                        {{ $t('message.sections.places.msg.place_contains_info') }}
                                     </v-card-text>
 
                                     <v-list disabled>
@@ -336,11 +336,11 @@
                                         <v-btn class="mt-6"
                                                text
                                                color="red"
-                                               @click="bottomSheet = !bottomSheet">No</v-btn>
+                                               @click="bottomSheet = !bottomSheet">{{ $t('message.global.btn_no') }}</v-btn>
                                         <v-btn class="mt-6"
                                                text
                                                color="success"
-                                               @click="useSuggestedData">Yes</v-btn>
+                                               @click="useSuggestedData">{{ $t('message.global.btn_yes') }}</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-sheet>
@@ -364,15 +364,31 @@
                 </v-icon>
                 <v-icon
                         color="error darken-3"
-                        @click="deleteItem(item)"
+                        @click="askDeletePlace(item)"
                 >
                     mdi-delete
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <v-btn color="primary" @click="getDataFromApi">Reset</v-btn>
+                <v-btn color="primary" @click="getDataFromApi">{{ $t('message.global.lbl_reset') }}</v-btn>
             </template>
         </v-data-table>
+
+        <v-dialog v-model="delete_dialog" persistent max-width="290">
+            <v-card>
+                <v-card-title>{{ $t('message.global.msg.delete_ask') }} "{{ deletePlacetitle }}"?</v-card-title>
+                <v-divider></v-divider>
+                <v-card-text>
+                    <v-card-subtitle>"{{ deletePlacetitle }}" {{ $t('message.global.msg.delete_ask_msg') }}.</v-card-subtitle>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary darken-1" text @click="cancelPlaceDelete">No</v-btn>
+                    <v-btn color="error darken-1" @click="deletePlaceConfirmed">Yes</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
         <form-helpers :snackbar_visible="snackbar"
                       :snack_color="snack_color"
                       :snack_message="snack_message"
@@ -414,12 +430,21 @@
         },
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'New place' : 'Edit place "' + this.editedItem.user.name + '"'
+                return this.editedIndex === -1 ? this.$i18n.t('message.sections.places.form.form_title_new') : this.$i18n.t('message.sections.places.form.form_title_edit') + '"' + this.editedItem.user.name + '"'
             },
             lookupData () {
                 this.setLookupData(this.$store.state.lookups)
                 return this.$store.state.lookups
-            }
+            },
+            headers() {
+                return [
+                    {text: this.$t('message.sections.places.headers.name'), align: 'left', sortable: true, value: 'user.name',},
+                    {text: this.$t('message.sections.places.headers.email'), value: 'user.email', sortable: true,},
+                    {text: this.$t('message.sections.places.headers.type'), value: 'type.name', sortable: false,},
+                    {text: this.$t('message.sections.places.headers.created'), value: 'user.created_at', sortable: true,},
+                    {text: '', align: 'right', value: 'action', sortable: false},
+                ]
+            },
         },
         watch: {
             dialog(val) {
@@ -454,13 +479,6 @@
                 items: [],
                 loading: true,
                 options: {},
-                headers: [
-                    {text: 'Name', align: 'left', sortable: true, value: 'user.name',},
-                    {text: 'Email', value: 'user.email', sortable: true,},
-                    {text: 'Type', value: 'type.name', sortable: false,},
-                    {text: 'Since', value: 'user.created_at', sortable: true,},
-                    {text: '', align: 'right', value: 'action', sortable: false},
-                ],
                 search: '',
                 errors: [],
 
@@ -469,6 +487,10 @@
                 snackbar: false,
                 snack_message: '',
                 snack_color: '',
+
+                delete_dialog: false,
+                deletePlace: '',
+                deletePlacetitle: '',
 
                 progress: false,
 
@@ -876,9 +898,48 @@
                 this.dialog = true
             },
 
+            askDeletePlace(place) {
+                this.deletePlace = place
+                this.deletePlacetitle = place.user.name
+                this.delete_dialog = true
+            },
+            cancelPlaceDelete() {
+                this.delete_dialog = false
+                this.deletePlace = null
+                this.deletePlacetitle = ''
+            },
+            deletePlaceConfirmed() {
+                this.deleteItem(this.deletePlace)
+            },
             deleteItem (item) {
                 const index = this.items.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
+
+                this.saving = true
+                this.snackbar = false
+
+                let that = this
+                axios.post('/api/place/delete/' + this.deletePlace.id)
+                    .then(response => {
+                        that.snack_message = response.data.message
+                        that.snack_color = response.data.success ? 'success' : 'error'
+
+                        that.items.splice(index, 1)
+
+                        that.deletePlace = null
+                        that.deletePlacetitle = ''
+                        that.delete_dialog = false
+                    })
+                    .catch(error => {
+                        if (error.data.errors)
+                            that.errors = error.data.errors
+
+                        that.snack_message = error.data.message
+                        that.snack_color = 'error'
+                    })
+                    .then(() => {
+                        that.saving = false
+                        that.snackbar = true
+                    })
             },
 
             close () {

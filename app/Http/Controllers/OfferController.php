@@ -55,30 +55,57 @@ class OfferController extends Controller
 
         $offers = Offer::where('deleted_at', null)
                        ->where('owner_id', $owner_id)
+                       ->where('ends_at', '>=', DB::raw('NOW()'))
                        ->orderBy('created_at', 'desc')
                        ->paginate(30);
 
         return OfferResource::collection($offers);
     }
 
-    public function get($fromDashboard = false)
+    public function get(Request $request, $fromDashboard = false)
     {
+        $category = $request->input('category');
+        $subcategory = $request->input('subcategory');
+
         $get = $fromDashboard ? 4 : 30;
+
+        //DB::enableQueryLog();
 
         $featured_offers = Offer::select('offers.*')
                                 ->join('tickets', 'tickets.offer_id', '!=', 'offers.id')
+                                ->join('users', 'offers.owner_id', '=', 'users.id')
+                                ->join('user_details', 'user_details.user_id', '=', 'users.id')
+                                ->join('locations', 'locations.id', '=', 'user_details.location_id')
                                 ->where('offers.deleted_at', null)
                                 ->where('offers.include_global', 1)
                                 ->where('offers.featured', 1)
+                                ->when($category, function ($query) use ($category) {
+                                    return $query->where('locations.category_id', '=', $category);
+                                })
+                                ->when($subcategory, function ($query) use ($subcategory) {
+                                    return $query->where('locations.subcategory_id', '=', $subcategory);
+                                })
+                                ->where('ends_at', '>=', DB::raw('NOW()'))
                                 ->orderBy('offers.created_at', 'desc')
                                 ->groupBy('offers.id')
                                 ->paginate($get);
+        //dd(DB::getQueryLog());
 
         $other_offers = Offer::select('offers.*')
                                ->join('tickets', 'tickets.offer_id', '!=', 'offers.id')
+                               ->join('users', 'offers.owner_id', '=', 'users.id')
+                               ->join('user_details', 'user_details.user_id', '=', 'users.id')
+                               ->join('locations', 'locations.id', '=', 'user_details.location_id')
                                ->where('offers.deleted_at', null)
                                ->where('offers.include_global', 1)
                                ->where('offers.featured', 0)
+                               ->when($category, function ($query) use ($category) {
+                                    return $query->where('locations.category_id', '=', $category);
+                               })
+                               ->when($subcategory, function ($query) use ($subcategory) {
+                                    return $query->where('locations.subcategory_id', '=', $subcategory);
+                               })
+                               ->where('ends_at', '>=', DB::raw('NOW()'))
                                ->orderBy('offers.created_at', 'desc')
                                ->groupBy('offers.id')
                                ->paginate($get);
@@ -105,7 +132,9 @@ class OfferController extends Controller
             'short_description' => 'required',
             'real_price' => 'required',
             'offered_price' => 'required',
-            'owner_id' => 'required'
+            'owner_id' => 'required',
+            'starts_at' => 'required',
+            'ends_at' => 'required',
         ];
 
         if ($request->hasFile('promo_image'))
@@ -124,6 +153,8 @@ class OfferController extends Controller
         $offer->featured = $request->input('featured') ? 1 : 0;
         $offer->notes = $request->input('notes');
         $offer->owner_id = $request->input('owner_id');
+        $offer->starts_at = $request->input('starts_at');
+        $offer->ends_at = $request->input('ends_at');
 
         if ($request->hasFile('promo_image'))
             $offer->promo_image = $this->uploadPromoImage($request, 'promo_image', $this->promo_image_path, $offer->promo_image);
@@ -183,15 +214,5 @@ class OfferController extends Controller
                 'message' => 'Error deleting offer!'
             ], 201);
         }
-    }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Offer  $offer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Offer $offer)
-    {
-        //
     }
 }

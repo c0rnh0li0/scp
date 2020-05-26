@@ -6,7 +6,7 @@
             </v-alert>
         </v-col>
         <v-col cols="12" v-else>
-            <div row class="display-1 mb-2">Your offers</div>
+            <div row class="display-1 mb-2">{{ $t('message.sections.place.sections.offers.section_title') }}</div>
 
             <v-layout row wrap class="">
                 <v-flex v-for="(offer, i) in offers" :key="offer.id" xs12 sm6 md4 lg3 xl3 class="">
@@ -27,7 +27,7 @@
         <v-dialog v-model="dialog" scrollable persistent max-width="1000" :fullscreen="$vuetify.breakpoint.mdAndDown">
             <v-card>
                 <v-card-title class="font-weight-bold">
-                    {{ dialog_title }}
+                    {{ formTitle }}
                     <v-spacer></v-spacer>
                     <v-btn icon dark @click="closeForm">
                         <v-icon color="black">mdi-close</v-icon>
@@ -42,36 +42,36 @@
                                 <v-input hidden v-model="id" />
                                 <v-text-field
                                         prepend-icon="mdi-tag"
-                                        label="Offer Title"
+                                        :label="$t('message.sections.place.sections.offers.form.fields.title')"
                                         v-model="title"
                                         :error-messages="errors.title" />
                             </v-flex>
 
                             <!-- short description -->
                             <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-label ref="shortDescriptionLabel">Short Description</v-label>
+                                <v-label ref="shortDescriptionLabel">{{ $t('message.sections.place.sections.offers.form.fields.short_description') }}</v-label>
                                 <tiptap-vuetify
                                         v-model="short_description"
                                         :extensions="extensions"
                                         ref="shortDescription"
-                                        placeholder="Add a short description for your offer…"
+                                        :placeholder="$t('message.sections.place.sections.offers.form.fields.short_description_placeholder')"
                                 />
                                 <errors :message="errors.short_description" />
                             </v-flex>
 
                             <!-- long description -->
                             <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-label>Long Description</v-label>
+                                <v-label>{{ $t('message.sections.place.sections.offers.form.fields.long_description') }}</v-label>
                                 <tiptap-vuetify
                                         v-model="long_description"
                                         :extensions="extensions"
-                                        placeholder="Add a nice and long description for your offer…"
+                                        placeholder="$t('message.sections.place.sections.offers.form.fields.long_description_placeholder')"
                                 />
                             </v-flex>
 
                             <!-- promo image -->
                             <v-flex xs12 sm12 md6 lg6 xl6 class="text-center justify-space-between">
-                                <v-label @click.stop="pickFile">Promo image</v-label>
+                                <v-label @click.stop="pickFile">{{ $t('message.sections.place.sections.offers.form.fields.promo_image') }}</v-label>
 
                                 <input type="file"
                                        style="display: none;"
@@ -90,7 +90,7 @@
                                         <v-col cols="11">
                                             <v-text-field
                                                     prepend-icon="mdi-cash"
-                                                    label="Real Price"
+                                                    :label="$t('message.sections.place.sections.offers.form.fields.real_price')"
                                                     v-model="real_price"
                                                     :error-messages="errors.real_price"
                                             />
@@ -103,7 +103,7 @@
                                         <v-col cols="11">
                                             <v-text-field
                                                     prepend-icon="mdi-cash-refund"
-                                                    label="Offered Price"
+                                                    :label="$t('message.sections.place.sections.offers.form.fields.offered_price')"
                                                     v-model="offered_price"
                                                     :error-messages="errors.offered_price"
                                             />
@@ -116,32 +116,88 @@
                                         <v-tooltip top>
                                             <template v-slot:activator="{ on }">
                                     <span v-on="on">
-                                        <v-checkbox v-model="include_global" class="mx-2" label="Include in global offers?"></v-checkbox>
+                                        <v-checkbox v-model="include_global" class="mx-2" :label="$t('message.sections.place.sections.offers.form.fields.global_offer')"></v-checkbox>
                                     </span>
                                             </template>
-                                            <span>Can this offer be displayed publicly for tourists and can it be used in the creation of bundles (multiple offers) by our system?</span>
+                                            <span>{{ $t('message.sections.place.sections.offers.form.fields.global_offer_hint') }}</span>
                                         </v-tooltip>
                                     </v-row>
                                     <v-row>
                                         <v-tooltip top>
                                             <template v-slot:activator="{ on }">
                                     <span v-on="on">
-                                        <v-checkbox v-model="featured" class="mx-2" label="Display as featured offer?"></v-checkbox>
+                                        <v-checkbox v-model="featured" class="mx-2" :label="$t('message.sections.place.sections.offers.form.fields.featured')"></v-checkbox>
                                     </span>
                                             </template>
-                                            <span>Can this offer be displayed as a featured offer in the top section publicly and for tourists?</span>
+                                            <span>{{ $t('message.sections.place.sections.offers.form.fields.featured_hint') }}</span>
                                         </v-tooltip>
                                     </v-row>
                                 </v-col>
                             </v-flex>
 
+                            <v-flex xs12 sm12 md6 lg6 xl6>
+                                <v-col cols="12">
+                                    <v-menu
+                                            ref="start_date_menu"
+                                            v-model="start_date_menu"
+                                            :close-on-content-click="false"
+                                            :return-value.sync="start_date"
+                                            transition="scale-transition"
+                                            offset-y
+                                            min-width="290px">
+                                        <template v-slot:activator="{ on }">
+                                            <v-text-field
+                                                    v-model="formatted_start_date"
+                                                    :label="$t('message.sections.place.sections.offers.form.fields.starts_at')"
+                                                    prepend-icon="mdi-calendar-month"
+                                                    readonly
+                                                    :error-messages="errors.starts_at"
+                                                    v-on="on"></v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="start_date" :min="new Date().toISOString().slice(0,10)" no-title scrollable>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text color="primary" @click="start_date_menu = false">{{ $t('message.global.btn_close') }}</v-btn>
+                                            <v-btn text color="primary" @click="processStartDate(start_date)">{{ $t('message.global.btn_ok') }}</v-btn>
+                                        </v-date-picker>
+                                    </v-menu>
+                                </v-col>
+                            </v-flex>
+
+                            <v-flex xs12 sm12 md6 lg6 xl6>
+                                <v-col cols="12">
+                                    <v-menu
+                                            ref="end_date_menu"
+                                            v-model="end_date_menu"
+                                            :close-on-content-click="false"
+                                            :return-value.sync="end_date"
+                                            transition="scale-transition"
+                                            offset-y
+                                            min-width="290px">
+                                        <template v-slot:activator="{ on }">
+                                            <v-text-field
+                                                    v-model="formatted_end_date"
+                                                    :label="$t('message.sections.place.sections.offers.form.fields.ends_at')"
+                                                    prepend-icon="mdi-calendar-month"
+                                                    readonly
+                                                    :error-messages="errors.ends_at"
+                                                    v-on="on"></v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="end_date" :min="endDateMin" :max="endDateMax" no-title scrollable>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text color="primary" @click="end_date_menu = false">{{ $t('message.global.btn_close') }}</v-btn>
+                                            <v-btn text color="primary" @click="processEndDate(end_date)">{{ $t('message.global.btn_ok') }}</v-btn>
+                                        </v-date-picker>
+                                    </v-menu>
+                                </v-col>
+                            </v-flex>
+
                             <!-- notes -->
                             <v-flex xs12 sm12 md12 lg12 xl12>
-                                <v-label>Notes about this offer</v-label>
+                                <v-label>{{ $t('message.sections.place.sections.offers.form.fields.notes') }}</v-label>
                                 <tiptap-vuetify
                                         v-model="notes"
                                         :extensions="extensions"
-                                        placeholder="Add few notes about your offer…"
+                                        :placeholder="$t('message.sections.place.sections.offers.form.fields.notes_placeholder')"
                                 />
                             </v-flex>
                         </v-layout>
@@ -149,9 +205,9 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-spacer />
-                    <v-btn text color="error" @click="closeForm" :disabled="btn_save_disabled">Cancel</v-btn>
-                    <v-btn text color="success" @click="saveForm" :disabled="btn_save_disabled">Save</v-btn>
+                    <v-btn text color="error" @click="closeForm" :disabled="btn_save_disabled">{{ $t('message.global.btn_cancel') }}</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="success" @click="saveForm" :disabled="btn_save_disabled">{{ $t('message.global.btn_save') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -160,15 +216,15 @@
         </v-dialog>
         <v-dialog v-model="delete_dialog" persistent max-width="290">
             <v-card>
-                <v-card-title>Are you sure you want to delete "{{ deleteOffertitle }}"?</v-card-title>
+                <v-card-title>{{ $t('message.global.msg.delete_ask') }} "{{ deleteOffertitle }}"?</v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-                    <v-card-subtitle>Your offer will no longer appear in promotions and bundle offers after this action.</v-card-subtitle>
+                    <v-card-subtitle>"{{ deleteOffertitle }}" {{ $t('message.global.msg.delete_ask_msg') }}.</v-card-subtitle>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary darken-1" text @click="cancelOfferDelete">No</v-btn>
-                    <v-btn color="error darken-1" @click="deleteOfferConfirmed">Yes</v-btn>
+                    <v-btn color="primary darken-1" text @click="cancelOfferDelete">{{ $t('message.global.btn_no') }}</v-btn>
+                    <v-btn color="error darken-1" @click="deleteOfferConfirmed">{{ $t('message.global.btn_yes') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -207,6 +263,7 @@
     import originalPlaceholderImage from "./assets/placeholder-img.jpg"
     import PreviewOffer from '../tourist/custom/OfferDetails'
     import OfferCard from './custom/OfferCard'
+    import { format, parseISO, differenceInMonths, isAfter, addDays, addMonths } from 'date-fns'
 
     export default {
         components: {
@@ -215,6 +272,11 @@
             Errors,
             PreviewOffer,
             OfferCard
+        },
+        computed: {
+            formTitle () {
+                return this.editedIndex === -1 ? this.$t('message.sections.place.sections.offers.form.form_title_new') : this.$t('message.sections.place.sections.offers.form.form_title_edit') + ' "' + this.editedItem.title + '"'
+            },
         },
         watch: {
             offers(newVal, oldVal) {
@@ -277,6 +339,16 @@
             images: [],
             placeholderImage: originalPlaceholderImage,
 
+            start_date: '',
+            formatted_start_date: '',
+            start_date_menu: false,
+
+            end_date: '',
+            formatted_end_date: '',
+            end_date_menu: false,
+            endDateMin: '',
+            endDateMax: '',
+
             // form data
             id: 0,
             title: '',
@@ -288,18 +360,51 @@
             include_global: '',
             featured: '',
             notes: '',
-            editedObject: {
-                id: 0,
-                title: '',
-                short_description: '',
-                long_description: '',
-                promo_image: '',
-                real_price: '',
-                offered_price: '',
-                include_global: '',
-                featured: '',
-                notes: '',
+            starts_at: '',
+            ends_at: '',
+
+            editedIndex: -1,
+            editedItem: {
+                'id': -1,
+                'title': '',
+                'short_description': '',
+                'long_description': '',
+                'promo_image': '',
+                'owner_id': -1,
+                'real_price': '',
+                'offered_price': '',
+                'include_global': false,
+                'featured': false,
+                'notes': '',
+                'starts_at': '',
+                'ends_at': '',
+                'modified_by': '',
+                'deleted_by': '',
+                'created_at': '',
+                'updated_at': '',
+                'deleted_at': ''
             },
+            defaultItem: {
+                'id': -1,
+                'title': '',
+                'short_description': '',
+                'long_description': '',
+                'promo_image': '',
+                'owner_id': -1,
+                'real_price': '',
+                'offered_price': '',
+                'include_global': false,
+                'featured': false,
+                'notes': '',
+                'starts_at': '',
+                'ends_at': '',
+                'modified_by': '',
+                'deleted_by': '',
+                'created_at': '',
+                'updated_at': '',
+                'deleted_at': ''
+            },
+
             deleteOffer: null,
             deleteOffertitle: '',
             valute: ''
@@ -324,28 +429,48 @@
                 if (this.$store.state.session.valute)
                     this.valute = this.$store.state.session.valute.sign
             },
+            setEditedItem(item) {
+                this.editedIndex = this.offers.indexOf(item)
+                let defObj = Object.assign({}, this.defaultItem)
+                this.editedItem = {...defObj, ...item }
+
+                this.id = this.editedItem.id
+                this.owner_id = this.editedItem.owner_id
+                this.title = this.editedItem.title
+                this.short_description = this.editedItem.short_description
+                this.long_description = this.editedItem.long_description
+                this.promo_image = this.editedItem.promo_image
+                this.placeholderImage = this.editedItem.promo_image ? this.$store.state.promo_images_path + this.editedItem.promo_image : this.originalPlaceholderImage
+                this.real_price = this.editedItem.real_price
+                this.offered_price = this.editedItem.offered_price
+                this.include_global = this.editedItem.include_global
+                this.featured = this.editedItem.featured
+                this.notes = this.editedItem.notes
+
+                this.starts_at = this.start_date = this.editedItem.starts_at
+                this.ends_at = this.end_date = this.editedItem.ends_at
+            },
+            resetEditedItem() {
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.setEditedItem(this.editedItem)
+                this.editedIndex = -1
+                this.images = []
+            },
+
             showForm() {
                 this.errors = []
-                this.dialog_title = 'Create new offer'
+                this.resetEditedItem()
                 this.dialog = true
             },
             editOffer(offer) {
-                this.id = offer.id
-                this.title = offer.title
-                this.short_description = offer.short_description
-                this.long_description = offer.long_description
-                this.placeholderImage = this.$store.state.promo_images_path + offer.promo_image
-                this.owner = offer.owner_id
-                this.real_price = offer.real_price
-                this.offered_price = offer.offered_price
-                this.include_global = offer.include_global
-                this.featured = offer.featured
-                this.notes = offer.notes
+                this.setEditedItem(offer)
 
                 this.errors = []
-                this.dialog_title = 'Edit offer "' + offer.title + '"'
-                this.dialog = true
+                this.editedItem = offer
 
+                this.fixDates()
+
+                this.dialog = true
             },
             askDeleteOffer(offer) {
                 this.deleteOffer = offer
@@ -358,6 +483,7 @@
                 this.deleteOffertitle = ''
             },
             deleteOfferConfirmed() {
+                const index = this.offers.indexOf(this.deleteOffer)
                 this.saving = true
                 this.snackbar = false
 
@@ -368,6 +494,9 @@
 
                         that.snack_message = response.data.message
                         that.snack_color = response.data.success ? 'success' : 'error'
+
+                        that.offers.splice(index, 1)
+
                         that.deleteOffer = null
                         that.deleteOffertitle = ''
                         that.delete_dialog = false
@@ -382,8 +511,8 @@
                         that.snackbar = true
                     })
             },
+
             previewOffer(offer) {
-                console.log(offer)
                 this.preview_offer = offer
                 this.preview_offer_dialog = true
             },
@@ -412,6 +541,9 @@
                 this.resetFormData()
             },
             saveForm() {
+                if (!this.checkDates())
+                    return
+
                 this.saving = this.btn_save_disabled = true
                 this.snackbar = false
 
@@ -459,6 +591,16 @@
                     })
             },
             fillEditedObject() {
+                console.log('start_date', this.start_date)
+                console.log('end_date', this.end_date)
+                console.log('-----------------------------')
+
+                this.starts_at = format(parseISO(this.start_date), 'yyyy-MM-dd HH:mm:ss')
+                this.ends_at = format(parseISO(this.end_date), 'yyyy-MM-dd HH:mm:ss')
+
+                console.log(this.start_date)
+                console.log(this.end_date)
+
                 this.editedObject = {
                     id: this.id,
                     owner_id: this.$store.state.session.user.id,
@@ -470,8 +612,51 @@
                     offered_price: this.offered_price,
                     include_global: this.include_global,
                     featured: this.featured,
-                    notes: this.notes
+                    notes: this.notes,
+                    starts_at: this.starts_at,
+                    ends_at: this.ends_at
                 }
+            },
+            checkDates() {
+                let hasErrors = false
+                this.errors = {}
+
+                if (!this.start_date || this.start_date == '') {
+                    hasErrors = true
+                    this.errors.starts_at = 'Please select a start date for your offer'
+                }
+
+                if (!this.end_date || this.end_date == '') {
+                    hasErrors = true
+                    this.errors.ends_at = 'Please select an end date for your offer'
+                }
+
+                if (!hasErrors) {
+                    let s = new Date(this.start_date)
+                    let e = new Date(this.end_date)
+
+                    let m_dif = differenceInMonths(e, s)
+                    console.log('is greater', isAfter(e, s))
+                    console.log('m_dif', m_dif)
+
+                    if (!isAfter(e, s)) {
+                        hasErrors = true
+                        this.errors.ends_at = 'Offer\'s end date must be greater than the start date'
+                    }
+
+                    if (m_dif > 3) {
+                        hasErrors = true
+                        this.errors.ends_at = 'Offer\'s end date must be not greater than three months from the start date'
+                    }
+                }
+
+                if (hasErrors) {
+                    this.snackbar = true
+                    this.snack_color = 'error'
+                    this.snack_message = 'You have to select correct dates for your offer'
+                }
+
+                return !hasErrors
             },
             resetFormData() {
                 this.id = 0
@@ -485,28 +670,56 @@
                 this.include_global = ''
                 this.featured = ''
                 this.notes = ''
+                this.starts_at = ''
+                this.ends_at = ''
+                this.start_date = ''
+                this.end_date = ''
+                this.formatted_start_date = ''
+                this.formatted_end_date = ''
+                this.endDateMin = ''
+                this.endDateMax = ''
 
                 this.images = []
                 this.placeholderImage = originalPlaceholderImage
 
-                this.editedObject = {
-                    id: this.id,
-                    title: this.title,
-                    short_description: this.short_description,
-                    long_description: this.long_description,
-                    promo_image: this.promo_image,
-                    real_price: this.real_price,
-                    offered_price: this.offered_price,
-                    include_global: this.include_global,
-                    featured: this.featured,
-                    notes: this.notes
-                }
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedObject = Object.assign({}, this.defaultItem)
+                this.setEditedItem(this.editedItem)
+                this.editedIndex = -1
+                this.images = []
+            },
+            processStartDate(start_date) {
+                if (!start_date || start_date == '')
+                    return
+
+                if (this.$refs.start_date_menu)
+                    this.$refs.start_date_menu.save(start_date)
+
+                this.start_date = new Date(start_date).toISOString()
+                this.formatted_start_date = format(parseISO(this.start_date), 'EEEE, MMMM do yyyy')
+
+                this.endDateMin = addDays(parseISO(this.start_date), 1).toISOString().slice(0,10)
+                this.endDateMax = addMonths(parseISO(this.start_date), 3).toISOString().slice(0,10)
+            },
+            processEndDate(end_date) {
+                if (!end_date || end_date == '')
+                    return
+
+                if (this.$refs.end_date_menu)
+                    this.$refs.end_date_menu.save(end_date)
+                
+                this.end_date = new Date(end_date).toISOString()
+                this.formatted_end_date = format(parseISO(this.end_date), 'EEEE, MMMM do yyyy')
+            },
+            fixDates() {
+                this.processStartDate(this.starts_at)
+                this.processEndDate(this.ends_at)
             }
         },
         mounted() {
-            console.log('offers Component mounted.')
             this.getOffers()
-        }
+        },
+        created() {}
     }
 </script>
 

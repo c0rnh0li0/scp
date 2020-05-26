@@ -3,7 +3,7 @@
         <v-flex xs12 sm12 md6 lg6 xl6>
             <v-col cols="12">
                 <v-text-field
-                        label="Name"
+                        :label="$t('message.sections.lookups.categories.form.fields.name')"
                         v-model="editedItem.name"
                         :error-messages="errors.name"
                 />
@@ -20,7 +20,7 @@
                         :items="$store.state.lookups.categories"
                         item-text="name"
                         item-value="id"
-                        label="Parent"
+                        :label="$t('message.sections.lookups.categories.form.fields.parent')"
                 ></v-select>
             </v-col>
         </v-flex>

@@ -24,7 +24,7 @@ class LanguageController extends Controller
         $sortBy = $request->input('sortBy');
         $sortBy = str_replace('user.', 'users.', $sortBy);
 
-        $dir = $request->input('dir');
+        $dir = $request->input('dir', 'asc');
 
         if ($sortBy == '')
             $sortBy = 'created_at';

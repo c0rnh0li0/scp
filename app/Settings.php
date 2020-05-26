@@ -15,7 +15,14 @@ class Settings extends Model
         'email',
         'longitude',
         'latitude',
+        'language_id',
+        'contract_check',
         'created_at',
         'updated_at'
+    ];
+
+    protected $casts = [
+        'frontpage_template' => 'integer',
+        'language_id' => 'integer'
     ];
 }

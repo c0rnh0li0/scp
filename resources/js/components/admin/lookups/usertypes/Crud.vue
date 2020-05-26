@@ -13,43 +13,43 @@
         components: {
             CrudIndex
         },
-        data: () => ({
-            usertypes: {
-                apiUrl: 'usertypes',
-                apiSaveUrl: 'usertypes/save',
-                apiDeleteUrl: 'usertypes/delete/',
+        computed: {
+            usertypes() {
+                return {
+                    apiUrl: 'usertypes',
+                    apiSaveUrl: 'usertypes/save',
+                    apiDeleteUrl: 'usertypes/delete/',
 
-                // data table options
-                headers: [
-                    {text: 'Name', value: 'name', align: 'left', sortable: false},
-                    {text: 'Created', value: 'created_at', sortable: false,},
-                    {text: '', align: 'right', value: 'action', sortable: false},
-                ],
-                form: Form,
-                newItemTitle: 'New user type',
-                formTitle: 'User types',
-                editedItem: {
-                    id: 0,
-                    name: '',
-                    created_at: '',
-                    updated_at: ''
-                },
-                defaultItem: {
-                    id: 0,
-                    name: '',
-                    created_at: '',
-                    updated_at: ''
-                },
-            }
-        }),
-        methods: {
-            editItem(item) {
-
+                    // data table options
+                    form: Form,
+                    headers: [
+                        {text: this.$t('message.sections.lookups.user_types.headers.name'), value: 'name', align: 'left', sortable: false},
+                        {text: this.$t('message.sections.lookups.user_types.headers.created'), value: 'created_at', sortable: false,},
+                        {text: '', align: 'right', value: 'action', sortable: false},
+                    ],
+                    sectionTitle: this.$i18n.t('message.sections.lookups.user_types.section_title'),
+                    newItemTitle: this.$i18n.t('message.sections.lookups.user_types.btn_new_title'),
+                    formTitleNew: this.$i18n.t('message.sections.lookups.user_types.form.form_title_new'),
+                    formTitleEdit: this.$i18n.t('message.sections.lookups.user_types.form.form_title_edit'),
+                    editedItem: {
+                        id: 0,
+                        name: '',
+                        created_at: '',
+                        updated_at: ''
+                    },
+                    defaultItem: {
+                        id: 0,
+                        name: '',
+                        created_at: '',
+                        updated_at: ''
+                    },
+                }
             },
-            deleteItem(item) {
-
-            }
         },
+        data: function() {
+            return {}
+        },
+        methods: {},
         mounted() {}
     }
 </script>

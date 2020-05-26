@@ -1,10 +1,10 @@
 <template>
     <info-cube :today="today"
-               :today-text="today_text"
+               :today-text="$t('message.widgets.todaytickets.today_text')"
                :this-week="this_week"
-               :week-text="week_text"
+               :week-text="$t('message.widgets.todaytickets.week_text')"
                :this-month="this_month"
-               :month-text="month_text"
+               :month-text="$t('message.widgets.todaytickets.month_text')"
                :box-icon="box_icon"
                :box-color="box_color">
     </info-cube>
@@ -22,7 +22,7 @@
             today: 0,
             this_week: 0,
             this_month: 0,
-            today_text: this.$t('widgets.todaytickets.todaytext'),
+            today_text: 'Tickets sold today',
             week_text: 'This week',
             month_text: 'This month',
             box_icon: 'mdi-card-text',
@@ -34,11 +34,12 @@
                 this.today = Number(ticketsData.data.chartdata.today)
                 this.this_week = Number(ticketsData.data.chartdata.week)
                 this.this_month = Number(ticketsData.data.chartdata.month)
-            }
+            },
         },
         async mounted() {
             await this.getData()
-        }
+        },
+        created() {}
     }
 </script>
 
