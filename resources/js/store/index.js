@@ -51,6 +51,7 @@ export default new Vuex.Store({
                 { icon: 'mdi-account', text: 'message.menus.admin.menu.items.people', route: '/admin/people' },
                 { icon: 'mdi-book-plus', text: 'message.menus.admin.menu.items.offers', route: '/admin/offers' },
                 { icon: 'mdi-qrcode-scan', text: 'message.menus.admin.menu.items.tickets', route: '/admin/tickets' },
+                { icon: 'mdi-blogger', text: 'message.menus.admin.menu.items.blog', route: '/admin/blog' },
                 { divider: true },
                 { icon: 'mdi-certificate-outline', text: 'message.menus.admin.menu.items.tokens', route: '/admin/tokens' },
                 { divider: true },
@@ -100,6 +101,7 @@ export default new Vuex.Store({
         promo_images_path: '/storage/promo_images/',
         tickets_path: '/storage/tickets/',
         logo_path: '/storage/logo/',
+        flags_path: '/storage/flags/',
     },
     mutations: {
         setSettings (state, payload) {
@@ -221,6 +223,9 @@ export default new Vuex.Store({
         },
         logo_path: (state) => {
             return state.logo_path
+        },
+        flags_path: (state) => {
+            return state.flags_path
         },
     }
 })

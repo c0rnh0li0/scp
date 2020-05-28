@@ -16,9 +16,7 @@
                 <v-btn text v-for="item in items" :key="'btn_' + item.title" @click="item.route ? $vuetify.goTo(item.route) && menuClick(item.route) : menuClick(item.click)">
                     {{ item.title }}
                 </v-btn>
-                <v-btn depressed text elevation="0">
-                    <language-selector></language-selector>
-                </v-btn>
+                <language-selector></language-selector>
             </div>
         </v-app-bar>
 

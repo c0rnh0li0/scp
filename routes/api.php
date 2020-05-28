@@ -35,13 +35,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('password', 'Api\AuthController@password');
 
     // charts data
-    Route::get('monthlytickets', 'ChartsController@monthlytickets');
-    Route::get('yearlytickets', 'ChartsController@yearlytickets');
-    Route::get('yearlyvisitors', 'ChartsController@yearlyvisitors');
-    Route::get('dailyticketsdata', 'ChartsController@dailyticketsdata');
+    Route::get('monthlytickets/{id?}', 'ChartsController@monthlytickets');
+    Route::get('yearlytickets/{id?}', 'ChartsController@yearlytickets');
+    Route::get('yearlyvisitors/{id?}', 'ChartsController@yearlyvisitors');
+    Route::get('dailyticketsdata/{id?}', 'ChartsController@dailyticketsdata');
     Route::get('dailyvisitorsdata', 'ChartsController@dailyvisitorsdata');
     Route::get('dailytouristsdata', 'ChartsController@dailytouristsdata');
-    Route::get('dailyvisitsdata', 'ChartsController@dailyvisitsdata');
+    Route::get('dailyvisitsdata/{id?}', 'ChartsController@dailyvisitsdata');
     Route::get('mostvisitedplaces', 'ChartsController@mostvisitedplaces');
 
     // users
@@ -72,7 +72,7 @@ Route::middleware('auth:api')->group(function () {
 
     // offers
     Route::get('offers', 'OfferController@index');
-    Route::get('offers/list/{id?}', 'OfferController@list');
+    Route::get('offers/list/{id?dailyticketsdata}', 'OfferController@list');
     Route::get('offers/get/{fromDashboard?}', 'OfferController@get');
     Route::post('offers/save/{id}', 'OfferController@save');
     Route::post('offers/delete/{id}', 'OfferController@delete');

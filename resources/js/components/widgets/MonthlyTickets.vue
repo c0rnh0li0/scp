@@ -23,8 +23,18 @@
 
     export default {
         name: "MonthlyTickets",
+        props: ['businessId'],
         components: {
             BarChart
+        },
+        computed: {
+            totalTicketsLbl() {
+                console.log(this.$t('message.widgets.monthlytickets.total_tickets_lbl'))
+                return this.$t('message.widgets.monthlytickets.total_tickets_lbl')
+            },
+            usedTicketsLbl() {
+                return this.$t('message.widgets.monthlytickets.used_tickets_lbl')
+            }
         },
         data: () => ({
             loaded: false,
@@ -67,19 +77,19 @@
         methods: {
             async getChartData() {
                 try {
-                    let ticketsData = await axios.get('/api/monthlytickets')
+                    let ticketsData = await axios.get('/api/monthlytickets/' + (this.businessId ? this.businessId : ''))
 
                     this.chartdata = {
                         labels: ticketsData.data.chartdata.labels,
                         datasets: [
                             {
-                                label: this.$t('message.widgets.monthlytickets.total_tickets_lbl'),
+                                label: this.totalTicketsLbl,
                                 data: ticketsData.data.chartdata.datasets.all.data,
                                 backgroundColor: '#42A5F5',
                                 //barPercentage: 0.4
                             },
                             {
-                                label: this.$t('message.widgets.monthlytickets.used_tickets_lbl'),
+                                label: this.usedTicketsLbl,
                                 data: ticketsData.data.chartdata.datasets.used.data,
                                 backgroundColor: '#4DB6AC',
                                 //barPercentage: 0.4

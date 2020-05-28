@@ -23,6 +23,7 @@
 
     export default {
         name: "YearlyTickets",
+        props: ['businessId'],
         components: {
             LineChart
         },
@@ -67,7 +68,7 @@
         methods: {
             async getChartData() {
                 try {
-                    let ticketsData = await axios.get('/api/yearlytickets')
+                    let ticketsData = await axios.get('/api/yearlytickets/' + (this.businessId ? this.businessId : ''))
 
                     this.chartdata = {
                         labels: ticketsData.data.chartdata.labels,

@@ -10,28 +10,29 @@ use Illuminate\Support\Facades\DB;
 
 class ChartsController extends Controller
 {
-    public function monthlytickets() {
+    public function monthlytickets($id = null) {
         $start = Carbon::now()->startOfMonth();
         $end = Carbon::now()->endOfMonth();
 
-        /*$sql = "SELECT SUM(`amount`) AS `amount`,
-                       `created_at` 
-                FROM `tickets` 
-                WHERE `created_at` BETWEEN '$start' AND '$end'
-                and `tickets`.`deleted_at` is null 
-                group by CAST(`created_at` AS DATE)";*/
-
         $allTicketsData = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`, CAST(`created_at` AS DATE) AS `date`, 0 AS `used`'))
-            ->whereBetween('created_at', ["$start", "$end"])
-            ->groupBy(DB::raw('CAST(`created_at` AS DATE), `used`'))
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`, CAST(`tickets`.`created_at` AS DATE) AS `date`, 0 AS `used`'))
+            ->whereBetween('tickets.created_at', ["$start", "$end"])
+            ->groupBy(DB::raw('CAST(`tickets`.`created_at` AS DATE), `used`'))
             ->get();
 
         $usedTicketsData = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`, CAST(`created_at` AS DATE) AS `date`, `used`'))
-            ->where('used', '=',  1)
-            ->whereBetween('created_at', ["$start", "$end"])
-            ->groupBy(DB::raw('CAST(`created_at` AS DATE), `used`'))
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`, CAST(`tickets`.`created_at` AS DATE) AS `date`, `tickets`.`used`'))
+            ->where('tickets.used', '=',  1)
+            ->whereBetween('tickets.created_at', ["$start", "$end"])
+            ->groupBy(DB::raw('CAST(`tickets`.`created_at` AS DATE), `used`'))
             ->get();
 
         //DB::enableQueryLog();
@@ -64,23 +65,31 @@ class ChartsController extends Controller
         ]);
     }
 
-    public function yearlytickets() {
+    public function yearlytickets($id = null) {
         $start = Carbon::now()->startOfYear();
         $end = Carbon::now();
 
         //DB::enableQueryLog();
 
         $allTicketsData = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`, MONTH(`created_at`) AS `month`'))
-            ->whereBetween('created_at', ["$start", "$end"])
-            ->groupBy(DB::raw('MONTH(`created_at`)'))
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`, MONTH(`tickets`.`created_at`) AS `month`'))
+            ->whereBetween('tickets.created_at', ["$start", "$end"])
+            ->groupBy(DB::raw('MONTH(`tickets`.`created_at`)'))
             ->get();
 
         $usedTicketsData = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`, MONTH(`created_at`) AS `month`'))
-            ->where('used', '=',  1)
-            ->whereBetween('created_at', ["$start", "$end"])
-            ->groupBy(DB::raw('MONTH(`created_at`)'))
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`, MONTH(`tickets`.`created_at`) AS `month`'))
+            ->where('tickets.used', '=',  1)
+            ->whereBetween('tickets.created_at', ["$start", "$end"])
+            ->groupBy(DB::raw('MONTH(`tickets`.`created_at`)'))
             ->get();
 
 
@@ -124,17 +133,21 @@ class ChartsController extends Controller
         ]);
     }
 
-    public function yearlyvisitors() {
+    public function yearlyvisitors($id = null) {
         $start = Carbon::now()->startOfYear();
         $end = Carbon::now();
 
         //DB::enableQueryLog();
 
         $yearlyVisitsData = DB::table('tickets')
-            ->select(DB::raw('COUNT(`user_id`) AS `amt`, MONTH(`used_at`) AS `month`'))
-            ->where('used', '=',  1)
-            ->whereBetween('created_at', ["$start", "$end"])
-            ->groupBy(DB::raw('MONTH(`used_at`)'))
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->select(DB::raw('COUNT(`tickets`.`user_id`) AS `amt`, MONTH(`tickets`.`used_at`) AS `month`'))
+            ->where('tickets.used', '=',  1)
+            ->whereBetween('tickets.created_at', ["$start", "$end"])
+            ->groupBy(DB::raw('MONTH(`tickets`.`used_at`)'))
             ->get();
 
         //dd($yearlyVisitsData);
@@ -176,7 +189,7 @@ class ChartsController extends Controller
         ]);
     }
 
-    public function dailyticketsdata()
+    public function dailyticketsdata($id = null)
     {
         $todayStart = Carbon::now()->startOfDay();
         $weekStart = Carbon::now()->startOfWeek();
@@ -186,21 +199,35 @@ class ChartsController extends Controller
         //DB::enableQueryLog();
 
         $todayTickets = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`'))
-            ->whereBetween('created_at', ["$todayStart", "$todayEnd"])
-            ->get();
-
-        $weekTickets = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`'))
-            ->whereBetween('created_at', ["$weekStart", "$todayEnd"])
-            ->get();
-
-        $monthTickets = DB::table('tickets')
-            ->select(DB::raw('SUM(`amount`) AS `amt`'))
-            ->whereBetween('created_at', ["$monthStart", "$todayEnd"])
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`'))
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->whereBetween('tickets.created_at', ["$todayStart", "$todayEnd"])
             ->get();
 
         //dd(DB::getQueryLog());
+
+        $weekTickets = DB::table('tickets')
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`'))
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->whereBetween('tickets.created_at', ["$weekStart", "$todayEnd"])
+            ->get();
+
+        $monthTickets = DB::table('tickets')
+            ->join('offers', 'offers.id', '=', 'tickets.offer_id')
+            ->select(DB::raw('SUM(`tickets`.`amount`) AS `amt`'))
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
+            ->whereBetween('tickets.created_at', ["$monthStart", "$todayEnd"])
+            ->get();
+
+
 
         return response()->json([
             'success' => true,
@@ -282,7 +309,7 @@ class ChartsController extends Controller
         ]);
     }
 
-    public function dailyvisitsdata() {
+    public function dailyvisitsdata($id = null) {
         $todayStart = Carbon::now()->startOfDay();
         $weekStart = Carbon::now()->startOfWeek();
         $monthStart = Carbon::now()->startOfMonth();
@@ -295,6 +322,9 @@ class ChartsController extends Controller
             ->join('users', 'users.id', '=', 'offers.owner_id')
             ->select(DB::raw('COUNT(`users`.`id`) AS `places`, `users`.`name`'))
             ->where('tickets.used', '=', 1)
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
             ->whereBetween('used_at', ["$todayStart", "$todayEnd"])
             ->groupByRaw('`users`.`id`')
             ->get();
@@ -305,6 +335,9 @@ class ChartsController extends Controller
             ->join('users', 'users.id', '=', 'offers.owner_id')
             ->select(DB::raw('COUNT(`users`.`id`) AS `places`, `users`.`name`'))
             ->where('tickets.used', '=', 1)
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
             ->whereBetween('used_at', ["$weekStart", "$todayEnd"])
             ->groupByRaw('`users`.`id`')
             ->get();
@@ -314,6 +347,9 @@ class ChartsController extends Controller
             ->join('users', 'users.id', '=', 'offers.owner_id')
             ->select(DB::raw('COUNT(`users`.`id`) AS `places`, `users`.`name`'))
             ->where('tickets.used', '=', 1)
+            ->when($id, function ($query) use ($id) {
+                return $query->where('offers.owner_id', '=', $id);
+            })
             ->whereBetween('used_at', ["$monthStart", "$todayEnd"])
             ->groupByRaw('`users`.`id`')
             ->get();

@@ -35,6 +35,11 @@ const adminroutes = [
         meta: { requiresAuth: true, type: 'admin', transitionName: 'fade' }
     },
     {
+        path: 'blog',
+        component: require('./../components/admin/Blog').default,
+        meta: { requiresAuth: true, type: 'admin', transitionName: 'fade' }
+    },
+    {
         path: 'lookups',
         component: { render: h => h('router-view') },
         children: [

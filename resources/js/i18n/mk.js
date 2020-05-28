@@ -30,6 +30,7 @@ export default {
                         people: 'Туристи',
                         offers: 'Понуди',
                         tickets: 'Билети',
+                        blog: 'Блог',
                         tokens: 'Токени',
                         about: 'За SCP',
                         logout: 'Одјава',
@@ -68,7 +69,7 @@ export default {
                 month_text: 'Овој месец'
             },
             todayplaces: {
-                today_text: 'Посетени места денес',
+                today_text: 'Денешни посети',
                 week_text: 'Оваа недела',
                 month_text: 'Овој месец'
             },

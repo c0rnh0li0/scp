@@ -30,6 +30,7 @@ export default {
                         people: 'Tourists',
                         offers: 'Offers',
                         tickets: 'Tickets',
+                        blog: 'Блог',
                         tokens: 'Tokens',
                         about: 'About SCP',
                         logout: 'Logout',
@@ -68,7 +69,7 @@ export default {
                 month_text: 'This month'
             },
             todayplaces: {
-                today_text: 'Today\'s visited places',
+                today_text: 'Today\'s visits',
                 week_text: 'This week',
                 month_text: 'This month'
             },

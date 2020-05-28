@@ -15,6 +15,7 @@
 
     export default {
         name: "TodayTickets",
+        props: ['businessId'],
         components: {
             InfoCube
         },
@@ -30,7 +31,7 @@
         }),
         methods: {
             async getData() {
-                let ticketsData = await axios.get('/api/dailyticketsdata')
+                let ticketsData = await axios.get('/api/dailyticketsdata/' + (this.businessId ? this.businessId : ''))
                 this.today = Number(ticketsData.data.chartdata.today)
                 this.this_week = Number(ticketsData.data.chartdata.week)
                 this.this_month = Number(ticketsData.data.chartdata.month)
